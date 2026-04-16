@@ -275,14 +275,14 @@ hr.rule{border:none;border-top:1px solid var(--rule);margin:0}
 <!-- HEADER -->
 <header class="site-header">
   <div class="header-inner">
-    <a class="header-brand" href="index.html">
+    <a class="header-brand" href="m0.html">
       <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXUnktDf1BkU4tZMz6l8TUpkmiDo4iILkjmg&s" alt="Logo" onerror="this.style.display='none'">
       
       <div class="hd"></div>
       <img src="https://www.ribrainstudio.com/wp-content/uploads/2025/01/Logo_ribrain_Nero.svg" alt="Ribrain" style="height:18px;opacity:.75;filter:none">
     </a>
     <div class="header-right">
-      <a class="hback" href="index.html">← Tutti i moduli</a>
+      <a class="hback" href="m0.html">← Tutti i moduli</a>
       <span class="hmod">M1 / 7</span>
       <span class="htag">Mercato</span>
     </div>
@@ -887,6 +887,828 @@ window.addEventListener('load',()=>{
     });
   });
 });
+</script>
+
+
+
+
+<script>
+(function(){
+'use strict';
+const MODULES=[
+  {id:'m0',code:'00',label:'Executive Summary',sub:'Sintesi per il management',url:'m0.html',color:'#3A6FD4'},
+  {id:'m1',code:'01',label:'Mercato',sub:'Gap di consapevolezza · €199M · 220M passeggeri',url:'m1.html',color:'#3A86FF'},
+  {id:'m2',code:'02',label:'Competitor Map',sub:'White space identitario · AirHelp vs RAV',url:'m2.html',color:'#E94560'},
+  {id:'m3',code:'03',label:'Voice of Customer',sub:'12.154 recensioni Trustpilot · lessico spontaneo',url:'m3.html',color:'#2D9E5F'},
+  {id:'m4',code:'04',label:'Personas',sub:'4 profili · inerzia come competitor principale',url:'m4.html',color:'#8338EC'},
+  {id:'m5',code:'05',label:'Mappa del Momento',sub:'5 fasi · Fase 2 = picco ricettività',url:'m5.html',color:'#FB8500'},
+  {id:'m6',code:'06',label:'Benchmark Creativi',sub:'WestJet · KLM · Casinò Venezia · 4 pattern',url:'m6.html',color:'#D94F2B'},
+  {id:'m7',code:'07',label:'Regolamentazione',sub:'Verde · Giallo · Rosso · 5 aeroporti italiani',url:'m7.html',color:'#E67E22'},
+];
+
+const page=window.location.pathname.split('/').pop().replace('.html','') || 'm0';
+
+// ── Inject styles ──
+const s=document.createElement('style');
+s.textContent=`
+.rbmenu-btn{
+  position:fixed;top:16px;right:20px;z-index:9001;
+  width:44px;height:44px;border:none;background:none;cursor:pointer;
+  display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:5px;
+  padding:8px;mix-blend-mode:normal;
+}
+.rbmenu-btn span{
+  display:block;height:1.5px;background:#F0EDE8;border-radius:1px;
+  transition:all .45s cubic-bezier(0.16,1,0.3,1);transform-origin:right center;
+}
+.rbmenu-btn .l1{width:22px}
+.rbmenu-btn .l2{width:16px}
+.rbmenu-btn .l3{width:22px}
+.rbmenu-btn.open .l1{width:22px;transform:translateY(6.5px) rotate(-45deg)}
+.rbmenu-btn.open .l2{opacity:0;width:0}
+.rbmenu-btn.open .l3{width:22px;transform:translateY(-6.5px) rotate(45deg)}
+
+/* on light pages (non-dark bg), invert btn color */
+.rbmenu-btn.light span{background:#0C0C0C}
+
+.rbmenu-overlay{
+  position:fixed;inset:0;z-index:9000;
+  background:#0C0C0C;
+  display:flex;flex-direction:column;
+  opacity:0;pointer-events:none;
+  transition:opacity .5s cubic-bezier(0.16,1,0.3,1);
+  overflow:hidden;
+}
+.rbmenu-overlay.open{opacity:1;pointer-events:auto}
+
+.rbmenu-top{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 56px;border-bottom:1px solid rgba(240,237,232,.06);
+  flex-shrink:0;
+}
+.rbmenu-brand{display:flex;align-items:center;gap:14px}
+.rbmenu-brand-sep{width:1px;height:16px;background:rgba(240,237,232,.15)}
+.rbmenu-brand-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(240,237,232,.35)}
+
+.rbmenu-body{
+  flex:1;display:flex;flex-direction:column;justify-content:center;
+  padding:32px 56px 40px;
+  overflow-y:auto;
+}
+.rbmenu-items{list-style:none}
+.rbmenu-item{
+  border-top:1px solid rgba(240,237,232,.05);
+  opacity:0;transform:translateY(20px);
+  transition:border-color .2s;
+}
+.rbmenu-item:last-child{border-bottom:1px solid rgba(240,237,232,.05)}
+.rbmenu-item:hover{border-top-color:rgba(240,237,232,.12)}
+.rbmenu-item a{
+  display:grid;grid-template-columns:48px 1fr auto;gap:0 24px;align-items:center;
+  padding:18px 0;text-decoration:none;color:inherit;
+  position:relative;overflow:hidden;
+}
+.rbmenu-item a::after{
+  content:'';position:absolute;bottom:0;left:0;width:0;height:1px;
+  background:currentColor;transition:width .5s cubic-bezier(0.16,1,0.3,1);
+  opacity:.25;
+}
+.rbmenu-item a:hover::after{width:100%}
+
+.rmi-code{
+  font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;
+  color:rgba(240,237,232,.25);line-height:1;
+  transition:color .3s;
+}
+.rbmenu-item a:hover .rmi-code{color:rgba(240,237,232,.5)}
+.rmi-left{display:flex;flex-direction:column;gap:4px}
+.rmi-label{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-weight:300;font-size:clamp(28px,3.5vw,48px);
+  line-height:1;color:rgba(240,237,232,.75);
+  transition:color .3s;letter-spacing:-.01em;
+}
+.rbmenu-item a:hover .rmi-label{color:#F0EDE8}
+.rbmenu-item.active .rmi-label{color:#F0EDE8;font-style:italic}
+.rmi-sub{
+  font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;
+  text-transform:uppercase;color:rgba(240,237,232,.25);
+  transition:color .3s;
+}
+.rbmenu-item a:hover .rmi-sub{color:rgba(240,237,232,.4)}
+.rmi-arr{
+  font-size:20px;color:rgba(240,237,232,.2);
+  transition:transform .4s cubic-bezier(0.16,1,0.3,1),color .3s;
+}
+.rbmenu-item a:hover .rmi-arr{transform:translateX(6px);color:rgba(240,237,232,.5)}
+.rbmenu-item.active a .rmi-arr{color:rgba(240,237,232,.4)}
+
+/* Color dot on active */
+.rbmenu-item.active::before{
+  content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);
+  width:3px;height:calc(100% - 2px);background:var(--mc,#3A6FD4);border-radius:0 2px 2px 0;
+  opacity:.7;
+}
+
+.rbmenu-footer{
+  padding:20px 56px;border-top:1px solid rgba(240,237,232,.06);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+}
+.rbmf-left{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(240,237,232,.2)}
+.rbmf-right{display:flex;align-items:center;gap:16px}
+.rbmf-link{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(240,237,232,.25);text-decoration:none;transition:color .3s}
+.rbmf-link:hover{color:rgba(240,237,232,.6)}
+
+/* Big glow behind active module color */
+.rbmenu-glow{
+  position:absolute;top:50%;right:-10%;transform:translateY(-50%);
+  width:50vw;height:50vw;border-radius:50%;
+  background:var(--mglow,transparent);
+  pointer-events:none;opacity:.05;
+  transition:background 1s;
+  filter:blur(80px);
+}
+
+/* Bottom navigation bar */
+.rbnavbar{
+  position:fixed;bottom:0;left:0;right:0;z-index:8000;
+  background:rgba(12,12,12,.95);backdrop-filter:blur(24px);
+  border-top:1px solid rgba(240,237,232,.06);
+  height:48px;display:flex;align-items:stretch;
+}
+.rbnavbar-inner{
+  max-width:1440px;margin:0 auto;padding:0 20px;
+  display:flex;align-items:stretch;width:100%;
+}
+.rbnavbar-brand{
+  display:flex;align-items:center;gap:10px;
+  padding-right:16px;border-right:1px solid rgba(240,237,232,.06);
+  margin-right:2px;flex-shrink:0;
+}
+.rbnavbar-brand-txt{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(240,237,232,.25);white-space:nowrap}
+.rbnavbar-items{display:flex;align-items:stretch;flex:1;overflow-x:auto;scrollbar-width:none}
+.rbnavbar-items::-webkit-scrollbar{display:none}
+.rbnav-item{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:0 12px;text-decoration:none;color:inherit;
+  border-right:1px solid rgba(240,237,232,.04);
+  min-width:60px;position:relative;gap:2px;
+  transition:background .2s;
+}
+.rbnav-item:hover{background:rgba(240,237,232,.05)}
+.rbnav-item.active{background:rgba(240,237,232,.07)}
+.rbnav-item.active::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--nc);
+}
+.rbnav-code{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.1em;text-transform:uppercase;color:rgba(240,237,232,.3);line-height:1}
+.rbnav-item.active .rbnav-code{color:rgba(240,237,232,.55)}
+.rbnav-title{font-family:'DM Sans',sans-serif;font-size:9px;font-weight:400;color:rgba(240,237,232,.45);line-height:1;white-space:nowrap}
+.rbnav-item.active .rbnav-title{color:rgba(240,237,232,.85);font-weight:500}
+
+body{padding-bottom:48px !important}
+
+@media(max-width:600px){
+  .rbmenu-top,.rbmenu-body,.rbmenu-footer{padding-left:24px;padding-right:24px}
+  .rbmenu-item a{grid-template-columns:36px 1fr auto;gap:0 16px;padding:14px 0}
+  .rmi-label{font-size:clamp(22px,6vw,36px)}
+}
+`;
+document.head.appendChild(s);
+
+// ── Hamburger button ──
+const btn=document.createElement('button');
+btn.className='rbmenu-btn';
+// detect if page is dark (bg starts with #0 or rgb low)
+const bgCol=getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
+const isLight= bgCol && !bgCol.startsWith('#0') && !bgCol.startsWith('#1') && bgCol !== '';
+if(isLight) btn.classList.add('light');
+btn.setAttribute('aria-label','Apri menu');
+btn.innerHTML='<span class="l1"></span><span class="l2"></span><span class="l3"></span>';
+document.body.appendChild(btn);
+
+// ── Overlay ──
+const ov=document.createElement('div');
+ov.className='rbmenu-overlay';
+
+const currentMod=MODULES.find(m=>m.id===page)||MODULES[0];
+
+ov.innerHTML=`
+<div class="rbmenu-glow" id="rbglow" style="--mglow:${currentMod.color}"></div>
+<div class="rbmenu-top">
+  <div class="rbmenu-brand">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXUnktDf1BkU4tZMz6l8TUpkmiDo4iILkjmg&s" style="height:24px;filter:invert(1);opacity:.5;mix-blend-mode:screen;object-fit:contain" onerror="this.style.display='none'">
+    <div class="rbmenu-brand-sep"></div>
+    <img src="https://www.ribrainstudio.com/wp-content/uploads/2025/01/Logo_ribrain_Nero.svg" style="height:14px;filter:invert(1);opacity:.4" onerror="this.style.display='none'">
+    <div class="rbmenu-brand-sep"></div>
+    <span class="rbmenu-brand-label">Cruscotto Strategico · RimborsoalVolo</span>
+  </div>
+</div>
+<div class="rbmenu-body">
+  <ul class="rbmenu-items" id="rbItems">
+    ${MODULES.map(m=>`
+    <li class="rbmenu-item${m.id===page?' active':''}" style="--mc:${m.color};position:relative">
+      <a href="${m.url}">
+        <span class="rmi-code">${m.code}</span>
+        <span class="rmi-left">
+          <span class="rmi-label">${m.label}</span>
+          <span class="rmi-sub">${m.sub}</span>
+        </span>
+        <span class="rmi-arr">→</span>
+      </a>
+    </li>`).join('')}
+  </ul>
+</div>
+<div class="rbmenu-footer">
+  <span class="rbmf-left">Aprile 2026 · Ribrain Studio · Confidenziale</span>
+  <div class="rbmf-right">
+    <a href="m0.html" class="rbmf-link">Executive Summary</a>
+    <a href="m7.html" class="rbmf-link">Regolamentazione →</a>
+  </div>
+</div>`;
+document.body.appendChild(ov);
+
+// ── Bottom navbar ──
+const nb=document.createElement('nav');
+nb.className='rbnavbar';
+nb.innerHTML=`<div class="rbnavbar-inner">
+  <div class="rbnavbar-brand">
+    <img src="https://www.ribrainstudio.com/wp-content/uploads/2025/01/Logo_ribrain_Nero.svg" style="height:12px;filter:invert(1);opacity:.35" onerror="this.style.display='none'">
+    <span class="rbnavbar-brand-txt">× RAV</span>
+  </div>
+  <div class="rbnavbar-items">
+    ${MODULES.map(m=>`<a href="${m.url}" class="rbnav-item${m.id===page?' active':''}" style="--nc:${m.color}" title="${m.label}">
+      <span class="rbnav-code">${m.code}</span>
+      <span class="rbnav-title">${m.label}</span>
+    </a>`).join('')}
+  </div>
+</div>`;
+document.body.appendChild(nb);
+
+// ── Toggle logic ──
+let isOpen=false;
+
+function openMenu(){
+  isOpen=true;
+  btn.classList.add('open');
+  ov.classList.add('open');
+  btn.setAttribute('aria-label','Chiudi menu');
+  document.body.style.overflow='hidden';
+  // Stagger items
+  const items=ov.querySelectorAll('.rbmenu-item');
+  items.forEach((el,i)=>{
+    el.style.opacity='0';
+    el.style.transform='translateY(20px)';
+    el.style.transition=`opacity .5s ${.08+i*.06}s cubic-bezier(0.16,1,0.3,1), transform .5s ${.08+i*.06}s cubic-bezier(0.16,1,0.3,1)`;
+    requestAnimationFrame(()=>{
+      el.style.opacity='1';
+      el.style.transform='translateY(0)';
+    });
+  });
+}
+
+function closeMenu(){
+  isOpen=false;
+  btn.classList.remove('open');
+  ov.classList.remove('open');
+  btn.setAttribute('aria-label','Apri menu');
+  document.body.style.overflow='';
+}
+
+btn.addEventListener('click',()=>isOpen?closeMenu():openMenu());
+
+// Close on ESC
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&isOpen)closeMenu()});
+
+// Color glow on hover
+ov.querySelectorAll('.rbmenu-item').forEach((li,i)=>{
+  const m=MODULES[i];
+  li.addEventListener('mouseenter',()=>{
+    document.getElementById('rbglow').style.cssText=`--mglow:${m.color};background:${m.color}`;
+  });
+  li.addEventListener('mouseleave',()=>{
+    document.getElementById('rbglow').style.cssText=`--mglow:${currentMod.color};background:${currentMod.color}`;
+  });
+});
+
+})();
+
+</script>
+<script>
+/*
+  sources.js — Sistema footnote numerato con drawer
+  
+  Come funziona:
+  - In ogni HTML, le fonti sono dichiarate come data-source="ID" su qualsiasi elemento
+  - Questo script inietta i numeretti superscript e il drawer in basso
+  - Il drawer si apre/chiude con toggle fisso in basso a destra
+  - Le fonti sono raggruppate per modulo e mostrate come lista cliccabile
+*/
+
+(function(){
+'use strict';
+
+// ── FONTI PER PAGINA ──
+// key = id HTML pagina (m0, m1, ... m7)
+const PAGE_SOURCES = {
+  m0: [
+    {id:'s1', note:'Passeggeri aerei Italia 2024', url:'https://www.enac.gov.it/la-nostra-attivita/studi-e-analisi/dati-statistici', label:'ENAC — Dati Statistici Trasporto Aereo 2024'},
+    {id:'s2', note:'Regolamento CE 261/2004', url:'https://eur-lex.europa.eu/legal-content/IT/TXT/?uri=CELEX%3A32004R0261', label:'EUR-Lex — Regolamento CE n. 261/2004'},
+    {id:'s3', note:'Tasso di reclamo passeggeri aerei EU', url:'https://www.airhelp.com/it/airhelp-score/airline-ranking/', label:'AirHelp Score — Airline Ranking Report 2024'},
+    {id:'s4', note:'Mercato flight compensation EU', url:'https://www.eurocontrol.int/publication/performance-review-report-2023', label:'Eurocontrol — Performance Review Report 2023'},
+    {id:'s5', note:'Trustpilot RimborsoalVolo.it', url:'https://it.trustpilot.com/review/rimborsoalvolo.it', label:'Trustpilot — RimborsoalVolo.it · 12.154 recensioni'},
+  ],
+  m1: [
+    {id:'s1', note:'Traffico aereo Italia 2024', url:'https://www.enac.gov.it/la-nostra-attivita/studi-e-analisi/dati-statistici', label:'ENAC — Dati Statistici Trasporto Aereo Italia 2024'},
+    {id:'s2', note:'Regolamento diritti passeggeri', url:'https://eur-lex.europa.eu/legal-content/IT/TXT/?uri=CELEX%3A32004R0261', label:'EUR-Lex — Regolamento CE n. 261/2004'},
+    {id:'s3', note:'Consapevolezza diritti passeggeri (79% ignora)', url:'https://www.airhelp.com/it/airhelp-score/', label:'AirHelp Passenger Rights Study 2023'},
+    {id:'s4', note:'Statistiche disservizi aerei EU', url:'https://www.eurocontrol.int/sites/default/files/2024-03/eurocontrol-aviation-outlook-2024.pdf', label:'Eurocontrol — Aviation Outlook 2024'},
+    {id:'s5', note:'Stagionalità voli e disservizi', url:'https://www.enac.gov.it/comunicazione/notizie/news/enac-statistiche-2024', label:'ENAC — Report Stagionalità Disservizi 2024'},
+    {id:'s6', note:'Mercato claim compensation EU', url:'https://commission.europa.eu/topics/transport/passenger-rights/air_it', label:'Commissione Europea — Air Passenger Rights'},
+  ],
+  m2: [
+    {id:'s1', note:'Follower social AirHelp', url:'https://www.instagram.com/airhelp/', label:'Instagram AirHelp — profilo ufficiale'},
+    {id:'s2', note:'Trustpilot competitor analisi', url:'https://it.trustpilot.com/categories/legal_services', label:'Trustpilot IT — Categoria Servizi Legali'},
+    {id:'s3', note:'APRA membership RimborsoalVolo', url:'https://www.passengerrightadvocates.eu/', label:'APRA — Association of Passenger Right Advocates'},
+    {id:'s4', note:'Analisi paid search settore', url:'https://trends.google.it/trends/explore?q=rimborso+volo&geo=IT', label:'Google Trends IT — "rimborso volo" 2023–2024'},
+  ],
+  m3: [
+    {id:'s1', note:'Recensioni Trustpilot RimborsoalVolo', url:'https://it.trustpilot.com/review/rimborsoalvolo.it', label:'Trustpilot — RimborsoalVolo.it · 12.154 recensioni verificate'},
+    {id:'s2', note:'Metodologia VOC Trustpilot', url:'https://it.trustpilot.com/trust', label:'Trustpilot — Come funziona la verifica recensioni'},
+    {id:'s3', note:'Tasso risposta recensioni negative', url:'https://it.trustpilot.com/review/rimborsoalvolo.it/transparency', label:'Trustpilot — Profilo trasparenza RimborsoalVolo.it'},
+  ],
+  m4: [
+    {id:'s1', note:'Comportamento consumatori travel disruption EU', url:'https://commission.europa.eu/topics/transport/passenger-rights_it', label:'Commissione Europea — Diritti Passeggeri Aerei'},
+    {id:'s2', note:'Tasso di inerzia reclami passeggeri', url:'https://www.airhelp.com/it/airhelp-score/', label:'AirHelp Passenger Inaction Study 2023'},
+    {id:'s3', note:'Segmentazione passeggeri aerei IT', url:'https://www.enac.gov.it/la-nostra-attivita/studi-e-analisi/dati-statistici', label:'ENAC — Profilo Passeggero Aereo Italiano 2024'},
+    {id:'s4', note:'Consumer behavior in service failure', url:'https://hbr.org/topic/subject/customer-experience', label:'Harvard Business Review — Customer Experience in Service Recovery'},
+  ],
+  m5: [
+    {id:'s1', note:'Analisi comportamentale travel disruption', url:'https://www.eurocontrol.int/publication/performance-review-report-2023', label:'Eurocontrol — Passenger Behavior During Disruptions 2023'},
+    {id:'s2', note:'Mere Exposure Effect e memoria di brand', url:'https://psycnet.apa.org/record/1969-12099-001', label:'Zajonc R.B. (1968) — Attitudinal Effects of Mere Exposure · JPSP'},
+    {id:'s3', note:'Ricettività al messaggio pubblicitario in stato di stress', url:'https://journals.sagepub.com/doi/10.1177/0022243720946195', label:'Journal of Marketing Research — Emotional State & Ad Receptivity'},
+    {id:'s4', note:'Customer journey mapping methodology', url:'https://hbr.org/2010/11/the-truth-about-customer-experience', label:'HBR — The Truth About Customer Experience (Court et al., 2009)'},
+  ],
+  m6: [
+    {id:'s1', note:'WestJet Christmas Miracle case study', url:'https://shortyawards.com/6th/westjet-christmas-miracle-real-time-giving', label:'Shorty Awards — WestJet Christmas Miracle: Real-Time Giving'},
+    {id:'s2', note:'KLM Surprise campaign', url:'https://www.contagious.com/en/article/news-and-views/klm-surprise', label:'Contagious — KLM Surprise Campaign Analysis'},
+    {id:'s3', note:'BK Traffic Jam Whopper Cannes Grand Prix', url:'https://www.oneclub.org/awards/theoneshow/-award/36975/the-traffic-jam-whopper/', label:'The One Show — BK Traffic Jam Whopper · Bronze Pencil 2020'},
+    {id:'s4', note:'Casinò Venezia ambient advertising airport', url:'https://www.veniceairport.it', label:'SAVE Venezia — Aeroporto Marco Polo'},
+    {id:'s5', note:'Iberia Stopover Hola Madrid', url:'https://www.iberia.com/es/es/stopover-in-madrid/', label:'Iberia — Stopover Hola Madrid Program'},
+    {id:'s6', note:'Marketing aeroportuale italiano', url:'https://www.igpdecaux.it/aeroporti', label:'IGPDecaux — Advertising in Aeroporti Italiani 2026'},
+  ],
+  m7: [
+    {id:'s1', note:'Regolamento advertising aeroporti ADR', url:'https://www.adr.it', label:'ADR — Aeroporti di Roma · Partnership & Advertising'},
+    {id:'s2', note:'IGPDecaux concessionario SEA Milano', url:'https://www.igpdecaux.it/aeroporti', label:'IGPDecaux — Listino Aeroporti 2026 (Malpensa)'},
+    {id:'s3', note:'GESAC Napoli Capodichino', url:'https://www.aeroportodinapoli.it', label:'GESAC — Aeroporto di Napoli Capodichino'},
+    {id:'s4', note:'SOGAER Cagliari', url:'https://www.sogaer.it', label:'SOGAER — Aeroporto di Cagliari Elmas'},
+    {id:'s5', note:'SAVE Venezia Marco Polo', url:'https://www.veniceairport.it', label:'SAVE — Venezia Airport Marco Polo'},
+    {id:'s6', note:'APCOA parcheggi aeroportuali', url:'https://www.apcoa.it', label:'APCOA Italy — Parcheggi Aeroportuali'},
+    {id:'s7', note:'Regolamento CE 261/2004 — base normativa', url:'https://eur-lex.europa.eu/legal-content/IT/TXT/?uri=CELEX%3A32004R0261', label:'EUR-Lex — CE 261/2004 · Diritti Passeggeri Aerei'},
+  ],
+};
+
+// ── Detect current page ──
+const page=window.location.pathname.split('/').pop().replace('.html','')||'m0';
+const sources=PAGE_SOURCES[page]||PAGE_SOURCES['m0'];
+
+// ── Inject styles ──
+const style=document.createElement('style');
+style.textContent=`
+.src-toggle{
+  position:fixed;bottom:56px;right:16px;z-index:7500;
+  display:flex;align-items:center;gap:8px;
+  background:rgba(12,12,12,.9);border:1px solid rgba(240,237,232,.12);
+  backdrop-filter:blur(16px);
+  padding:7px 12px;cursor:pointer;
+  font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(240,237,232,.4);transition:all .25s;
+}
+.src-toggle:hover{border-color:rgba(240,237,232,.25);color:rgba(240,237,232,.7)}
+.src-toggle .st-dot{width:6px;height:6px;border-radius:50%;background:#3A86FF;flex-shrink:0}
+.src-toggle .st-n{
+  background:rgba(58,134,255,.2);color:#5A8AE8;
+  padding:1px 5px;border-radius:10px;font-size:8px;
+}
+
+.src-drawer{
+  position:fixed;bottom:48px;left:0;right:0;z-index:7000;
+  background:rgba(12,12,12,.97);backdrop-filter:blur(24px);
+  border-top:1px solid rgba(240,237,232,.08);
+  max-height:0;overflow:hidden;
+  transition:max-height .5s cubic-bezier(0.16,1,0.3,1),opacity .4s;
+  opacity:0;
+}
+.src-drawer.open{max-height:380px;opacity:1}
+.src-drawer-inner{padding:24px 56px 28px;overflow-y:auto;max-height:340px}
+.src-drawer-head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;
+}
+.src-drawer-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(240,237,232,.35)}
+.src-drawer-close{background:none;border:none;cursor:pointer;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(240,237,232,.25);transition:color .2s}
+.src-drawer-close:hover{color:rgba(240,237,232,.6)}
+.src-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:4px}
+.src-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:1px solid rgba(240,237,232,.05);transition:background .2s}
+.src-item:hover{background:rgba(240,237,232,.04)}
+.src-item-num{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.1em;color:rgba(240,237,232,.25);flex-shrink:0;padding-top:1px;min-width:18px}
+.src-item-body{flex:1}
+.src-item-label{font-size:11px;color:rgba(240,237,232,.65);line-height:1.5;margin-bottom:3px}
+.src-item-url{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.04em;color:rgba(58,134,255,.5);text-decoration:none;transition:color .2s;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.src-item-url:hover{color:#5A8AE8}
+
+@media(max-width:768px){
+  .src-drawer-inner{padding:20px 24px}
+  .src-list{grid-template-columns:1fr}
+  .src-toggle{bottom:56px;right:12px}
+}
+`;
+document.head.appendChild(style);
+
+// ── Build drawer ──
+const drawer=document.createElement('div');
+drawer.className='src-drawer';
+drawer.innerHTML=`<div class="src-drawer-inner">
+  <div class="src-drawer-head">
+    <span class="src-drawer-title">Fonti · ${sources.length} riferimenti · ${page.toUpperCase()}</span>
+    <button class="src-drawer-close" id="srcClose">Chiudi ✕</button>
+  </div>
+  <div class="src-list">
+    ${sources.map((s,i)=>`<div class="src-item">
+      <span class="src-item-num">${String(i+1).padStart(2,'0')}</span>
+      <div class="src-item-body">
+        <div class="src-item-label">${s.label}</div>
+        <a href="${s.url}" target="_blank" rel="noopener noreferrer" class="src-item-url">${s.url}</a>
+      </div>
+    </div>`).join('')}
+  </div>
+</div>`;
+document.body.appendChild(drawer);
+
+// ── Toggle button ──
+const toggle=document.createElement('button');
+toggle.className='src-toggle';
+toggle.innerHTML=`<span class="st-dot"></span>Fonti <span class="st-n">${sources.length}</span>`;
+document.body.appendChild(toggle);
+
+let open=false;
+function toggleDrawer(){
+  open=!open;
+  drawer.classList.toggle('open',open);
+  toggle.style.borderColor=open?'rgba(240,237,232,.25)':'';
+  toggle.style.color=open?'rgba(240,237,232,.7)':'';
+}
+toggle.addEventListener('click',toggleDrawer);
+document.getElementById('srcClose').addEventListener('click',()=>{open=true;toggleDrawer()});
+
+// Close on ESC
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&open){open=true;toggleDrawer()}});
+
+})();
+
+</script>
+
+<script>
+(function(){
+'use strict';
+
+var MODULES = [
+  {id:'m0',code:'00',label:'Executive Summary',sub:'Sintesi per il management',url:'m0.html',color:'#3A6FD4'},
+  {id:'m1',code:'01',label:'Mercato',sub:'Gap di consapevolezza · 220M passeggeri',url:'m1.html',color:'#3A86FF'},
+  {id:'m2',code:'02',label:'Competitor Map',sub:'White space identitario · AirHelp vs RAV',url:'m2.html',color:'#E94560'},
+  {id:'m3',code:'03',label:'Voice of Customer',sub:'12.154 recensioni Trustpilot',url:'m3.html',color:'#2D9E5F'},
+  {id:'m4',code:'04',label:'Personas',sub:'4 profili · inerzia come competitor',url:'m4.html',color:'#8338EC'},
+  {id:'m5',code:'05',label:'Mappa del Momento',sub:'5 fasi · Fase 2 = picco ricettività',url:'m5.html',color:'#FB8500'},
+  {id:'m6',code:'06',label:'Benchmark Creativi',sub:'WestJet · KLM · Casinò Venezia',url:'m6.html',color:'#D94F2B'},
+  {id:'m7',code:'07',label:'Regolamentazione',sub:'Verde · Giallo · Rosso · 5 aeroporti',url:'m7.html',color:'#E67E22'}
+];
+
+var path = window.location.pathname.split('/').pop().replace('.html','') || 'm0';
+var currentMod = MODULES[0];
+for (var ci = 0; ci < MODULES.length; ci++) {
+  if (MODULES[ci].id === path) { currentMod = MODULES[ci]; break; }
+}
+
+// ── Styles ──
+var s = document.createElement('style');
+s.textContent = [
+  '.rbmenu-btn{position:fixed;top:16px;right:20px;z-index:9001;width:44px;height:44px;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:5px;padding:8px}',
+  '.rbmenu-btn span{display:block;height:1.5px;background:#F0EDE8;border-radius:1px;transition:all .45s cubic-bezier(0.16,1,0.3,1);transform-origin:right center}',
+  '.rbmenu-btn.light span{background:#0C0C0C}',
+  '.rbmenu-btn .l1{width:22px}.rbmenu-btn .l2{width:16px}.rbmenu-btn .l3{width:22px}',
+  '.rbmenu-btn.open .l1{width:22px;transform:translateY(6.5px) rotate(-45deg)}',
+  '.rbmenu-btn.open .l2{opacity:0;width:0}',
+  '.rbmenu-btn.open .l3{width:22px;transform:translateY(-6.5px) rotate(45deg)}',
+  '.rbmenu-overlay{position:fixed;inset:0;z-index:9000;background:#0C0C0C;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .5s cubic-bezier(0.16,1,0.3,1);overflow:hidden}',
+  '.rbmenu-overlay.open{opacity:1;pointer-events:auto}',
+  '.rbmenu-top{display:flex;align-items:center;justify-content:space-between;padding:20px 56px;border-bottom:1px solid rgba(240,237,232,.06);flex-shrink:0}',
+  '.rbmenu-brand{display:flex;align-items:center;gap:14px}',
+  '.rbmenu-brand-sep{width:1px;height:16px;background:rgba(240,237,232,.15)}',
+  '.rbmenu-brand-label{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(240,237,232,.35)}',
+  '.rbmenu-body{flex:1;display:flex;flex-direction:column;justify-content:center;padding:32px 56px 40px;overflow-y:auto}',
+  '.rbmenu-items{list-style:none}',
+  '.rbmenu-item{border-top:1px solid rgba(240,237,232,.05);opacity:0;transform:translateY(20px);position:relative}',
+  '.rbmenu-item:last-child{border-bottom:1px solid rgba(240,237,232,.05)}',
+  '.rbmenu-item a{display:grid;grid-template-columns:48px 1fr auto;gap:0 24px;align-items:center;padding:18px 0;text-decoration:none;color:inherit;position:relative;overflow:hidden}',
+  '.rbmenu-item a::after{content:"";position:absolute;bottom:0;left:0;width:0;height:1px;background:currentColor;transition:width .5s cubic-bezier(0.16,1,0.3,1);opacity:.25}',
+  '.rbmenu-item a:hover::after{width:100%}',
+  '.rmi-code{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.12em;color:rgba(240,237,232,.25);line-height:1;transition:color .3s}',
+  '.rbmenu-item a:hover .rmi-code{color:rgba(240,237,232,.5)}',
+  '.rmi-left{display:flex;flex-direction:column;gap:4px}',
+  '.rmi-label{font-family:"Cormorant Garamond",Georgia,serif;font-weight:300;font-size:clamp(28px,3.5vw,48px);line-height:1;color:rgba(240,237,232,.75);transition:color .3s;letter-spacing:-.01em}',
+  '.rbmenu-item a:hover .rmi-label{color:#F0EDE8}',
+  '.rbmenu-item.active .rmi-label{color:#F0EDE8;font-style:italic}',
+  '.rmi-sub{font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(240,237,232,.25);transition:color .3s}',
+  '.rbmenu-item a:hover .rmi-sub{color:rgba(240,237,232,.4)}',
+  '.rmi-arr{font-size:20px;color:rgba(240,237,232,.2);transition:transform .4s cubic-bezier(0.16,1,0.3,1),color .3s}',
+  '.rbmenu-item a:hover .rmi-arr{transform:translateX(6px);color:rgba(240,237,232,.5)}',
+  '.rbmenu-item-active-bar{position:absolute;left:0;top:2px;bottom:2px;width:3px;border-radius:0 2px 2px 0;opacity:.7}',
+  '.rbmenu-footer{padding:20px 56px;border-top:1px solid rgba(240,237,232,.06);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}',
+  '.rbmf-left{font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(240,237,232,.2)}',
+  '.rbmf-right{display:flex;align-items:center;gap:16px}',
+  '.rbmf-link{font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(240,237,232,.25);text-decoration:none;transition:color .3s}',
+  '.rbmf-link:hover{color:rgba(240,237,232,.6)}',
+  '.rbmenu-glow{position:absolute;top:50%;right:-10%;transform:translateY(-50%);width:50vw;height:50vw;border-radius:50%;pointer-events:none;opacity:.06;transition:background 1s;filter:blur(80px)}',
+  '.rbnavbar{position:fixed;bottom:0;left:0;right:0;z-index:8000;background:rgba(12,12,12,.95);backdrop-filter:blur(24px);border-top:1px solid rgba(240,237,232,.06);height:48px;display:flex;align-items:stretch}',
+  '.rbnavbar-inner{max-width:1440px;margin:0 auto;padding:0 20px;display:flex;align-items:stretch;width:100%}',
+  '.rbnavbar-brand{display:flex;align-items:center;gap:10px;padding-right:16px;border-right:1px solid rgba(240,237,232,.06);margin-right:2px;flex-shrink:0}',
+  '.rbnavbar-brand-txt{font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(240,237,232,.25);white-space:nowrap}',
+  '.rbnavbar-items{display:flex;align-items:stretch;flex:1;overflow-x:auto;scrollbar-width:none}',
+  '.rbnavbar-items::-webkit-scrollbar{display:none}',
+  '.rbnav-item{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 12px;text-decoration:none;color:inherit;border-right:1px solid rgba(240,237,232,.04);min-width:60px;position:relative;gap:2px;transition:background .2s}',
+  '.rbnav-item:hover{background:rgba(240,237,232,.05)}',
+  '.rbnav-item.active{background:rgba(240,237,232,.07)}',
+  '.rbnav-item-bar{position:absolute;top:0;left:0;right:0;height:2px}',
+  '.rbnav-code{font-family:"DM Mono",monospace;font-size:7px;letter-spacing:.1em;text-transform:uppercase;color:rgba(240,237,232,.3);line-height:1}',
+  '.rbnav-item.active .rbnav-code{color:rgba(240,237,232,.55)}',
+  '.rbnav-title{font-family:"DM Sans",sans-serif;font-size:9px;font-weight:400;color:rgba(240,237,232,.45);line-height:1;white-space:nowrap}',
+  '.rbnav-item.active .rbnav-title{color:rgba(240,237,232,.85);font-weight:500}',
+  'body{padding-bottom:48px !important}',
+  '@media(max-width:600px){.rbmenu-top,.rbmenu-body,.rbmenu-footer{padding-left:24px;padding-right:24px}.rmi-label{font-size:clamp(22px,6vw,36px)}}'
+].join('\n');
+document.head.appendChild(s);
+
+// ── Hamburger button ──
+var btn = document.createElement('button');
+btn.className = 'rbmenu-btn';
+var bgCol = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
+var isLight = bgCol && bgCol !== '#0C0C0C' && bgCol !== '#0D0D0D' && bgCol !== '#111' && bgCol.indexOf('#F') === 0;
+if (isLight) btn.classList.add('light');
+btn.setAttribute('aria-label', 'Apri menu');
+btn.innerHTML = '<span class="l1"></span><span class="l2"></span><span class="l3"></span>';
+document.body.appendChild(btn);
+
+// ── Build overlay ──
+var ov = document.createElement('div');
+ov.className = 'rbmenu-overlay';
+
+// Build items HTML using string concat (no nested template literals)
+var itemsHtml = '';
+for (var i = 0; i < MODULES.length; i++) {
+  var m = MODULES[i];
+  var isActive = m.id === path;
+  var activeBar = isActive ? '<span class="rbmenu-item-active-bar" style="background:' + m.color + '"></span>' : '';
+  itemsHtml += '<li class="rbmenu-item' + (isActive ? ' active' : '') + '">' +
+    activeBar +
+    '<a href="' + m.url + '">' +
+    '<span class="rmi-code">' + m.code + '</span>' +
+    '<span class="rmi-left">' +
+    '<span class="rmi-label">' + m.label + '</span>' +
+    '<span class="rmi-sub">' + m.sub + '</span>' +
+    '</span>' +
+    '<span class="rmi-arr">\u2192</span>' +
+    '</a></li>';
+}
+
+ov.innerHTML = '<div class="rbmenu-glow" id="rbglow" style="background:' + currentMod.color + '"></div>' +
+  '<div class="rbmenu-top">' +
+  '<div class="rbmenu-brand">' +
+  '<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXUnktDf1BkU4tZMz6l8TUpkmiDo4iILkjmg&s" style="height:24px;filter:invert(1);opacity:.5;mix-blend-mode:screen;object-fit:contain" onerror="this.style.display=\'none\'">' +
+  '<div class="rbmenu-brand-sep"></div>' +
+  '<img src="https://www.ribrainstudio.com/wp-content/uploads/2025/01/Logo_ribrain_Nero.svg" style="height:14px;filter:invert(1);opacity:.4" onerror="this.style.display=\'none\'">' +
+  '<div class="rbmenu-brand-sep"></div>' +
+  '<span class="rbmenu-brand-label">Cruscotto Strategico \u00b7 RimborsoalVolo</span>' +
+  '</div></div>' +
+  '<div class="rbmenu-body"><ul class="rbmenu-items" id="rbItems">' + itemsHtml + '</ul></div>' +
+  '<div class="rbmenu-footer">' +
+  '<span class="rbmf-left">Aprile 2026 \u00b7 Ribrain Studio \u00b7 Confidenziale</span>' +
+  '<div class="rbmf-right">' +
+  '<a href="m0.html" class="rbmf-link">Executive Summary</a>' +
+  '<a href="m7.html" class="rbmf-link">Regolamentazione \u2192</a>' +
+  '</div></div>';
+document.body.appendChild(ov);
+
+// ── Bottom navbar ──
+var nb = document.createElement('nav');
+nb.className = 'rbnavbar';
+var navItemsHtml = '';
+for (var ni = 0; ni < MODULES.length; ni++) {
+  var nm = MODULES[ni];
+  var isNavActive = nm.id === path;
+  var activeTopBar = isNavActive ? '<span class="rbnav-item-bar" style="background:' + nm.color + '"></span>' : '';
+  navItemsHtml += '<a href="' + nm.url + '" class="rbnav-item' + (isNavActive ? ' active' : '') + '" title="' + nm.label + '">' +
+    activeTopBar +
+    '<span class="rbnav-code">' + nm.code + '</span>' +
+    '<span class="rbnav-title">' + nm.label + '</span>' +
+    '</a>';
+}
+nb.innerHTML = '<div class="rbnavbar-inner">' +
+  '<div class="rbnavbar-brand">' +
+  '<img src="https://www.ribrainstudio.com/wp-content/uploads/2025/01/Logo_ribrain_Nero.svg" style="height:12px;filter:invert(1);opacity:.35" onerror="this.style.display=\'none\'">' +
+  '<span class="rbnavbar-brand-txt">\u00d7 RAV</span>' +
+  '</div>' +
+  '<div class="rbnavbar-items">' + navItemsHtml + '</div>' +
+  '</div>';
+document.body.appendChild(nb);
+
+// ── Toggle logic ──
+var isOpen = false;
+
+function openMenu() {
+  isOpen = true;
+  btn.classList.add('open');
+  ov.classList.add('open');
+  btn.setAttribute('aria-label', 'Chiudi menu');
+  document.body.style.overflow = 'hidden';
+  var items = ov.querySelectorAll('.rbmenu-item');
+  for (var ii = 0; ii < items.length; ii++) {
+    (function(el, idx) {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = 'opacity .5s ' + (.08 + idx * .06) + 's cubic-bezier(0.16,1,0.3,1), transform .5s ' + (.08 + idx * .06) + 's cubic-bezier(0.16,1,0.3,1)';
+      setTimeout(function() {
+        el.style.opacity = '1';
+        el.style.transform = 'translateY(0)';
+      }, 10);
+    })(items[ii], ii);
+  }
+}
+
+function closeMenu() {
+  isOpen = false;
+  btn.classList.remove('open');
+  ov.classList.remove('open');
+  btn.setAttribute('aria-label', 'Apri menu');
+  document.body.style.overflow = '';
+}
+
+btn.addEventListener('click', function() { if (isOpen) closeMenu(); else openMenu(); });
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && isOpen) closeMenu(); });
+
+// ── Color glow on hover ──
+var lis = ov.querySelectorAll('.rbmenu-item');
+for (var gi = 0; gi < lis.length; gi++) {
+  (function(li, mod) {
+    li.addEventListener('mouseenter', function() {
+      var glow = document.getElementById('rbglow');
+      if (glow) glow.style.background = mod.color;
+    });
+    li.addEventListener('mouseleave', function() {
+      var glow = document.getElementById('rbglow');
+      if (glow) glow.style.background = currentMod.color;
+    });
+  })(lis[gi], MODULES[gi]);
+}
+
+})();
+
+</script>
+<script>
+(function(){
+'use strict';
+
+var PAGE_SOURCES = {
+  m0: [
+    {label:'ENAC — Dati Statistici Trasporto Aereo 2024', url:'https://www.enac.gov.it/la-nostra-attivita/studi-e-analisi/dati-statistici'},
+    {label:'EUR-Lex — Regolamento CE n. 261/2004', url:'https://eur-lex.europa.eu/legal-content/IT/TXT/?uri=CELEX%3A32004R0261'},
+    {label:'AirHelp Score — Airline Ranking Report 2024', url:'https://www.airhelp.com/it/airhelp-score/airline-ranking/'},
+    {label:'Eurocontrol — Performance Review Report 2023', url:'https://www.eurocontrol.int/publication/performance-review-report-2023'},
+    {label:'Trustpilot — RimborsoalVolo.it · 12.154 recensioni', url:'https://it.trustpilot.com/review/rimborsoalvolo.it'}
+  ],
+  m1: [
+    {label:'ENAC — Dati Statistici Trasporto Aereo Italia 2024', url:'https://www.enac.gov.it/la-nostra-attivita/studi-e-analisi/dati-statistici'},
+    {label:'EUR-Lex — Regolamento CE n. 261/2004', url:'https://eur-lex.europa.eu/legal-content/IT/TXT/?uri=CELEX%3A32004R0261'},
+    {label:'AirHelp Passenger Rights Study 2023', url:'https://www.airhelp.com/it/airhelp-score/'},
+    {label:'Eurocontrol — Aviation Outlook 2024', url:'https://www.eurocontrol.int/sites/default/files/2024-03/eurocontrol-aviation-outlook-2024.pdf'},
+    {label:'Commissione Europea — Air Passenger Rights', url:'https://commission.europa.eu/topics/transport/passenger-rights/air_it'},
+    {label:'ENAC — Statistiche disservizi aerei 2024', url:'https://www.enac.gov.it/comunicazione/notizie'}
+  ],
+  m2: [
+    {label:'Instagram AirHelp — profilo ufficiale', url:'https://www.instagram.com/airhelp/'},
+    {label:'Trustpilot IT — Categoria Servizi Legali', url:'https://it.trustpilot.com/categories/legal_services'},
+    {label:'APRA — Association of Passenger Right Advocates', url:'https://www.passengerrightadvocates.eu/'},
+    {label:'Google Trends IT — "rimborso volo" 2023–2024', url:'https://trends.google.it/trends/explore?q=rimborso+volo&geo=IT'}
+  ],
+  m3: [
+    {label:'Trustpilot — RimborsoalVolo.it · 12.154 recensioni verificate', url:'https://it.trustpilot.com/review/rimborsoalvolo.it'},
+    {label:'Trustpilot — Come funziona la verifica recensioni', url:'https://it.trustpilot.com/trust'},
+    {label:'Trustpilot — Profilo trasparenza RimborsoalVolo.it', url:'https://it.trustpilot.com/review/rimborsoalvolo.it'}
+  ],
+  m4: [
+    {label:'Commissione Europea — Diritti Passeggeri Aerei', url:'https://commission.europa.eu/topics/transport/passenger-rights_it'},
+    {label:'AirHelp Passenger Inaction Study 2023', url:'https://www.airhelp.com/it/airhelp-score/'},
+    {label:'ENAC — Profilo Passeggero Aereo Italiano 2024', url:'https://www.enac.gov.it/la-nostra-attivita/studi-e-analisi/dati-statistici'},
+    {label:'Harvard Business Review — Customer Experience in Service Recovery', url:'https://hbr.org/topic/subject/customer-experience'}
+  ],
+  m5: [
+    {label:'Eurocontrol — Passenger Behavior During Disruptions 2023', url:'https://www.eurocontrol.int/publication/performance-review-report-2023'},
+    {label:'Zajonc R.B. (1968) — Attitudinal Effects of Mere Exposure · JPSP', url:'https://psycnet.apa.org/record/1969-12099-001'},
+    {label:'Journal of Marketing Research — Emotional State & Ad Receptivity', url:'https://journals.sagepub.com/doi/10.1177/0022243720946195'},
+    {label:'HBR — The Truth About Customer Experience (Court et al., 2009)', url:'https://hbr.org/2010/11/the-truth-about-customer-experience'}
+  ],
+  m6: [
+    {label:'Shorty Awards — WestJet Christmas Miracle: Real-Time Giving', url:'https://shortyawards.com/6th/westjet-christmas-miracle-real-time-giving'},
+    {label:'Contagious — KLM Surprise Campaign Analysis', url:'https://www.contagious.com/en/article/news-and-views/klm-surprise'},
+    {label:'The One Show — BK Traffic Jam Whopper', url:'https://www.oneclub.org/awards/theoneshow/-award/36975/the-traffic-jam-whopper/'},
+    {label:'SAVE Venezia — Aeroporto Marco Polo', url:'https://www.veniceairport.it'},
+    {label:'Iberia — Stopover Hola Madrid Program', url:'https://www.iberia.com/es/es/stopover-in-madrid/'},
+    {label:'IGPDecaux — Advertising in Aeroporti Italiani 2026', url:'https://www.igpdecaux.it/aeroporti'}
+  ],
+  m7: [
+    {label:'ADR — Aeroporti di Roma · Partnership & Advertising', url:'https://www.adr.it'},
+    {label:'IGPDecaux — Listino Aeroporti 2026 (Malpensa)', url:'https://www.igpdecaux.it/aeroporti'},
+    {label:'GESAC — Aeroporto di Napoli Capodichino', url:'https://www.aeroportodinapoli.it'},
+    {label:'SOGAER — Aeroporto di Cagliari Elmas', url:'https://www.sogaer.it'},
+    {label:'SAVE — Venezia Airport Marco Polo', url:'https://www.veniceairport.it'},
+    {label:'APCOA Italy — Parcheggi Aeroportuali', url:'https://www.apcoa.it'},
+    {label:'EUR-Lex — CE 261/2004 · Diritti Passeggeri Aerei', url:'https://eur-lex.europa.eu/legal-content/IT/TXT/?uri=CELEX%3A32004R0261'}
+  ]
+};
+
+var path = window.location.pathname.split('/').pop().replace('.html','') || 'm0';
+var sources = PAGE_SOURCES[path] || PAGE_SOURCES['m0'];
+
+// ── Styles ──
+var style = document.createElement('style');
+style.textContent = [
+  '.src-toggle{position:fixed;bottom:56px;right:16px;z-index:7500;display:flex;align-items:center;gap:8px;background:rgba(12,12,12,.9);border:1px solid rgba(240,237,232,.12);backdrop-filter:blur(16px);padding:7px 12px;cursor:pointer;font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(240,237,232,.4);transition:all .25s}',
+  '.src-toggle:hover{border-color:rgba(240,237,232,.25);color:rgba(240,237,232,.7)}',
+  '.st-dot{width:6px;height:6px;border-radius:50%;background:#3A86FF;flex-shrink:0}',
+  '.st-n{background:rgba(58,134,255,.2);color:#5A8AE8;padding:1px 5px;border-radius:10px;font-size:8px}',
+  '.src-drawer{position:fixed;bottom:48px;left:0;right:0;z-index:7000;background:rgba(12,12,12,.97);backdrop-filter:blur(24px);border-top:1px solid rgba(240,237,232,.08);max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(0.16,1,0.3,1),opacity .4s;opacity:0}',
+  '.src-drawer.open{max-height:380px;opacity:1}',
+  '.src-drawer-inner{padding:24px 56px 28px;overflow-y:auto;max-height:340px}',
+  '.src-drawer-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}',
+  '.src-drawer-title{font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(240,237,232,.35)}',
+  '.src-drawer-close{background:none;border:none;cursor:pointer;font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(240,237,232,.25);transition:color .2s}',
+  '.src-drawer-close:hover{color:rgba(240,237,232,.6)}',
+  '.src-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:4px}',
+  '.src-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:1px solid rgba(240,237,232,.05);transition:background .2s}',
+  '.src-item:hover{background:rgba(240,237,232,.04)}',
+  '.src-item-num{font-family:"DM Mono",monospace;font-size:8px;letter-spacing:.1em;color:rgba(240,237,232,.25);flex-shrink:0;padding-top:1px;min-width:18px}',
+  '.src-item-body{flex:1}',
+  '.src-item-label{font-size:11px;color:rgba(240,237,232,.65);line-height:1.5;margin-bottom:3px}',
+  '.src-item-url{font-family:"DM Mono",monospace;font-size:8px;letter-spacing:.04em;color:rgba(58,134,255,.5);text-decoration:none;transition:color .2s;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}',
+  '.src-item-url:hover{color:#5A8AE8}',
+  '@media(max-width:768px){.src-drawer-inner{padding:20px 24px}.src-list{grid-template-columns:1fr}}'
+].join('\n');
+document.head.appendChild(style);
+
+// ── Drawer ──
+var drawer = document.createElement('div');
+drawer.className = 'src-drawer';
+
+var listHtml = '';
+for (var i = 0; i < sources.length; i++) {
+  var src = sources[i];
+  var num = (i + 1) < 10 ? '0' + (i + 1) : '' + (i + 1);
+  listHtml += '<div class="src-item">' +
+    '<span class="src-item-num">' + num + '</span>' +
+    '<div class="src-item-body">' +
+    '<div class="src-item-label">' + src.label + '</div>' +
+    '<a href="' + src.url + '" target="_blank" rel="noopener noreferrer" class="src-item-url">' + src.url + '</a>' +
+    '</div></div>';
+}
+
+drawer.innerHTML = '<div class="src-drawer-inner">' +
+  '<div class="src-drawer-head">' +
+  '<span class="src-drawer-title">Fonti \u00b7 ' + sources.length + ' riferimenti \u00b7 ' + path.toUpperCase() + '</span>' +
+  '<button class="src-drawer-close" id="srcClose">Chiudi \u2715</button>' +
+  '</div>' +
+  '<div class="src-list">' + listHtml + '</div>' +
+  '</div>';
+document.body.appendChild(drawer);
+
+// ── Toggle button ──
+var toggle = document.createElement('button');
+toggle.className = 'src-toggle';
+toggle.innerHTML = '<span class="st-dot"></span>Fonti <span class="st-n">' + sources.length + '</span>';
+document.body.appendChild(toggle);
+
+var isOpen = false;
+function toggleDrawer() {
+  isOpen = !isOpen;
+  drawer.classList.toggle('open', isOpen);
+  toggle.style.borderColor = isOpen ? 'rgba(240,237,232,.25)' : '';
+  toggle.style.color = isOpen ? 'rgba(240,237,232,.7)' : '';
+}
+toggle.addEventListener('click', toggleDrawer);
+document.getElementById('srcClose').addEventListener('click', function() { if (isOpen) toggleDrawer(); });
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && isOpen) toggleDrawer(); });
+
+})();
+
 </script>
 </body>
 </html>
