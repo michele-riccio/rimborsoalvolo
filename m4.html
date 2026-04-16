@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M4 — Personas · RimborsoalVolo × Ribrain</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<style>
+:root{
+  --bg:#F7F5F0;--bg-warm:#EDE9E1;--brand:#1B4F9B;--brand-light:#E8F0FC;
+  --accent:#D94F2B;--ink:#0C0C0C;--ink-60:rgba(12,12,12,.60);
+  --ink-30:rgba(12,12,12,.28);--ink-10:rgba(12,12,12,.08);
+  --white:#FFFFFF;--rule:rgba(12,12,12,.10);
+  --p1:#3A86FF;--p2:#8338EC;--p3:#E94560;--p4:#FB8500;
+  --f-display:'Cormorant Garamond',Georgia,serif;
+  --f-sans:'DM Sans',system-ui,sans-serif;
+  --f-mono:'DM Mono',monospace;
+  --ease:cubic-bezier(0.16,1,0.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-sans);font-weight:300;line-height:1.6;overflow-x:hidden;cursor:none}
+.cursor{position:fixed;width:10px;height:10px;background:var(--ink);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:multiply}
+.cursor-ring{position:fixed;width:40px;height:40px;border:1px solid rgba(12,12,12,.3);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .5s var(--ease)}
+.progress-bar{position:fixed;top:63px;left:0;height:2px;background:var(--brand);z-index:101;width:0%}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9997;opacity:.4}
+.site-header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(247,245,240,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--rule);height:64px;display:flex;align-items:center}
+.header-inner{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:1320px;margin:0 auto;padding:0 48px}
+.hb{display:flex;align-items:center;gap:16px;text-decoration:none;color:var(--ink)}
+.hd{width:1px;height:18px;background:var(--rule)}
+.hl{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-60)}
+.hr2{display:flex;align-items:center;gap:24px}
+.hback{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;color:var(--ink-30);text-decoration:none;transition:color .3s}
+.hback:hover{color:var(--brand)}
+.htag{font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:var(--brand);color:var(--white);padding:4px 10px;border-radius:2px}
+.hmod{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;color:var(--ink-60)}
+.wrap{max-width:1320px;margin:0 auto;padding:0 48px}
+/* HERO */
+.hero{padding:130px 0 60px;min-height:88vh;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.hero-bg{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--f-display);font-size:clamp(120px,18vw,260px);font-weight:300;color:rgba(12,12,12,.025);white-space:nowrap;pointer-events:none;user-select:none}
+.hlabel{display:flex;align-items:center;gap:14px;margin-bottom:32px;opacity:0;transform:translateY(16px)}
+.hlabel-line{width:36px;height:1px;background:var(--brand)}
+.hlabel span{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-60)}
+.hero-h1{font-family:var(--f-display);font-weight:300;font-size:clamp(60px,7.5vw,116px);line-height:1.0;opacity:0;transform:translateY(40px)}
+.hero-h1 em{font-style:italic;color:var(--brand)}
+.hero-sub{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--rule);margin-top:48px;opacity:0}
+.hs-col{padding:28px 40px 28px 0;border-right:1px solid var(--rule)}
+.hs-col:last-child{border-right:none;padding:28px 0 28px 40px}
+.hs-label{font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-30);margin-bottom:10px}
+.hs-text{font-size:14px;line-height:1.7;color:var(--ink-60)}
+.hs-text strong{font-weight:500;color:var(--ink)}
+/* SELECTOR */
+.selector-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;background:var(--bg-warm)}
+.sel-tab{
+  padding:32px 28px;cursor:pointer;position:relative;overflow:hidden;
+  transition:transform .25s var(--ease),box-shadow .25s var(--ease);
+  background:var(--white);
+  border-left:5px solid var(--tab-color,var(--brand));
+}
+.sel-tab.inactive{opacity:.65;filter:grayscale(.2)}
+.sel-tab.active{
+  background:var(--tab-color,var(--brand));
+  border-left-color:transparent;
+  transform:translateY(-3px);
+  box-shadow:0 8px 32px rgba(0,0,0,.12);
+}
+.sel-tab.active .sel-code{color:rgba(255,255,255,.5)}
+.sel-tab.active .sel-name{color:var(--white)}
+.sel-tab.active .sel-demo{color:rgba(255,255,255,.55)}
+.sel-tab:hover:not(.active){transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.sel-code{font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-30);margin-bottom:8px;transition:color .25s}
+.sel-name{font-family:var(--f-display);font-size:20px;font-weight:400;line-height:1.2;margin-bottom:8px;transition:color .25s;color:var(--tab-color,var(--brand))}
+.sel-pill{display:inline-block;font-family:var(--f-mono);font-size:8px;letter-spacing:.07em;text-transform:uppercase;padding:3px 8px;border-radius:2px;margin-bottom:8px}
+.sel-tab.active .sel-pill{background:rgba(255,255,255,.2);color:var(--white)}
+.sel-demo{font-size:11px;color:var(--ink-30);line-height:1.5;transition:color .25s}
+.sel-indicator{display:none}
+/* PERSONA CANVAS */
+.persona-canvas{background:var(--white)}
+.pc-grid{display:grid;grid-template-columns:1fr 1fr;min-height:560px}
+.pc-left{padding:48px;display:flex;flex-direction:column;gap:28px;border-right:1px solid var(--rule)}
+.pc-tag-row{display:flex;align-items:center;gap:10px}
+.pc-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.pc-tag-lbl{font-family:var(--f-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-30)}
+.pc-name{font-family:var(--f-display);font-size:clamp(32px,3.5vw,52px);font-weight:300;line-height:1.1}
+.pc-sub{font-size:12px;color:var(--ink-60)}
+.radar-container{display:flex;justify-content:center}
+canvas#radarCanvas{display:block;max-width:300px;width:100%}
+.pc-stats{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+.pcs-item{background:var(--bg);padding:18px 20px}
+.pcs-num{font-family:var(--f-display);font-size:32px;font-weight:300;line-height:1;margin-bottom:4px}
+.pcs-label{font-family:var(--f-mono);font-size:8px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-30);line-height:1.4}
+.pc-right{padding:48px;display:flex;flex-direction:column;gap:0}
+.pc-sec-lbl{font-family:var(--f-mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-30);margin-bottom:12px;display:block}
+.pc-emotions{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:24px}
+.em-item{padding:14px 16px;border:1px solid var(--rule);position:relative;overflow:hidden}
+.em-bg{position:absolute;inset:0;opacity:.06}
+.em-bar{position:absolute;bottom:0;left:0;height:2px;width:0%;z-index:1;transition:width .9s var(--ease)}
+.em-lbl{font-family:var(--f-mono);font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-30);margin-bottom:4px;position:relative;z-index:2}
+.em-val{font-family:var(--f-display);font-size:22px;font-weight:300;line-height:1;position:relative;z-index:2}
+.pc-pills{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:20px}
+.ppill{font-size:11px;padding:5px 12px;border-radius:2px;transition:transform .2s;cursor:default}
+.ppill:hover{transform:translateY(-1px)}
+.ppill--t{background:var(--brand-light);color:var(--brand);border:1px solid rgba(27,79,155,.12)}
+.ppill--b{background:rgba(200,40,40,.06);color:#C62828;border:1px solid rgba(200,40,40,.1)}
+.pc-channels{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:24px}
+.ch-chip{display:flex;align-items:center;gap:6px;background:var(--bg);padding:7px 12px;font-family:var(--f-mono);font-size:9px;letter-spacing:.06em;color:var(--ink-60)}
+.ch-ico{font-size:13px}
+.pc-copy{padding:20px 24px;margin-top:auto}
+.pc-copy-lbl{font-family:var(--f-mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+.pc-copy-txt{font-family:var(--f-display);font-size:18px;font-weight:300;line-height:1.4}
+.pc-copy-txt em{font-style:italic;opacity:.5}
+/* PEOPLE */
+.people-section{padding:72px 0;background:var(--ink);overflow:hidden}
+.ppl-label{font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:10px;display:block}
+.ppl-h2{font-family:var(--f-display);font-weight:300;font-size:clamp(32px,4vw,56px);line-height:1.1;color:var(--white);margin-bottom:40px}
+.ppl-h2 em{font-style:italic;color:rgba(255,255,255,.3)}
+.people-grid{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:24px}
+.pg-p{width:18px;height:18px;opacity:0}
+.ppl-legend{display:flex;gap:28px;margin-bottom:40px;flex-wrap:wrap}
+.pll-item{display:flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;color:rgba(255,255,255,.4)}
+.pll-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.pll-num{font-family:var(--f-display);font-size:22px;font-weight:300;color:var(--white);margin-left:4px}
+.journey-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+.js-step{padding:28px 24px;border-right:1px solid rgba(255,255,255,.05);position:relative;overflow:hidden;opacity:0;transform:translateY(14px)}
+.js-step:last-child{border-right:none}
+.js-step::before{content:'';position:absolute;top:0;left:0;width:100%;height:2px;transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}
+.js-step:hover::before{transform:scaleX(1)}
+.js-pname{font-family:var(--f-display);font-size:17px;font-weight:400;color:var(--white);margin-bottom:4px}
+.js-inlabel{font-family:var(--f-mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:10px}
+.js-bar{height:2px;background:rgba(255,255,255,.08);border-radius:1px;margin-bottom:14px;overflow:hidden}
+.js-bar-fill{height:100%;width:0%;border-radius:1px;transition:width 1.4s var(--ease)}
+.js-insights{display:flex;flex-direction:column;gap:5px}
+.js-line{font-size:11px;color:rgba(255,255,255,.3);line-height:1.5;padding-left:10px;position:relative}
+.js-line::before{content:'';position:absolute;left:0;top:7px;width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.18)}
+/* COMPARE */
+.compare-section{padding:72px 0;background:var(--white)}
+.ct-head{display:grid;grid-template-columns:130px repeat(4,1fr);background:var(--ink);padding:14px 20px;gap:10px}
+.cth{font-family:var(--f-mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;text-align:center}
+.cth:first-child{text-align:left;color:rgba(255,255,255,.3)}
+.ct-row{display:grid;grid-template-columns:130px repeat(4,1fr);padding:14px 20px;gap:10px;border-top:1px solid var(--rule);align-items:center;opacity:0;transform:translateX(-10px);transition:background .2s}
+.ct-row:hover{background:var(--bg)}
+.ct-key{font-family:var(--f-mono);font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-30)}
+.ct-cell{text-align:center;font-size:11px;color:var(--ink-60);line-height:1.4}
+.dots{display:flex;justify-content:center;gap:3px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--ink-10)}
+/* MESSAGING */
+.msg-section{padding:72px 0;background:var(--bg)}
+.msg-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;margin-top:40px}
+.msg-card{padding:36px 32px;opacity:0;transform:translateY(18px)}
+.msg-card:nth-child(1){background:rgba(58,134,255,.07);border:1px solid rgba(58,134,255,.1)}
+.msg-card:nth-child(2){background:rgba(131,56,236,.07);border:1px solid rgba(131,56,236,.1)}
+.msg-card:nth-child(3){background:rgba(233,69,96,.07);border:1px solid rgba(233,69,96,.1)}
+.msg-card:nth-child(4){background:rgba(251,133,0,.07);border:1px solid rgba(251,133,0,.1)}
+.msg-hdr{display:flex;align-items:center;gap:9px;margin-bottom:14px}
+.msg-mdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.msg-plabel{font-family:var(--f-mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase}
+.msg-q{font-family:var(--f-display);font-size:clamp(16px,1.8vw,22px);font-weight:300;line-height:1.4;color:var(--ink);padding:14px 0;border-top:1px solid rgba(0,0,0,.06);border-bottom:1px solid rgba(0,0,0,.06);margin-bottom:12px}
+.msg-q::before{content:'"';opacity:.35}
+.msg-q::after{content:'"';opacity:.35}
+.msg-why{font-size:12px;color:var(--ink-60);line-height:1.6}
+/* NEXT + FOOTER */
+.next-section{padding:56px 0;border-top:1px solid var(--rule)}
+.next-inner{display:flex;align-items:center;justify-content:space-between}
+.next-label{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-30)}
+.next-link{display:flex;align-items:center;gap:16px;text-decoration:none;color:var(--ink);transition:gap .4s var(--ease)}
+.next-link:hover{gap:24px}
+.next-link-text{font-family:var(--f-display);font-size:clamp(26px,3vw,42px);font-weight:300}
+.next-arrow{font-size:30px;color:var(--brand)}
+.site-footer{padding:36px 0;border-top:1px solid var(--rule)}
+.footer-inner{display:flex;align-items:center;justify-content:space-between}
+.fl{display:flex;align-items:center;gap:12px}
+.fl-sep{font-family:var(--f-mono);font-size:11px;color:var(--ink-30)}
+.fr-foot{font-family:var(--f-mono);font-size:11px;color:var(--ink-30)}
+@media(max-width:1024px){
+  .selector-strip{grid-template-columns:repeat(2,1fr)}
+  .pc-grid{grid-template-columns:1fr}
+  .pc-left{border-right:none;border-bottom:1px solid var(--rule)}
+  .journey-strip{grid-template-columns:repeat(2,1fr)}
+  .msg-grid{grid-template-columns:1fr}
+}
+@media(max-width:768px){
+  .header-inner{padding:0 24px}
+  .hero-sub{grid-template-columns:1fr}
+  .hs-col{border-right:none;border-bottom:1px solid var(--rule);padding:20px 0}
+  .hs-col:last-child{border-bottom:none;padding:20px 0 0}
+  .ct-head,.ct-row{grid-template-columns:90px repeat(4,1fr);gap:6px}
+  .journey-strip{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="progress-bar" id="prog"></div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="hb" href="index.html">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXUnktDf1BkU4tZMz6l8TUpkmiDo4iILkjmg&s" alt="RimborsoalVolo" style="height:32px;filter:none;object-fit:contain;mix-blend-mode:multiply" onerror="this.style.display='none'">
+      
+      <div class="hd"></div>
+      <img src="https://www.ribrainstudio.com/wp-content/uploads/2025/01/Logo_ribrain_Nero.svg" alt="Ribrain" style="height:18px;opacity:.75;filter:none">
+    </a>
+    <div class="hr2">
+      <a class="hback" href="m3.html">← M3</a>
+      <span class="hmod">M4 / 7</span>
+      <span class="htag">Personas</span>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-bg">PERSONAS</div>
+  <div class="wrap">
+    <div class="hlabel" id="hl"><div class="hlabel-line"></div><span>M4 — Personas Comportamentali</span></div>
+    <h1 class="hero-h1" id="hh">Non chi sono.<br>Come si <em>comportano.</em></h1>
+    <div class="hero-sub" id="hs">
+      <div class="hs-col">
+        <div class="hs-label">Il metodo</div>
+        <p class="hs-text">Quattro archetipi costruiti su <strong>comportamenti osservabili</strong>: frequenza di viaggio, reazione al disservizio, propensione al reclamo, criteri di fiducia.</p>
+      </div>
+      <div class="hs-col">
+        <div class="hs-label">L'insight centrale</div>
+        <p class="hs-text">Il competitor principale non è un altro operatore: è <strong>l'inerzia</strong>. Chi non abbatte conoscenza, sforzo percepito e fiducia non entra nel set di scelta.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="selector-strip" id="selStrip">
+  <div class="sel-tab active" data-persona="0" style="--tab-color:var(--p1)"><div class="sel-code">P1</div><div class="sel-name" style="color:var(--p1)">Leisure Low-Cost</div><span class="sel-pill" style="background:rgba(58,134,255,.12);color:var(--p1)">Volume principale</span><div class="sel-demo">18–44 · Vacanza · Low-cost · 1–3 voli/anno</div></div>
+  <div class="sel-tab" data-persona="1" style="--tab-color:var(--p2)"><div class="sel-code">P2</div><div class="sel-name">Frequent Flyer</div><span class="sel-pill" style="background:rgba(131,56,236,.1);color:var(--p2)">Alto valore</span><div class="sel-demo">30–54 · Business · Delega · Tempo = denaro</div></div>
+  <div class="sel-tab" data-persona="2" style="--tab-color:var(--p3)"><div class="sel-code">P3</div><div class="sel-name">Viaggiatore di Legami</div><span class="sel-pill" style="background:rgba(233,69,96,.1);color:var(--p3)">Passaparola</span><div class="sel-demo">25–54 · Famiglia/Amici · Social proof forte</div></div>
+  <div class="sel-tab" data-persona="3" style="--tab-color:var(--p4)"><div class="sel-code">P4</div><div class="sel-name">Passeggero Prudente</div><span class="sel-pill" style="background:rgba(251,133,0,.1);color:var(--p4)">Legittimazione</span><div class="sel-demo">55+ · Pianifica · Fiducia lenta · Digitale cauto</div></div>
+</div>
+
+<div class="persona-canvas" id="personaCanvas">
+  <div class="pc-grid">
+    <div class="pc-left" id="pcLeft">
+      <div>
+        <div class="pc-tag-row"><div class="pc-dot" id="pDot"></div><span class="pc-tag-lbl" id="pLbl"></span></div>
+        <div class="pc-name" id="pName"></div>
+        <div class="pc-sub" id="pSub"></div>
+      </div>
+      <div class="radar-container"><canvas id="radarCanvas" width="300" height="300"></canvas></div>
+      <div class="pc-stats" id="pStats"></div>
+    </div>
+    <div class="pc-right" id="pcRight">
+      <span class="pc-sec-lbl">Stato emotivo nel disservizio</span>
+      <div class="pc-emotions" id="pEmotions"></div>
+      <span class="pc-sec-lbl">Cosa lo fa agire</span>
+      <div class="pc-pills" id="pTriggers" style="margin-bottom:20px"></div>
+      <span class="pc-sec-lbl">Cosa lo blocca</span>
+      <div class="pc-pills" id="pBarriers" style="margin-bottom:20px"></div>
+      <span class="pc-sec-lbl">Dove scopre il servizio</span>
+      <div class="pc-channels" id="pChannels" style="margin-bottom:24px"></div>
+      <div class="pc-copy" id="pCopy">
+        <div class="pc-copy-lbl">Messaggio chiave</div>
+        <div class="pc-copy-txt" id="pCopyTxt"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="people-section">
+  <div class="wrap">
+    <span class="ppl-label">Il vero avversario — visualizzato</span>
+    <h2 class="ppl-h2">Su 100 passeggeri con diritto<br>al rimborso, <em>quanti agiscono?</em></h2>
+    <div class="people-grid" id="peopleGrid"></div>
+    <div class="ppl-legend">
+      <div class="pll-item"><div class="pll-dot" style="background:var(--brand)"></div><span>Agiscono</span><span class="pll-num">38</span></div>
+      <div class="pll-item"><div class="pll-dot" style="background:rgba(255,255,255,.12)"></div><span>Non agiscono — mercato da conquistare</span><span class="pll-num">62</span></div>
+    </div>
+    <div class="journey-strip" id="journeyStrip">
+      <div class="js-step" id="js0" style="border-right-color:rgba(255,255,255,.05)"><style>#js0::before{background:var(--p1)}</style><div class="js-pname">Leisure Low-Cost</div><div class="js-inlabel">Inerzia: alta</div><div class="js-bar"><div class="js-bar-fill" data-pct="72" style="background:var(--p1)"></div></div><div class="js-insights"><div class="js-line">Importo basso = motivazione bassa</div><div class="js-line">Processo percepito come lungo</div><div class="js-line">Si sblocca con zero frizione visibile</div></div></div>
+      <div class="js-step" id="js1"><style>#js1::before{background:var(--p2)}</style><div class="js-pname">Frequent Flyer</div><div class="js-inlabel">Inerzia: media</div><div class="js-bar"><div class="js-bar-fill" data-pct="55" style="background:var(--p2)"></div></div><div class="js-insights"><div class="js-line">Tempo vale più del rimborso</div><div class="js-line">Si sblocca con delega totale</div><div class="js-line">Lifetime value alto — ogni conversione conta</div></div></div>
+      <div class="js-step" id="js2"><style>#js2::before{background:var(--p3)}</style><div class="js-pname">Viaggiatore di Legami</div><div class="js-inlabel">Inerzia: medio-alta</div><div class="js-bar"><div class="js-bar-fill" data-pct="65" style="background:var(--p3)"></div></div><div class="js-insights"><div class="js-line">«Chissà se funziona davvero»</div><div class="js-line">Racconto concreto di un simile sblocca</div><div class="js-line">Referral più forte di qualsiasi ADV</div></div></div>
+      <div class="js-step" id="js3"><style>#js3::before{background:var(--p4)}</style><div class="js-pname">Passeggero Prudente</div><div class="js-inlabel">Inerzia: molto alta</div><div class="js-bar"><div class="js-bar-fill" data-pct="80" style="background:var(--p4)"></div></div><div class="js-insights"><div class="js-line">Paura di firmare senza capire</div><div class="js-line">Fee esplicita = barriera abbattuta</div><div class="js-line">Una volta convinto, fedele e raccomanda</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="compare-section">
+  <div class="wrap">
+    <span style="font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-30);margin-bottom:12px;display:block">Confronto diretto</span>
+    <h2 style="font-family:var(--f-display);font-weight:300;font-size:clamp(38px,4.5vw,60px);line-height:1.08;margin-bottom:36px">Le quattro personas<br><em>a confronto.</em></h2>
+    <div style="overflow-x:auto"><div style="min-width:760px">
+      <div class="ct-head"><span class="cth"></span><span class="cth" style="color:rgba(58,134,255,.8)">P1 Leisure</span><span class="cth" style="color:rgba(131,56,236,.8)">P2 Frequent</span><span class="cth" style="color:rgba(233,69,96,.8)">P3 Legami</span><span class="cth" style="color:rgba(251,133,0,.8)">P4 Prudente</span></div>
+      <div class="ct-row" id="cr0"><span class="ct-key">Scoperta</span><span class="ct-cell">Search post-evento</span><span class="ct-cell">Branded + referenza</span><span class="ct-cell">Passaparola diretto</span><span class="ct-cell">Ricerca organica</span></div>
+      <div class="ct-row" id="cr1"><span class="ct-key">Barriera #1</span><span class="ct-cell">«Non vale lo sbattimento»</span><span class="ct-cell">Costo-opportunità tempo</span><span class="ct-cell">Diffidenza sul funzionamento</span><span class="ct-cell">Paura di cosa si firma</span></div>
+      <div class="ct-row" id="cr2"><span class="ct-key">Trigger #1</span><span class="ct-cell">Semplicità assoluta</span><span class="ct-cell">«Penso a tutto io»</span><span class="ct-cell">Racconto concreto</span><span class="ct-cell">Fonte autorevole + fee</span></div>
+      <div class="ct-row" id="cr3"><span class="ct-key">Referral</span><div class="ct-cell"><div class="dots"><div class="dot" style="background:var(--p1)"></div><div class="dot" style="background:var(--p1)"></div><div class="dot" style="background:var(--p1)"></div><div class="dot"></div><div class="dot"></div></div></div><div class="ct-cell"><div class="dots"><div class="dot" style="background:var(--p2)"></div><div class="dot" style="background:var(--p2)"></div><div class="dot" style="background:var(--p2)"></div><div class="dot" style="background:var(--p2)"></div><div class="dot"></div></div></div><div class="ct-cell"><div class="dots"><div class="dot" style="background:var(--p3)"></div><div class="dot" style="background:var(--p3)"></div><div class="dot" style="background:var(--p3)"></div><div class="dot" style="background:var(--p3)"></div><div class="dot" style="background:var(--p3)"></div></div></div><div class="ct-cell"><div class="dots"><div class="dot" style="background:var(--p4)"></div><div class="dot" style="background:var(--p4)"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div></div>
+      <div class="ct-row" id="cr4"><span class="ct-key">Aeroporto</span><div class="ct-cell"><div class="dots"><div class="dot" style="background:var(--p1)"></div><div class="dot" style="background:var(--p1)"></div><div class="dot" style="background:var(--p1)"></div><div class="dot" style="background:var(--p1)"></div><div class="dot"></div></div></div><div class="ct-cell"><div class="dots"><div class="dot" style="background:var(--p2)"></div><div class="dot" style="background:var(--p2)"></div><div class="dot" style="background:var(--p2)"></div><div class="dot"></div><div class="dot"></div></div></div><div class="ct-cell"><div class="dots"><div class="dot" style="background:var(--p3)"></div><div class="dot" style="background:var(--p3)"></div><div class="dot" style="background:var(--p3)"></div><div class="dot" style="background:var(--p3)"></div><div class="dot" style="background:var(--p3)"></div></div></div><div class="ct-cell"><div class="dots"><div class="dot" style="background:var(--p4)"></div><div class="dot" style="background:var(--p4)"></div><div class="dot" style="background:var(--p4)"></div><div class="dot"></div><div class="dot"></div></div></div></div>
+      <div class="ct-row" id="cr5"><span class="ct-key">Lifetime value</span><span class="ct-cell" style="color:#C62828">Basso</span><span class="ct-cell" style="color:var(--p2)">Alto</span><span class="ct-cell" style="color:var(--p3)">Medio-alto</span><span class="ct-cell" style="color:var(--p4)">Medio</span></div>
+    </div></div>
+  </div>
+</section>
+
+<section class="msg-section">
+  <div class="wrap">
+    <span style="font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-30);margin-bottom:12px;display:block">Implicazioni per la comunicazione</span>
+    <h2 style="font-family:var(--f-display);font-weight:300;font-size:clamp(38px,4.5vw,60px);line-height:1.08">Messaggi diversi<br><em>per persone diverse.</em></h2>
+    <div class="msg-grid">
+      <div class="msg-card" id="mc0"><div class="msg-hdr"><div class="msg-mdot" style="background:var(--p1)"></div><span class="msg-plabel" style="color:var(--p1)">P1 — Leisure Low-Cost</span></div><div class="msg-q">Hai il volo in ritardo? Mandi tre documenti. Il resto lo facciamo noi. Gratis se non vinciamo.</div><div class="msg-why">Zero sforzo, zero rischio, importo visibile. Basta questo.</div></div>
+      <div class="msg-card" id="mc1"><div class="msg-hdr"><div class="msg-mdot" style="background:var(--p2)"></div><span class="msg-plabel" style="color:var(--p2)">P2 — Frequent Flyer</span></div><div class="msg-q">Voli spesso. Succederà di nuovo. La prossima volta apri in 2 minuti, poi dimentica.</div><div class="msg-why">Non il singolo rimborso: il risparmio di tempo su ogni futuro disservizio.</div></div>
+      <div class="msg-card" id="mc2"><div class="msg-hdr"><div class="msg-mdot" style="background:var(--p3)"></div><span class="msg-plabel" style="color:var(--p3)">P3 — Viaggiatore di Legami</span></div><div class="msg-q">Stessa cosa capitata a mia sorella il mese scorso. Le hanno rimandato 400 euro senza fare nulla.</div><div class="msg-why">Non advertising. Racconto di qualcuno simile. Il referral aeroportuale è questa dinamica scalata.</div></div>
+      <div class="msg-card" id="mc3"><div class="msg-hdr"><div class="msg-mdot" style="background:var(--p4)"></div><span class="msg-plabel" style="color:var(--p4)">P4 — Passeggero Prudente</span></div><div class="msg-q">Dal 2009. Unici italiani in APRA. Commissione del 25% solo se vinciamo. Mandato chiaro.</div><div class="msg-why">Non emozioni. Fatti verificabili, credenziali istituzionali, modello economico esplicitato.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="next-section">
+  <div class="wrap">
+    <div class="next-inner">
+      <span class="next-label">Prossimo modulo</span>
+      <a href="m5.html" class="next-link"><span class="next-link-text">M5 — Mappa del Momento</span><span class="next-arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-inner">
+      <div class="fl">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXUnktDf1BkU4tZMz6l8TUpkmiDo4iILkjmg&s" alt="" style="height:20px;filter:none;opacity:.6" onerror="this.style.display='none'">
+        <span class="fl-sep">×</span>
+        <img src="https://www.ribrainstudio.com/wp-content/uploads/2025/01/Logo_ribrain_Nero.svg" alt="Ribrain" style="height:16px;opacity:.6;filter:none">
+      </div>
+      <span class="fr-foot">M4 · Personas · Aprile 2026</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px'});
+(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop)})();
+const prog=document.getElementById('prog');
+window.addEventListener('scroll',()=>{prog.style.width=(window.scrollY/(document.documentElement.scrollHeight-window.innerHeight)*100)+'%'});
+
+const PERSONAS=[
+  {color:'#3A86FF',lbl:'P1 — Target principale per volume',name:'Leisure<br>Low-Cost',sub:'Vola 1–3×/anno · Vacanza · Alta sensibilità al prezzo',
+   radar:[82,60,35,70,45,55],
+   stats:[{n:'1–3',l:'voli/anno'},{n:'18–44',l:'fascia d\'età'},{n:'63%',l:'low-cost IT 2024'},{n:'Alta',l:'sensibilità prezzo'}],
+   emotions:[{l:'Irritazione',v:80,c:'#E94560'},{l:'Frustrazione',v:65,c:'#E94560'},{l:'Urgenza',v:45,c:'#E67E22'},{l:'Inerzia',v:72,c:'#8338EC'}],
+   triggers:['Semplicità assoluta','Nessun anticipo','Importo visibile','Verifica rapida'],
+   barriers:['«Non vale lo sbattimento»','Importo percepito basso','Pigrizia amministrativa'],
+   channels:[{i:'🔍',l:'Search post-evento'},{i:'💬',l:'Passaparola amici'},{i:'📱',l:'Social (under 35)'}],
+   copy:'«Tre documenti. <em>Il resto lo facciamo noi.</em> Gratis se non vinciamo.»'},
+  {color:'#8338EC',lbl:'P2 — Target ad alto valore lifetime',name:'Frequent<br>Flyer',sub:'Vola spesso · Business · Il tempo è denaro',
+   radar:[88,45,55,90,30,40],
+   stats:[{n:'5+',l:'voli/anno'},{n:'30–54',l:'fascia d\'età'},{n:'Alto',l:'valore della delega'},{n:'LTV',l:'più alto tra le personas'}],
+   emotions:[{l:'Perdita controllo',v:88,c:'#8338EC'},{l:'Urgenza operativa',v:75,c:'#E67E22'},{l:'Rabbia',v:55,c:'#E94560'},{l:'Inerzia',v:45,c:'#3A86FF'}],
+   triggers:['Delega totale','Stato pratica aggiornato','Tono non aggressivo','«Apri in 2 min, poi dimentica»'],
+   barriers:['Costo-opportunità burocrazia','Pratiche via OTA complesse','«Potrei farlo ma non ho tempo»'],
+   channels:[{i:'🔍',l:'Branded search'},{i:'💼',l:'Network professionale'},{i:'📊',l:'Comparazione online'}],
+   copy:'«Voli spesso. Succederà di nuovo. <em>La prossima volta dimentica</em> — pensiamo noi.»'},
+  {color:'#E94560',lbl:'P3 — Target passaparola e referral',name:'Viaggiatore<br>di Legami',sub:'Vola per famiglia e amici · Social proof fortissima',
+   radar:[65,95,60,55,50,62],
+   stats:[{n:'25–54',l:'fascia d\'età'},{n:'24%',l:'vacanze IT per visite'},{n:'★★★★★',l:'sensibilità social proof'},{n:'Alta',l:'propensione referral'}],
+   emotions:[{l:'Perdita personale',v:90,c:'#E94560'},{l:'Frustrazione',v:70,c:'#E94560'},{l:'Bisogno rassicurazione',v:85,c:'#3A86FF'},{l:'Inerzia',v:65,c:'#8338EC'}],
+   triggers:['Passaparola persona di fiducia','Racconto concreto con cifra','Procedura visibilmente corta','Parlare con qualcuno'],
+   barriers:['«Fa parte del gioco»','Soglia attrito digitale bassa','Non sa quando ha diritto'],
+   channels:[{i:'👨‍👩‍👧',l:'Amici e familiari'},{i:'⭐',l:'Recensioni visibili'},{i:'🔍',l:'Google post-evento'}],
+   copy:'«<em>Stessa cosa capitata a mia sorella.</em> Le hanno rimandato 400€ senza fare nulla.»'},
+  {color:'#FB8500',lbl:'P4 — Target legittimazione e fiducia lenta',name:'Passeggero<br>Prudente',sub:'55+ · Pianifica tutto · Entra nel funnel lentamente',
+   radar:[50,70,40,45,75,70],
+   stats:[{n:'55+',l:'fascia d\'età'},{n:'Lenta',l:'velocità conversione'},{n:'Alta',l:'fedeltà post-conv.'},{n:'Fee trasparente',l:'barriera abbattuta'}],
+   emotions:[{l:'Preoccupazione',v:85,c:'#FB8500'},{l:'Diffidenza',v:78,c:'#E94560'},{l:'Vulnerabilità',v:70,c:'#8338EC'},{l:'Inerzia',v:80,c:'#3A86FF'}],
+   triggers:['Credenziali istituzionali','Fee esplicita in anticipo','Linguaggio chiaro','Persona disponibile tel.'],
+   barriers:['Paura di non capire cosa si firma','«Gratis = truffa»','Privacy — dove vanno i dati?'],
+   channels:[{i:'🔍',l:'Ricerca organica'},{i:'📄',l:'Siti sui diritti'},{i:'👥',l:'Conoscenti fidati'}],
+   copy:'«Dal 2009. Unici italiani in APRA. <em>Commissione del 25% solo se vinciamo.</em>»'}
+];
+
+function drawRadar(ctx,data,color,prog){
+  const W=300,H=300,cx=W/2,cy=H/2,r=100;
+  const axes=['Propensione\nazione','Social proof','Urgenza','Semplicità\nneed','Barriera\nburocrazia','Inerzia'];
+  const n=6;
+  ctx.clearRect(0,0,W,H);
+  [25,50,75,100].forEach(p=>{
+    ctx.beginPath();
+    for(let i=0;i<n;i++){const a=(i/n)*Math.PI*2-Math.PI/2,rr=r*(p/100);i===0?ctx.moveTo(cx+rr*Math.cos(a),cy+rr*Math.sin(a)):ctx.lineTo(cx+rr*Math.cos(a),cy+rr*Math.sin(a))}
+    ctx.closePath();ctx.strokeStyle='rgba(12,12,12,.06)';ctx.lineWidth=1;ctx.stroke();
+  });
+  for(let i=0;i<n;i++){
+    const a=(i/n)*Math.PI*2-Math.PI/2;
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+(r+4)*Math.cos(a),cy+(r+4)*Math.sin(a));
+    ctx.strokeStyle='rgba(12,12,12,.07)';ctx.lineWidth=1;ctx.stroke();
+    const lx=cx+(r+24)*Math.cos(a),ly=cy+(r+24)*Math.sin(a);
+    const lines=axes[i].split('\n');
+    ctx.fillStyle='rgba(12,12,12,.28)';ctx.font='8px DM Mono,monospace';ctx.textAlign='center';ctx.textBaseline='middle';
+    lines.forEach((ln,li)=>ctx.fillText(ln,lx,ly+(li-(lines.length-1)/2)*11));
+  }
+  const d=data.map(v=>v*(prog/100));
+  ctx.beginPath();
+  for(let i=0;i<n;i++){const a=(i/n)*Math.PI*2-Math.PI/2,rr=r*(d[i]/100);i===0?ctx.moveTo(cx+rr*Math.cos(a),cy+rr*Math.sin(a)):ctx.lineTo(cx+rr*Math.cos(a),cy+rr*Math.sin(a))}
+  ctx.closePath();ctx.fillStyle=color+'1E';ctx.fill();ctx.strokeStyle=color;ctx.lineWidth=2;ctx.stroke();
+  for(let i=0;i<n;i++){
+    const a=(i/n)*Math.PI*2-Math.PI/2,rr=r*(d[i]/100);
+    ctx.beginPath();ctx.arc(cx+rr*Math.cos(a),cy+rr*Math.sin(a),3.5,0,Math.PI*2);
+    ctx.fillStyle=color;ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.stroke();
+  }
+}
+
+function animRadar(data,color){
+  const canvas=document.getElementById('radarCanvas');
+  const ctx=canvas.getContext('2d');
+  const obj={v:0};
+  gsap.to(obj,{v:100,duration:1,ease:'power2.out',
+    onUpdate(){drawRadar(ctx,data,color,obj.v)},
+    onComplete(){drawRadar(ctx,data,color,100)}
+  });
+}
+
+function renderPersona(idx){
+  const p=PERSONAS[idx];
+  document.getElementById('pDot').style.background=p.color;
+  document.getElementById('pLbl').textContent=p.lbl;
+  document.getElementById('pName').innerHTML=p.name;
+  document.getElementById('pSub').textContent=p.sub;
+  const pc=document.getElementById('pCopy');
+  pc.style.background=p.color+'18';pc.style.borderLeft='2px solid '+p.color;
+  document.querySelector('.pc-copy-lbl').style.color=p.color;
+  document.getElementById('pCopyTxt').innerHTML=p.copy;
+  document.getElementById('pStats').innerHTML=p.stats.map(s=>`<div class="pcs-item"><div class="pcs-num" style="color:${p.color}">${s.n}</div><div class="pcs-label">${s.l}</div></div>`).join('');
+  document.getElementById('pEmotions').innerHTML=p.emotions.map(e=>`<div class="em-item"><div class="em-bg" style="background:${e.c}"></div><div class="em-bar" style="background:${e.c}" data-pct="${e.v}"></div><div class="em-lbl">${e.l}</div><div class="em-val" style="color:${e.c}">${e.v}%</div></div>`).join('');
+  setTimeout(()=>{
+    document.querySelectorAll('.em-bar').forEach(bar=>{gsap.to(bar,{width:bar.dataset.pct+'%',duration:.8,ease:'power3.out',delay:.1})});
+    document.querySelectorAll('.em-bg').forEach((bg,i)=>{gsap.to(bg,{opacity:p.emotions[i].v/500,duration:.6})});
+  },50);
+  document.getElementById('pTriggers').innerHTML=p.triggers.map(t=>`<span class="ppill ppill--t">${t}</span>`).join('');
+  document.getElementById('pBarriers').innerHTML=p.barriers.map(b=>`<span class="ppill ppill--b">${b}</span>`).join('');
+  document.getElementById('pChannels').innerHTML=p.channels.map(c=>`<div class="ch-chip"><span class="ch-ico">${c.i}</span>${c.l}</div>`).join('');
+  animRadar(p.radar,p.color);
+  gsap.from(['#pcLeft','#pcRight'],{opacity:0,y:12,duration:.45,stagger:.08,ease:'power3.out'});
+}
+
+let current=0;
+document.querySelectorAll('.sel-tab').forEach((tab,i)=>{
+  tab.addEventListener('click',()=>{
+    if(i===current) return;
+    current=i;
+    document.querySelectorAll('.sel-tab').forEach((t,j)=>{
+      t.classList.toggle('active',j===i);
+      t.classList.toggle('inactive',j!==i);
+      const nameEl = t.querySelector('.sel-name');
+      nameEl.style.color = j===i ? PERSONAS[j].color : '';
+    });
+    renderPersona(i);
+  });
+});
+
+function buildPeople(){
+  const grid=document.getElementById('peopleGrid');
+  for(let i=0;i<100;i++){
+    const d=document.createElement('div');d.className='pg-p';const a=i<38;
+    d.innerHTML=`<svg viewBox="0 0 18 18" fill="none"><circle cx="9" cy="5.5" r="3" fill="${a?'#1B4F9B':'rgba(255,255,255,0.14)'}"/><rect x="2" y="10" width="14" height="7" rx="2.5" fill="${a?'#1B4F9B':'rgba(255,255,255,0.1)'}"/></svg>`;
+    grid.appendChild(d);
+  }
+}
+
+window.addEventListener('load',()=>{
+  const tl=gsap.timeline({delay:.15});
+  tl.to('#hl',{opacity:1,y:0,duration:.7,ease:'power3.out'})
+    .to('#hh',{opacity:1,y:0,duration:1,ease:'power3.out'},'-=.3')
+    .to('#hs',{opacity:1,duration:.8,ease:'power3.out'},'-=.3');
+  renderPersona(0);
+  buildPeople();
+  ScrollTrigger.create({trigger:'#peopleGrid',start:'top 75%',once:true,onEnter(){
+    document.querySelectorAll('.pg-p').forEach((p,i)=>gsap.to(p,{opacity:1,duration:.22,ease:'power2.out',delay:i*.013}));
+  }});
+  ['#js0','#js1','#js2','#js3'].forEach((sel,i)=>{
+    gsap.to(sel,{opacity:1,y:0,duration:.7,ease:'power3.out',delay:i*.1,scrollTrigger:{trigger:sel,start:'top 85%',once:true,
+      onEnter(){const bar=document.querySelector(sel+' .js-bar-fill');if(bar) gsap.to(bar,{width:bar.dataset.pct+'%',duration:1.2,ease:'power3.out',delay:.2});}
+    }});
+  });
+  ['#cr0','#cr1','#cr2','#cr3','#cr4','#cr5'].forEach((sel,i)=>{
+    gsap.to(sel,{opacity:1,x:0,duration:.6,ease:'power3.out',delay:i*.07,scrollTrigger:{trigger:sel,start:'top 88%',once:true}});
+  });
+  ['#mc0','#mc1','#mc2','#mc3'].forEach((sel,i)=>{
+    gsap.to(sel,{opacity:1,y:0,duration:.7,ease:'power3.out',delay:i*.1,scrollTrigger:{trigger:sel,start:'top 85%',once:true}});
+  });
+  window.addEventListener('scroll',()=>{
+    const y=window.scrollY;
+    document.querySelector('.hero-h1').style.transform=`translateY(${y*.05}px)`;
+    document.querySelector('.hero-bg').style.transform=`translate(-50%,-50%) translateY(${y*.03}px)`;
+  });
+});
+</script>
+</body>
+</html>

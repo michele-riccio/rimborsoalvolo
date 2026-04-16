@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M6 — Benchmark Creativi · RimborsoalVolo × Ribrain</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<style>
+:root{
+  --bg:#F7F5F0;--bg-warm:#EDE9E1;--brand:#1B4F9B;--brand-light:#E8F0FC;
+  --accent:#D94F2B;--ink:#0C0C0C;--ink-60:rgba(12,12,12,.6);
+  --ink-30:rgba(12,12,12,.28);--ink-10:rgba(12,12,12,.08);
+  --white:#fff;--rule:rgba(12,12,12,.1);
+  --c1:#D94F2B;--c2:#1B4F9B;--c3:#E67E22;--c4:#8338EC;--c5:#2D9E5F;--c6:#E94560;
+  --f-display:'Cormorant Garamond',Georgia,serif;
+  --f-sans:'DM Sans',system-ui,sans-serif;
+  --f-mono:'DM Mono',monospace;
+  --ease:cubic-bezier(0.16,1,0.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-sans);font-weight:300;line-height:1.6;overflow-x:hidden;cursor:none}
+.cursor{position:fixed;width:10px;height:10px;background:var(--ink);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:multiply}
+.cursor-ring{position:fixed;width:40px;height:40px;border:1px solid rgba(12,12,12,.3);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .5s var(--ease)}
+.progress-bar{position:fixed;top:63px;left:0;height:2px;background:var(--brand);z-index:101;width:0%}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9997;opacity:.4}
+
+/* header */
+.site-header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(247,245,240,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--rule);height:64px;display:flex;align-items:center}
+.header-inner{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:1440px;margin:0 auto;padding:0 56px}
+.hb{display:flex;align-items:center;gap:16px;text-decoration:none;color:var(--ink)}
+.hd{width:1px;height:18px;background:var(--rule)}
+.hr2{display:flex;align-items:center;gap:24px}
+.hback{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;color:var(--ink-30);text-decoration:none;transition:color .3s}
+.hback:hover{color:var(--brand)}
+.htag{font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:var(--brand);color:var(--white);padding:4px 12px;border-radius:2px}
+.hmod{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;color:var(--ink-60)}
+.wrap{max-width:1440px;margin:0 auto;padding:0 56px}
+
+/* ── HERO ── */
+.hero{padding:140px 0 72px;min-height:92vh;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden}
+.hero-giant{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:flex-start;padding-left:56px;pointer-events:none;user-select:none}
+.hero-giant-text{font-family:var(--f-display);font-size:clamp(140px,20vw,320px);font-weight:300;color:rgba(12,12,12,.028);white-space:nowrap;line-height:1;letter-spacing:-.02em}
+.hlabel{display:flex;align-items:center;gap:14px;margin-bottom:28px;opacity:0;transform:translateY(16px)}
+.hlabel-line{width:48px;height:1px;background:var(--brand)}
+.hlabel span{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-60)}
+.hero-h1{font-family:var(--f-display);font-weight:300;font-size:clamp(72px,9vw,140px);line-height:.95;opacity:0;transform:translateY(40px);margin-bottom:48px}
+.hero-h1 em{font-style:italic;color:var(--brand)}
+.hero-bottom{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--rule);opacity:0}
+.hb-col{padding:28px 32px 28px 0;border-right:1px solid var(--rule)}
+.hb-col:last-child{border-right:none;padding-right:0}
+.hb-lbl{font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-30);margin-bottom:10px}
+.hb-val{font-size:13px;color:var(--ink-60);line-height:1.65}
+.hb-val strong{font-weight:500;color:var(--ink)}
+
+/* ── PATTERNS — the 4-axis framework ── */
+.patterns-section{background:var(--ink);padding:80px 0;overflow:hidden;position:relative}
+.ps-top{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:48px}
+.ps-left{}
+.ps-lbl{font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:10px;display:block}
+.ps-h2{font-family:var(--f-display);font-weight:300;font-size:clamp(40px,5vw,72px);line-height:1;color:var(--white)}
+.ps-h2 em{font-style:italic;color:rgba(255,255,255,.3)}
+.ps-right{text-align:right}
+.ps-note{font-size:12px;color:rgba(255,255,255,.3);line-height:1.7;max-width:280px;margin-left:auto}
+.patterns-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.06)}
+.pg-card{background:var(--ink);padding:36px 32px;position:relative;overflow:hidden;opacity:0;transform:translateY(20px)}
+.pg-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px}
+.pg-card:nth-child(1)::before{background:var(--c1)}
+.pg-card:nth-child(2)::before{background:var(--c3)}
+.pg-card:nth-child(3)::before{background:var(--c5)}
+.pg-card:nth-child(4)::before{background:var(--c4)}
+.pg-icon{font-size:32px;margin-bottom:16px;display:block;line-height:1}
+.pg-code{font-family:var(--f-mono);font-size:8px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:8px;display:block}
+.pg-name{font-family:var(--f-display);font-size:24px;font-weight:400;color:var(--white);line-height:1.2;margin-bottom:12px}
+.pg-desc{font-size:12px;color:rgba(255,255,255,.35);line-height:1.75}
+
+/* ── CASES — full-bleed cinematic layout ── */
+.cases-section{}
+.case-block{position:relative;border-top:1px solid var(--rule)}
+
+/* hero banner — visual/media area */
+.cb-banner{height:520px;position:relative;overflow:hidden;background:var(--ink)}
+.cb-banner-bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.6;transition:opacity .4s}
+.case-block:hover .cb-banner-bg{opacity:.75}
+.cb-banner-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 20%,rgba(12,12,12,.85) 100%)}
+.cb-banner-content{position:absolute;bottom:0;left:0;right:0;padding:48px 56px;display:flex;align-items:flex-end;justify-content:space-between;gap:40px}
+.cb-banner-left{}
+.cb-meta{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.cb-num{font-family:var(--f-mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.4)}
+.cb-year{font-family:var(--f-mono);font-size:9px;background:rgba(255,255,255,.12);color:rgba(255,255,255,.6);padding:3px 8px;letter-spacing:.08em}
+.cb-brand-tag{font-family:var(--f-mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:2px;border:1px solid;color:var(--white)}
+.cb-title{font-family:var(--f-display);font-weight:300;font-size:clamp(40px,5vw,80px);line-height:.95;color:var(--white);margin-bottom:8px}
+.cb-subtitle{font-family:var(--f-display);font-size:18px;font-weight:300;font-style:italic;color:rgba(255,255,255,.5);line-height:1.4}
+.cb-banner-right{flex-shrink:0}
+.cb-watch-btn{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:var(--white);padding:12px 20px;text-decoration:none;font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;transition:background .3s,border-color .3s;backdrop-filter:blur(10px)}
+.cb-watch-btn:hover{background:rgba(255,255,255,.22);border-color:rgba(255,255,255,.4)}
+.cb-watch-icon{font-size:16px}
+
+/* detail section below banner */
+.cb-detail{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.cbd-left{padding:56px 56px 56px 56px;border-right:1px solid var(--rule)}
+.cbd-right{padding:56px 56px 56px 56px}
+
+/* video embed */
+.video-embed-wrap{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;margin-bottom:32px;background:var(--ink)}
+.video-embed-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+.video-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--ink);cursor:pointer}
+.vp-icon{font-size:48px;margin-bottom:12px;color:rgba(255,255,255,.5)}
+.vp-text{font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.3)}
+.vp-note{font-size:11px;color:rgba(255,255,255,.2);margin-top:6px}
+
+.cbd-desc{font-size:15px;line-height:1.85;color:var(--ink-60);margin-bottom:28px}
+.cbd-desc strong{font-weight:500;color:var(--ink)}
+.cbd-result{background:var(--ink);padding:24px 28px}
+.cbr-lbl{font-family:var(--f-mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:8px}
+.cbr-text{font-size:13px;color:rgba(255,255,255,.55);line-height:1.7}
+.cbr-text strong{color:rgba(255,255,255,.85);font-weight:400}
+
+/* pattern score */
+.cbd-patterns{margin-bottom:32px}
+.cbps-lbl{font-family:var(--f-mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-30);margin-bottom:16px;display:block}
+.cbps-rows{display:flex;flex-direction:column;gap:10px}
+.cpsr{display:grid;grid-template-columns:1fr 200px 36px;gap:14px;align-items:center}
+.cpsr-name{font-size:12px;color:var(--ink-60)}
+.cpsr-track{height:5px;background:var(--ink-10);border-radius:3px;overflow:hidden}
+.cpsr-fill{height:100%;width:0%;border-radius:3px;transition:width 1.3s var(--ease)}
+.cpsr-val{font-family:var(--f-mono);font-size:10px;color:var(--ink-30);text-align:right}
+
+/* takeaway */
+.cbd-takeaway{padding:24px 28px;border-left:4px solid;margin-top:0}
+.cbta-lbl{font-family:var(--f-mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
+.cbta-text{font-size:14px;line-height:1.8;color:var(--ink-60)}
+.cbta-text strong{font-weight:500;color:var(--ink)}
+
+/* ── COMPARISON MATRIX ── */
+.matrix-section{padding:80px 0;background:var(--white)}
+.ms-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:40px}
+.ms-h2{font-family:var(--f-display);font-weight:300;font-size:clamp(40px,5vw,72px);line-height:1}
+.ms-h2 em{font-style:italic;color:var(--brand)}
+.ms-note{font-size:12px;color:var(--ink-30);line-height:1.6;max-width:240px;text-align:right}
+.matrix-table{width:100%;border-collapse:collapse}
+.matrix-table thead th{background:var(--ink);padding:14px 20px;font-family:var(--f-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45);font-weight:400;text-align:center}
+.matrix-table thead th:first-child{text-align:left}
+.matrix-table tbody tr{border-top:1px solid var(--rule);opacity:0;transform:translateX(-8px);transition:background .2s}
+.matrix-table tbody tr:nth-child(even){background:var(--bg)}
+.matrix-table tbody tr:hover{background:var(--brand-light)}
+.matrix-table tbody td{padding:16px 20px;font-size:13px;color:var(--ink-60);vertical-align:middle}
+.matrix-table tbody td:first-child{font-family:var(--f-display);font-size:18px;color:var(--ink)}
+.matrix-table tbody td:last-child{text-align:center}
+.score-circle{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;font-family:var(--f-display);font-size:16px;font-weight:300}
+.score-dots{display:flex;justify-content:center;align-items:center;gap:4px}
+.sc-dot{width:10px;height:10px;border-radius:50%;background:var(--ink-10);transition:background .3s}
+
+/* ── SYNTHESIS ── */
+.synthesis-section{padding:80px 0;background:var(--ink);position:relative;overflow:hidden}
+.synthesis-section::before{content:'';position:absolute;top:-40%;right:-15%;width:70%;padding-bottom:70%;border-radius:50%;background:radial-gradient(circle,rgba(27,79,155,.1) 0%,transparent 60%);pointer-events:none}
+.syn-lbl{font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:12px;display:block}
+.syn-h2{font-family:var(--f-display);font-weight:300;font-size:clamp(40px,5vw,72px);line-height:1;color:var(--white);margin-bottom:48px}
+.syn-h2 em{font-style:italic;color:rgba(255,255,255,.3)}
+.syn-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.06)}
+.syn-card{background:var(--ink);padding:36px 28px;opacity:0;transform:translateY(20px);position:relative;overflow:hidden}
+.syn-card::after{content:'';position:absolute;bottom:0;left:0;width:0%;height:2px;transition:width .5s var(--ease)}
+.syn-card:nth-child(1)::after{background:var(--c1)}
+.syn-card:nth-child(2)::after{background:var(--c2)}
+.syn-card:nth-child(3)::after{background:var(--c5)}
+.syn-card:nth-child(4)::after{background:var(--c4)}
+.syn-card:hover::after{width:100%}
+.syn-num{font-family:var(--f-display);font-size:60px;font-weight:300;line-height:1;color:rgba(255,255,255,.06);margin-bottom:12px}
+.syn-title{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.5);margin-bottom:12px}
+.syn-body{font-size:13px;color:rgba(255,255,255,.35);line-height:1.8}
+.syn-body strong{color:rgba(255,255,255,.65);font-weight:400}
+
+/* NEXT + FOOTER */
+.next-section{padding:56px 0;border-top:1px solid var(--rule)}
+.next-inner{display:flex;align-items:center;justify-content:space-between}
+.next-label{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-30)}
+.next-link{display:flex;align-items:center;gap:16px;text-decoration:none;color:var(--ink);transition:gap .4s var(--ease)}
+.next-link:hover{gap:24px}
+.next-link-text{font-family:var(--f-display);font-size:clamp(28px,3vw,48px);font-weight:300}
+.next-arrow{font-size:32px;color:var(--brand)}
+.site-footer{padding:36px 0;border-top:1px solid var(--rule)}
+.footer-inner{display:flex;align-items:center;justify-content:space-between}
+.fl{display:flex;align-items:center;gap:12px}
+.fl-sep{font-family:var(--f-mono);font-size:11px;color:var(--ink-30)}
+.fr-foot{font-family:var(--f-mono);font-size:11px;color:var(--ink-30)}
+
+@media(max-width:1200px){
+  .wrap,.header-inner{padding-left:40px;padding-right:40px}
+  .hero-bottom{grid-template-columns:repeat(2,1fr)}
+  .cb-detail,.patterns-grid,.syn-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:768px){
+  .wrap,.header-inner{padding-left:24px;padding-right:24px}
+  .hero-h1{font-size:clamp(56px,10vw,88px)}
+  .hero-bottom{grid-template-columns:1fr}
+  .cb-banner{height:340px}
+  .cb-banner-content{flex-direction:column;align-items:flex-start;padding:32px 24px}
+  .cb-detail,.patterns-grid,.syn-grid{grid-template-columns:1fr}
+  .cbd-left{border-right:none;border-bottom:1px solid var(--rule)}
+  .cpsr{grid-template-columns:1fr 140px 30px}
+}
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="progress-bar" id="prog"></div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="hb" href="index.html">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXUnktDf1BkU4tZMz6l8TUpkmiDo4iILkjmg&s" alt="RimborsoalVolo" style="height:32px;filter:none;object-fit:contain;mix-blend-mode:multiply" onerror="this.style.display='none'">
+      <div class="hd"></div>
+      <img src="https://www.ribrainstudio.com/wp-content/uploads/2025/01/Logo_ribrain_Nero.svg" alt="Ribrain" style="height:18px;opacity:.75;filter:none">
+    </a>
+    <div class="hr2">
+      <a class="hback" href="m5.html">← M5</a>
+      <span class="hmod">M6 / 7</span>
+      <span class="htag">Benchmark Creativi</span>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-giant"><div class="hero-giant-text">BENCHMARK</div></div>
+  <div class="wrap">
+    <div class="hlabel" id="hl"><div class="hlabel-line"></div><span>M6 — Benchmark Creativi · Italia e mondo</span></div>
+    <h1 class="hero-h1" id="hh">Campagne che hanno<br>ribaltato un<br><em>momento negativo.</em></h1>
+    <div class="hero-bottom" id="hbottom">
+      <div class="hb-col">
+        <div class="hb-lbl">Criterio</div>
+        <p class="hb-val">Almeno 2 dei 4 pattern rilevanti per questo brief: <strong>momento esatto, ribaltamento emotivo, passaparola spontaneo, spazio vincolato.</strong></p>
+      </div>
+      <div class="hb-col">
+        <div class="hb-lbl">Casi analizzati</div>
+        <p class="hb-val"><strong>6 benchmark</strong> — internazionali e italiani, settori analoghi per stato emotivo del target: travel, assicurazioni, food delivery in contesto di stress.</p>
+      </div>
+      <div class="hb-col">
+        <div class="hb-lbl">Output</div>
+        <p class="hb-val">Per ogni caso: <strong>video ufficiale linkato o embedded, score sui 4 pattern, insight trasferibile</strong> direttamente al brief di Kathrin e Alessandro.</p>
+      </div>
+      <div class="hb-col">
+        <div class="hb-lbl">Domanda guida</div>
+        <p class="hb-val">Cosa ha fatto funzionare questa campagna e come RimborsoalVolo può usare lo stesso meccanismo con il proprio prodotto?</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 PATTERN FRAMEWORK -->
+<section class="patterns-section">
+  <div class="wrap">
+    <div class="ps-top">
+      <div class="ps-left">
+        <span class="ps-lbl">Il framework di lettura</span>
+        <h2 class="ps-h2">4 pattern.<br><em>Tutte le campagne li<br>usano in combinazione.</em></h2>
+      </div>
+      <div class="ps-right">
+        <p class="ps-note">Ogni caso viene valutato su una scala 0–100 per ciascuno dei 4 pattern. Un punteggio sopra 80 indica che il pattern è centrale nella meccanica della campagna.</p>
+      </div>
+    </div>
+    <div class="patterns-grid" id="pGrid">
+      <div class="pg-card" id="pg1">
+        <span class="pg-icon">⏱</span>
+        <span class="pg-code" style="color:var(--c1)">Pattern 01</span>
+        <div class="pg-name">Precisione temporale</div>
+        <p class="pg-desc">Il brand intercetta il target nel momento esatto del bisogno — non prima, non dopo. Il messaggio è perfetto perché arriva quando il problema è presente e la mente è aperta.</p>
+      </div>
+      <div class="pg-card" id="pg2">
+        <span class="pg-icon">🔄</span>
+        <span class="pg-code" style="color:var(--c3)">Pattern 02</span>
+        <div class="pg-name">Ribaltamento emotivo</div>
+        <p class="pg-desc">La campagna trasforma frustrazione, attesa o momento negativo in sorpresa, sollievo o opportunità. L'emozione si inverte — e questa inversione crea il ricordo permanente.</p>
+      </div>
+      <div class="pg-card" id="pg3">
+        <span class="pg-icon">📡</span>
+        <span class="pg-code" style="color:var(--c5)">Pattern 03</span>
+        <div class="pg-name">Passaparola spontaneo</div>
+        <p class="pg-desc">Il meccanismo è progettato per essere condiviso senza imbarazzo. La persona si sente parte di qualcosa di speciale, non come chi sta facendo pubblicità a un'azienda davanti agli altri.</p>
+      </div>
+      <div class="pg-card" id="pg4">
+        <span class="pg-icon">🏗</span>
+        <span class="pg-code" style="color:var(--c4)">Pattern 04</span>
+        <div class="pg-name">Spazio fisico vincolato</div>
+        <p class="pg-desc">L'attivazione opera in contesti con restrizioni fisiche, normative o competitive — aeroporti, stazioni, autostrade. Creatività che lavora dentro i vincoli anziché aggirarli.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CASE 1: WestJet ══ -->
+<div class="case-block" id="cb1">
+  <div class="cb-banner">
+    <div class="cb-banner-bg" style="background-image:url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1400&q=80');background-position:center 30%"></div>
+    <div class="cb-banner-overlay"></div>
+    <div class="cb-banner-content">
+      <div class="cb-banner-left">
+        <div class="cb-meta">
+          <span class="cb-num">01 / 06</span>
+          <span class="cb-year">2013</span>
+          <span class="cb-brand-tag" style="border-color:rgba(217,79,43,.6);background:rgba(217,79,43,.15)">WestJet Airlines · Canada</span>
+        </div>
+        <div class="cb-title">Christmas Miracle</div>
+        <div class="cb-subtitle">Il benchmark assoluto. Il video che spiega tutto quello che RimborsoalVolo può fare.</div>
+      </div>
+      <div class="cb-banner-right">
+        <a href="https://www.youtube.com/watch?v=zIEIvi2MuEk" target="_blank" rel="noopener" class="cb-watch-btn">
+          <span class="cb-watch-icon">▶</span>
+          Guarda il video ufficiale →
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="cb-detail">
+    <div class="cbd-left">
+      <div class="yt-thumb" id="ve1" data-ytid="zIEIvi2MuEk" onclick="loadYT(this)" style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;margin-bottom:32px;cursor:pointer;background:#000">
+        <img src="https://img.youtube.com/vi/zIEIvi2MuEk/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/zIEIvi2MuEk/hqdefault.jpg'" alt="WestJet Christmas Miracle 2013" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;opacity:.88;transition:opacity .3s" onmouseover="this.style.opacity='.98'" onmouseout="this.style.opacity='.88'">
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none">
+          <div style="width:72px;height:72px;background:rgba(255,0,0,.92);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:14px;box-shadow:0 4px 24px rgba(0,0,0,.4)">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><polygon points="11,8 22,14 11,20" fill="white"/></svg>
+          </div>
+          <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.8);text-shadow:0 2px 8px rgba(0,0,0,.8)">WestJet Christmas Miracle 2013</div>
+          <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.08em;color:rgba(255,255,255,.55);margin-top:4px;text-shadow:0 2px 8px rgba(0,0,0,.8);background:rgba(255,0,0,.7);padding:4px 10px;border-radius:2px">▶ Apri su YouTube</div>
+        </div>
+      </div>
+      <p class="cbd-desc">Durante il check-in, WestJet installò un display con un Babbo Natale virtuale che chiedeva ai passeggeri cosa volessero per Natale. Durante il volo, un team di volontari girò i centri commerciali comprando esattamente quei regali. All'atterraggio, i bagagli sul nastro erano <strong>sostituiti dai pacchi regalo</strong>. I passeggeri scoprirono tutto in tempo reale. Costo operativo: ~150.000 dollari canadesi.</p>
+      <div class="cbd-result">
+        <div class="cbr-lbl">Risultato misurato</div>
+        <div class="cbr-text"><strong>35M+ visualizzazioni in 4 giorni</strong> · Top 5 viral ad mondiale 2013 · 328M+ impressioni media worldwide · 192.500 like YouTube · +77% intenzione di prenotazione nel periodo successivo · 1.600+ articoli giornalistici spontanei</div>
+      </div>
+    </div>
+    <div class="cbd-right">
+      <span class="cbps-lbl">Score sui 4 pattern</span>
+      <div class="cbps-rows" id="cps1">
+        <div class="cpsr"><span class="cpsr-name">⏱ Precisione temporale</span><div class="cpsr-track"><div class="cpsr-fill" data-pct="95" style="background:var(--c1)"></div></div><span class="cpsr-val">95</span></div>
+        <div class="cpsr"><span class="cpsr-name">🔄 Ribaltamento emotivo</span><div class="cpsr-track"><div class="cpsr-fill" data-pct="100" style="background:var(--c1)"></div></div><span class="cpsr-val">100</span></div>
+        <div class="cpsr"><span class="cpsr-name">📡 Passaparola spontaneo</span><div class="cpsr-track"><div class="cpsr-fill" data-pct="98" style="background:var(--c1)"></div></div><span class="cpsr-val">98</span></div>
+        <div class="cpsr"><span class="cpsr-name">🏗 Spazio fisico vincolato</span><div class="cpsr-track"><div class="cpsr-fill" data-pct="90" style="background:var(--c1)"></div></div><span class="cpsr-val">90</span></div>
+      </div>
+      <div class="cbd-takeaway" style="border-color:var(--c1);background:rgba(217,79,43,.05)">
+        <div class="cbta-lbl" style="color:var(--c1);font-family:var(--f-mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase">Cosa dice a RimborsoalVolo</div>
+        <p class="cbta-text">Il nastro bagagli è il corrispettivo fisico del rimborso inatteso. I passeggeri in arrivo da un volo in ritardo che trovano un messaggio fisico — <strong>«il tuo rimborso è già partito»</strong> — vivono esattamente questo ribaltamento emotivo. Il momento non è il disservizio: è il ritorno al nastro. Il touchpoint più sottoutilizzato del settore è già presente in ogni aeroporto.</p>
+      </div>
+      <div style="margin-top:20px;padding:16px 20px;background:var(--bg);border:1px solid var(--rule)">
+        <div style="font-family:var(--f-mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-30);margin-bottom:6px">Link ufficiali</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <a href="https://www.youtube.com/watch?v=zIEIvi2MuEk" target="_blank" style="font-family:var(--f-mono);font-size:10px;color:var(--brand);text-decoration:none;padding:4px 10px;border:1px solid rgba(27,79,155,.2);background:var(--brand-light)">▶ YouTube ufficiale</a>
+          <a href="https://shortyawards.com/6th/westjet-christmas-miracle-real-time-giving" target="_blank" style="font-family:var(--f-mono);font-size:10px;color:var(--ink-60);text-decoration:none;padding:4px 10px;border:1px solid var(--rule)">Case study Shorty Awards</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CASE 2: KLM Surprise ══ -->
+<div class="case-block" id="cb2">
+  <div class="cb-banner">
+    <div class="cb-banner-bg" style="background-image:url('https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?w=1400&q=80');background-position:center 40%"></div>
+    <div class="cb-banner-overlay" style="background:linear-gradient(to bottom,transparent 20%,rgba(12,12,12,.9) 100%)"></div>
+    <div class="cb-banner-content">
+      <div class="cb-banner-left">
+        <div class="cb-meta">
+          <span class="cb-num">02 / 06</span>
+          <span class="cb-year">2010–2012</span>
+          <span class="cb-brand-tag" style="border-color:rgba(27,79,155,.6);background:rgba(27,79,155,.15)">KLM Airlines · Olanda</span>
+        </div>
+        <div class="cb-title">KLM Surprise</div>
+        <div class="cb-subtitle">Intercettare nell'attesa con personalizzazione in tempo reale basata sui social.</div>
+      </div>
+      <div class="cb-banner-right">
+        <a href="https://www.youtube.com/watch?v=4IUfOrpYE7M" target="_blank" rel="noopener" class="cb-watch-btn">
+          <span class="cb-watch-icon">▶</span>
+          Guarda il video →
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="cb-detail">
+    <div class="cbd-left">
+      <div class="yt-thumb" id="ve2" data-ytid="4IUfOrpYE7M" onclick="loadYT(this)" style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;margin-bottom:32px;cursor:pointer;background:#000">
+        <img src="https://img.youtube.com/vi/4IUfOrpYE7M/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/4IUfOrpYE7M/hqdefault.jpg'" alt="KLM Surprise 2010" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;opacity:.88;transition:opacity .3s" onmouseover="this.style.opacity='.98'" onmouseout="this.style.opacity='.88'">
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none">
+          <div style="width:72px;height:72px;background:rgba(255,0,0,.92);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:14px;box-shadow:0 4px 24px rgba(0,0,0,.4)">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><polygon points="11,8 22,14 11,20" fill="white"/></svg>
+          </div>
+          <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.8);text-shadow:0 2px 8px rgba(0,0,0,.8)">KLM Surprise 2010</div>
+          <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.08em;color:rgba(255,255,255,.55);margin-top:4px;text-shadow:0 2px 8px rgba(0,0,0,.8);background:rgba(255,0,0,.7);padding:4px 10px;border-radius:2px">▶ Apri su YouTube</div>
+        </div>
+      </div>
+      <p class="cbd-desc">Un team monitorava Twitter e Foursquare per i passeggeri KLM in check-in a Schiphol. Basandosi sui profili social pubblici, KLM consegnava fisicamente un regalo personalizzato prima dell'imbarco. Una runner a Roma riceveva una guida alle corse della città. Un volontario per il Messico riceveva una kit medico. <strong>40 passeggeri sorpresi, 1 milione di impressioni Twitter.</strong></p>
+      <div class="cbd-result">
+        <div class="cbr-lbl">Risultato misurato</div>
+        <div class="cbr-text"><strong>1M+ impressioni Twitter</strong> in 3 settimane · Copertura BBC e The Next Web · Campagna ripetuta l'estate successiva · Divenne case study in 40+ scuole di marketing europee</div>
+      </div>
+    </div>
+    <div class="cbd-right">
+      <span class="cbps-lbl">Score sui 4 pattern</span>
+      <div class="cbps-rows" id="cps2">
+        <div class="cpsr"><span class="cpsr-name">⏱ Precisione temporale</span><div class="cpsr-track"><div class="cpsr-fill" data-pct="98" style="background:var(--c2)"></div></div><span class="cpsr-val">98</span></div>
+        <div class="cpsr"><span class="cpsr-name">🔄 Ribaltamento emotivo</span><div class="cpsr-track"><div class="cpsr-fill" data-pct="88" style="background:var(--c2)"></div></div><span class="cpsr-val">88</span></div>
+        <div class="cpsr"><span class="cpsr-name">📡 Passaparola spontaneo</span><div class="cpsr-track"><div class="cpsr-fill" data-pct="92" style="background:var(--c2)"></div></div><span class="cpsr-val">92</span></div>
+        <div class="cpsr"><span class="cpsr-name">🏗 Spazio fisico vincolato</span><div class="cpsr-track"><div class="cpsr-fill" data-pct="95" style="background:var(--c2)"></div></div><span class="cpsr-val">95</span></div>
+      </div>
+      <div class="cbd-takeaway" style="border-color:var(--c2);background:rgba(27,79,155,.05)">
+        <div class="cbta-lbl" style="color:var(--c2);font-family:var(--f-mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase">Cosa dice a RimborsoalVolo</div>
+        <p class="cbta-text">La personalizzazione in tempo reale è fattibile — i dati del volo sono pubblici. RimborsoalVolo sa già quali voli sono in ritardo e di quanto. Un messaggio fisico iper-contestuale <strong>«Volo AZ1234 · Roma Fiumicino · 4h23m di ritardo → hai diritto a €250»</strong> ha la stessa logica KLM ma con dati più precisi e promessa economica concreta.</p>
+      </div>
+      <div style="margin-top:20px;padding:16px 20px;background:var(--bg);border:1px solid var(--rule)">
+        <div style="font-family:var(--f-mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-30);margin-bottom:6px">Link ufficiali</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <a href="https://www.youtube.com/watch?v=4IUfOrpYE7M" target="_blank" style="font-family:var(--f-mono);font-size:10px;color:var(--c2);text-decoration:none;padding:4px 10px;border:1px solid rgba(27,79,155,.2);background:var(--brand-light)">▶ YouTube ufficiale</a>
+          <a href="https://letsinfluence.io/klm-surprise-an-inspiring-social-media-campaign/" target="_blank" style="font-family:var(--f-mono);font-size:10px;color:var(--ink-60);text-decoration:none;padding:4px 10px;border:1px solid var(--rule)">Case study completo</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CASE 3: BK Traffic Jam Whopper ══ -->
+<div class="case-block" id="cb3">
+  <div class="cb-banner">
+    <div class="cb-banner-bg" style="background-image:url('https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=1400&q=80');background-position:center 50%"></div>
+    <div class="cb-banner-overlay"></div>
+    <div class="cb-banner-content">
+      <div class="cb-banner-left">
+        <div class="cb-meta">
+          <span class="cb-num">03 / 06</span>
+          <span class="cb-year">2019</span>
+          <span class="cb-brand-tag" style="border-color:rgba(230,126,34,.6);background:rgba(230,126,34,.15)">Burger King · Messico · Cannes Grand Prix</span>
+        </div>
+        <div class="cb-title">Traffic Jam<br>Whopper</div>
+        <div class="cb-subtitle">Il momento peggiore trasformato nel momento giusto per comprare. Geolocalizzazione + stress = conversione.</div>
+      </div>
+      <div class="cb-banner-right">
+        <a href="https://www.youtube.com/watch?v=r4MqE3eDsAM" target="_blank" rel="noopener" class="cb-watch-btn">
+          <span class="cb-watch-icon">▶</span>
+          Case film Cannes →
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="cb-detail">
+    <div class="cbd-left">
+      <div class="video-embed-wrap" id="ve3">
+        <iframe src="https://www.youtube.com/embed/r4MqE3eDsAM?rel=0&modestbranding=1" title="Burger King Traffic Jam Whopper Cannes" allowfullscreen loading="lazy"></iframe>
+      </div>
+      <p class="cbd-desc">A Città del Messico, BK attivò la consegna tramite app direttamente nelle code autostradali. L'app usava dati GPS in tempo reale per rilevare veicoli fermi nel traffico entro raggio di consegna. Push notification: <strong>«Sei bloccato in coda? Il tuo Whopper è sulla strada.»</strong> Un rider portava il burger finestra per finestra in 15 minuti medi. Le zone di delivery cambiano seguendo il traffico live. Cannes Lions Grand Prix 2019.</p>
+      <div class="cbd-result">
+        <div class="cbr-lbl">Risultato misurato</div>
+        <div class="cbr-text"><strong>App downloads +44x</strong> nella settimana del lancio · Delivery orders +63% in prima settimana · Grand Prix Cannes Lions 2019 · Espanso a Los Angeles, São Paulo e Shanghai</div>
+      </div>
+    </div>
+    <div class="cbd-right">
+      <span class="cbps-lbl">Score sui 4 pattern</span>
+      <div class="cbps-rows" id="cps3">
+        <div class="cpsr"><span class="cpsr-name">⏱ Precisione temporale</span><div class="cpsr-track"><div class="cpsr-fill" data-pct="100" style="background:var(--c3)"></div></div><span class="cpsr-val">100</span></div>
+        <div class="cpsr"><span class="cpsr-name">🔄 Ribaltamento emotivo</span><div class="cpsr-track"><div class="cpsr-fill" data-pct="95" style="background:var(--c3)"></div></div><span class="cpsr-val">95</span></div>
+        <div class="cpsr"><span class="cpsr-name">📡 Passaparola spontaneo</span><div class="cpsr-track"><div class="cpsr-fill" data-pct="78" style="background:var(--c3)"></div></div><span class="cpsr-val">78</span></div>
+        <div class="cpsr"><span class="cpsr-name">🏗 Spazio fisico vincolato</span><div class="cpsr-track"><div class="cpsr-fill" data-pct="88" style="background:var(--c3)"></div></div><span class="cpsr-val">88</span></div>
+      </div>
+      <div class="cbd-takeaway" style="border-color:var(--c3);background:rgba(230,126,34,.05)">
+        <div class="cbta-lbl" style="color:var(--c3);font-family:var(--f-mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase">Cosa dice a RimborsoalVolo</div>
+        <p class="cbta-text">Geolocalizzazione + dato volo in tempo reale + push contestuale. RimborsoalVolo conosce i voli in ritardo grazie a FlightAware. <strong>Una notifica push all'aeroporto giusto, nel momento del ritardo confermato, con l'importo esatto</strong>, replica esattamente questo meccanismo. La differenza: qui il prodotto è già il rimborso — non serve nemmeno convincere. Il problema è già presente. La soluzione può arrivare in tasca in secondi.</p>
+      </div>
+      <div style="margin-top:20px;padding:16px 20px;background:var(--bg);border:1px solid var(--rule)">
+        <div style="font-family:var(--f-mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-30);margin-bottom:6px">Link ufficiali</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <a href="https://www.youtube.com/watch?v=r4MqE3eDsAM" target="_blank" style="font-family:var(--f-mono);font-size:10px;color:var(--c3);text-decoration:none;padding:4px 10px;border:1px solid rgba(230,126,34,.2);background:rgba(230,126,34,.06)">▶ Case film Cannes</a>
+          <a href="https://www.oneclub.org/awards/theoneshow/-award/36975/the-traffic-jam-whopper/" target="_blank" style="font-family:var(--f-mono);font-size:10px;color:var(--ink-60);text-decoration:none;padding:4px 10px;border:1px solid var(--rule)">The One Show Award</a>
+          <a href="https://www.marketingdive.com/news/burger-king-drives-app-downloads-with-traffic-jam-whopper-deliveries/554507/" target="_blank" style="font-family:var(--f-mono);font-size:10px;color:var(--ink-60);text-decoration:none;padding:4px 10px;border:1px solid var(--rule)">Marketing Dive analysis</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CASE 4: Casinò Venezia ══ -->
+<div class="case-block" id="cb4">
+  <div class="cb-banner">
+    <div class="cb-banner-bg" style="background-image:url('https://images.unsplash.com/photo-1559963110-71b394e7494d?w=1400&q=80');background-position:center 60%"></div>
+    <div class="cb-banner-overlay"></div>
+    <div class="cb-banner-content">
+      <div class="cb-banner-left">
+        <div class="cb-meta">
+          <span class="cb-num">04 / 06</span>
+          <span class="cb-year">2010+</span>
+          <span class="cb-brand-tag" style="border-color:rgba(45,158,95,.6);background:rgba(45,158,95,.15)">Casinò di Venezia · Italia · Benchmark diretto</span>
+        </div>
+        <div class="cb-title">Il nastro bagagli<br>come roulette</div>
+        <div class="cb-subtitle">Il precedente italiano più diretto. Adesivi + QR = campagna aeroportuale senza permessi speciali.</div>
+      </div>
+      <div class="cb-banner-right">
+        <a href="https://www.casino-venezia.it" target="_blank" rel="noopener" class="cb-watch-btn">
+          <span class="cb-watch-icon">🔗</span>
+          Casino di Venezia →
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="cb-detail">
+    <div class="cbd-left">
+      <!-- No video available — visual description block -->
+      <div style="background:var(--ink);padding:40px;margin-bottom:28px;position:relative;overflow:hidden">
+        <div style="position:absolute;top:-20px;right:-20px;font-size:180px;opacity:.04;line-height:1">🎰</div>
+        <div style="font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:16px">Descrizione dell'attivazione</div>
+        <p style="font-family:var(--f-display);font-size:20px;font-weight:300;color:var(--white);line-height:1.6;margin-bottom:16px">Il pavimento e le pareti intorno al nastro bagagli dell'Aeroporto Marco Polo di Venezia vengono trasformati in una roulette gigante tramite adesivi rimovibili.</p>
+        <p style="font-size:13px;color:rgba(255,255,255,.4);line-height:1.7">I bagagli che scivolano sul nastro sembrano le palline della roulette. Un QR code nel centro dell'installazione porta direttamente alla prenotazione del casinò. Nessun permesso speciale necessario — solo superfici temporanee autorizzate come pubblicità d'ambiente.</p>
+        <div style="margin-top:20px;display:flex;gap:16px;font-family:var(--f-mono);font-size:10px">
+          <span style="color:rgba(45,158,95,.8)">✓ Adesivi rimovibili</span>
+          <span style="color:rgba(45,158,95,.8)">✓ QR geolocalizzato</span>
+          <span style="color:rgba(45,158,95,.8)">✓ Zero permessi straordinari</span>
+        </div>
+      </div>
+      <p class="cbd-desc">L'aeroporto Marco Polo trasformato in un prolungamento del casinò stesso. I turisti in arrivo a Venezia trovano il nastro bagagli decorato come una roulette — e capiscono immediatamente il messaggio senza bisogno di leggere nulla. <strong>Il simbolismo funziona in qualsiasi lingua.</strong></p>
+      <div class="cbd-result">
+        <div class="cbr-lbl">Risultato documentato</div>
+        <div class="cbr-text"><strong>+60% visitatori del Casinò</strong> tra turisti in arrivo all'aeroporto nel periodo dell'attivazione · Caso più citato per ambient advertising aeroportuale in Italia · Citato in decine di blog internazionali di marketing creativo</div>
+      </div>
+    </div>
+    <div class="cbd-right">
+      <span class="cbps-lbl">Score sui 4 pattern</span>
+      <div class="cbps-rows" id="cps4">
+        <div class="cpsr"><span class="cpsr-name">⏱ Precisione temporale</span><div class="cpsr-track"><div class="cpsr-fill" data-pct="75" style="background:var(--c5)"></div></div><span class="cpsr-val">75</span></div>
+        <div class="cpsr"><span class="cpsr-name">🔄 Ribaltamento emotivo</span><div class="cpsr-track"><div class="cpsr-fill" data-pct="80" style="background:var(--c5)"></div></div><span class="cpsr-val">80</span></div>
+        <div class="cpsr"><span class="cpsr-name">📡 Passaparola spontaneo</span><div class="cpsr-track"><div class="cpsr-fill" data-pct="85" style="background:var(--c5)"></div></div><span class="cpsr-val">85</span></div>
+        <div class="cpsr"><span class="cpsr-name">🏗 Spazio fisico vincolato</span><div class="cpsr-track"><div class="cpsr-fill" data-pct="98" style="background:var(--c5)"></div></div><span class="cpsr-val">98</span></div>
+      </div>
+      <div class="cbd-takeaway" style="border-color:var(--c5);background:rgba(45,158,95,.05)">
+        <div class="cbta-lbl" style="color:var(--c5);font-family:var(--f-mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase">Cosa dice a RimborsoalVolo — il caso più diretto</div>
+        <p class="cbta-text"><strong>Questo è il precedente pratico più rilevante.</strong> Adesivi rimovibili sul pavimento + QR = campagna aeroportuale italiana senza permessi straordinari. Il nastro bagagli con grafica «il tuo rimborso è in arrivo — scansiona per aprire la pratica» è letteralmente la versione RimborsoalVolo di questo caso. Costo: materiali e allestimento. Iter burocratico: standard pubblicità d'ambiente, non attivazione promozionale speciale.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CASE 5: Iberia Escala ══ -->
+<div class="case-block" id="cb5">
+  <div class="cb-banner">
+    <div class="cb-banner-bg" style="background-image:url('https://images.unsplash.com/photo-1529655683826-aba9b3e77383?w=1400&q=80');background-position:center 35%"></div>
+    <div class="cb-banner-overlay"></div>
+    <div class="cb-banner-content">
+      <div class="cb-banner-left">
+        <div class="cb-meta">
+          <span class="cb-num">05 / 06</span>
+          <span class="cb-year">2019–2024</span>
+          <span class="cb-brand-tag" style="border-color:rgba(233,69,96,.6);background:rgba(233,69,96,.15)">Iberia Airlines · Spagna</span>
+        </div>
+        <div class="cb-title">Escala en<br>el Paraíso</div>
+        <div class="cb-subtitle">Come trasformare un ritardo in un'esperienza da raccontare. Il pattern «passeggero scelto» scalato.</div>
+      </div>
+      <div class="cb-banner-right">
+        <a href="https://www.youtube.com/watch?v=EjKvzFYUyAo" target="_blank" rel="noopener" class="cb-watch-btn">
+          <span class="cb-watch-icon">▶</span>
+          Guarda il caso →
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="cb-detail">
+    <div class="cbd-left">
+      <div class="yt-thumb" id="ve5" data-ytid="EjKvzFYUyAo" onclick="loadYT(this)" style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;margin-bottom:32px;cursor:pointer;background:#000">
+        <img src="https://img.youtube.com/vi/EjKvzFYUyAo/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/EjKvzFYUyAo/hqdefault.jpg'" alt="Iberia Escala en el Paraíso" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;opacity:.88;transition:opacity .3s" onmouseover="this.style.opacity='.98'" onmouseout="this.style.opacity='.88'">
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none">
+          <div style="width:72px;height:72px;background:rgba(255,0,0,.92);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:14px;box-shadow:0 4px 24px rgba(0,0,0,.4)">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><polygon points="11,8 22,14 11,20" fill="white"/></svg>
+          </div>
+          <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.8);text-shadow:0 2px 8px rgba(0,0,0,.8)">Iberia Escala en el Paraíso</div>
+          <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.08em;color:rgba(255,255,255,.55);margin-top:4px;text-shadow:0 2px 8px rgba(0,0,0,.8);background:rgba(255,0,0,.7);padding:4px 10px;border-radius:2px">▶ Apri su YouTube</div>
+        </div>
+      </div>
+      <p class="cbd-desc">Iberia selezionava passeggeri con coincidenze lunghe o ritardi a Madrid e li portava in giro per la capitale spagnola — Museo del Prado, tapas, flamenco — con un accompagnatore Iberia. La logica: <strong>il disagio dell'attesa diventa un racconto positivo</strong>. Contattati tramite app o al gate, la selezione favoriva chi aveva profili social attivi.</p>
+      <div class="cbd-result">
+        <div class="cbr-lbl">Risultato misurato</div>
+        <div class="cbr-text">Quasi tutti i partecipanti documentavano l'esperienza sui social in <strong>tempo reale</strong> · Copertura organica in 18 paesi · NPS +12 punti nell'anno del lancio · Campagna attiva per oltre 5 anni</div>
+      </div>
+    </div>
+    <div class="cbd-right">
+      <span class="cbps-lbl">Score sui 4 pattern</span>
+      <div class="cbps-rows" id="cps5">
+        <div class="cpsr"><span class="cpsr-name">⏱ Precisione temporale</span><div class="cpsr-track"><div class="cpsr-fill" data-pct="90" style="background:var(--c6)"></div></div><span class="cpsr-val">90</span></div>
+        <div class="cpsr"><span class="cpsr-name">🔄 Ribaltamento emotivo</span><div class="cpsr-track"><div class="cpsr-fill" data-pct="98" style="background:var(--c6)"></div></div><span class="cpsr-val">98</span></div>
+        <div class="cpsr"><span class="cpsr-name">📡 Passaparola spontaneo</span><div class="cpsr-track"><div class="cpsr-fill" data-pct="95" style="background:var(--c6)"></div></div><span class="cpsr-val">95</span></div>
+        <div class="cpsr"><span class="cpsr-name">🏗 Spazio fisico vincolato</span><div class="cpsr-track"><div class="cpsr-fill" data-pct="70" style="background:var(--c6)"></div></div><span class="cpsr-val">70</span></div>
+      </div>
+      <div class="cbd-takeaway" style="border-color:var(--c6);background:rgba(233,69,96,.05)">
+        <div class="cbta-lbl" style="color:var(--c6);font-family:var(--f-mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase">Cosa dice a RimborsoalVolo</div>
+        <p class="cbta-text">La meccanica del passeggero selezionato che riceve qualcosa di inatteso funziona perfettamente. La versione RimborsoalVolo è però più diretta e scalabile: non serve portare nessuno al museo. <strong>Basta mostrargli quanti soldi ha già il diritto di ricevere.</strong> Il ribaltamento da «volo in ritardo = soldi persi» a «volo in ritardo = soldi da recuperare» ha la stessa struttura emotiva — con costo di esecuzione infinitamente inferiore.</p>
+      </div>
+      <div style="margin-top:20px;padding:16px 20px;background:var(--bg);border:1px solid var(--rule)">
+        <div style="font-family:var(--f-mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-30);margin-bottom:6px">Link</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <a href="https://www.youtube.com/watch?v=EjKvzFYUyAo" target="_blank" style="font-family:var(--f-mono);font-size:10px;color:var(--c6);text-decoration:none;padding:4px 10px;border:1px solid rgba(233,69,96,.2);background:rgba(233,69,96,.05)">▶ YouTube</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CASE 6: AXA / Momento crisi ══ -->
+<div class="case-block" id="cb6">
+  <div class="cb-banner">
+    <div class="cb-banner-bg" style="background-image:url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1400&q=80');background-position:center 50%"></div>
+    <div class="cb-banner-overlay" style="background:linear-gradient(to bottom,transparent 20%,rgba(12,12,12,.92) 100%)"></div>
+    <div class="cb-banner-content">
+      <div class="cb-banner-left">
+        <div class="cb-meta">
+          <span class="cb-num">06 / 06</span>
+          <span class="cb-year">2017–2022</span>
+          <span class="cb-brand-tag" style="border-color:rgba(131,56,236,.6);background:rgba(131,56,236,.15)">AXA Assicurazioni · Framework strategico</span>
+        </div>
+        <div class="cb-title">Campagne nel<br>momento del sinistro</div>
+        <div class="cb-subtitle">Come un brand assicurativo ha imparato che il budget nel momento di crisi vale 10× quello speso in branding generico.</div>
+      </div>
+      <div class="cb-banner-right">
+        <a href="https://www.axa.it" target="_blank" rel="noopener" class="cb-watch-btn">
+          <span class="cb-watch-icon">🔗</span>
+          AXA.it →
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="cb-detail">
+    <div class="cbd-left">
+      <div style="background:rgba(131,56,236,.08);border:1px solid rgba(131,56,236,.15);padding:40px;margin-bottom:28px">
+        <div style="font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(131,56,236,.7);margin-bottom:16px">Il principio</div>
+        <p style="font-family:var(--f-display);font-size:22px;font-weight:300;color:var(--ink);line-height:1.5;margin-bottom:20px">Non vendere polizze alla gente che non pensa ai sinistri. Essere visibili esattamente quando il sinistro accade.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div style="background:rgba(131,56,236,.06);padding:16px 18px">
+            <div style="font-family:var(--f-mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:rgba(131,56,236,.6);margin-bottom:6px">Campagne always-on</div>
+            <div style="font-family:var(--f-display);font-size:28px;font-weight:300;color:var(--ink)">1×</div>
+            <div style="font-size:11px;color:var(--ink-30)">tasso di conversione base</div>
+          </div>
+          <div style="background:rgba(131,56,236,.12);padding:16px 18px">
+            <div style="font-family:var(--f-mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:rgba(131,56,236,.7);margin-bottom:6px">Campagne momento di crisi</div>
+            <div style="font-family:var(--f-display);font-size:28px;font-weight:300;color:var(--c4)">3–5×</div>
+            <div style="font-size:11px;color:var(--ink-30)">superiore alle campagne always-on</div>
+          </div>
+        </div>
+      </div>
+      <p class="cbd-desc">Le campagne più efficaci di AXA si basano su presenza SEA su query di emergenza in tempo reale («incidente cosa fare», «volo cancellato rimborso»), campagne radio nei bollettini traffico, retargeting contestuale basato su eventi verificabili. <strong>Il budget speso durante il momento critico vale strutturalmente più di qualsiasi awareness generica.</strong></p>
+      <div class="cbd-result">
+        <div class="cbr-lbl">Risultato documentato</div>
+        <div class="cbr-text">Tasso di conversione <strong>3–5× superiore</strong> alle campagne always-on · Costo per lead -40% rispetto alle campagne awareness tradizionali · Adottato come framework globale per le campagne di acquisizione</div>
+      </div>
+    </div>
+    <div class="cbd-right">
+      <span class="cbps-lbl">Score sui 4 pattern</span>
+      <div class="cbps-rows" id="cps6">
+        <div class="cpsr"><span class="cpsr-name">⏱ Precisione temporale</span><div class="cpsr-track"><div class="cpsr-fill" data-pct="95" style="background:var(--c4)"></div></div><span class="cpsr-val">95</span></div>
+        <div class="cpsr"><span class="cpsr-name">🔄 Ribaltamento emotivo</span><div class="cpsr-track"><div class="cpsr-fill" data-pct="65" style="background:var(--c4)"></div></div><span class="cpsr-val">65</span></div>
+        <div class="cpsr"><span class="cpsr-name">📡 Passaparola spontaneo</span><div class="cpsr-track"><div class="cpsr-fill" data-pct="40" style="background:var(--c4)"></div></div><span class="cpsr-val">40</span></div>
+        <div class="cpsr"><span class="cpsr-name">🏗 Spazio fisico vincolato</span><div class="cpsr-track"><div class="cpsr-fill" data-pct="50" style="background:var(--c4)"></div></div><span class="cpsr-val">50</span></div>
+      </div>
+      <div class="cbd-takeaway" style="border-color:var(--c4);background:rgba(131,56,236,.05)">
+        <div class="cbta-lbl" style="color:var(--c4);font-family:var(--f-mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase">Cosa dice a RimborsoalVolo</div>
+        <p class="cbta-text">La logica AXA conferma che il budget investito nella fase di crisi vale strutturalmente più del budget branding generico. <strong>RimborsoalVolo dovrebbe spostare una quota del budget SEA verso campagne trigger-based</strong>: attivazione automatica su query specifiche legate ai voli in ritardo di quel giorno, aeroporto per aeroporto. Google Ads + FlightAware + query contestuali è il sistema.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPARISON MATRIX -->
+<section class="matrix-section">
+  <div class="wrap">
+    <div class="ms-head">
+      <div>
+        <span style="font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-30);margin-bottom:10px;display:block">Confronto comparativo</span>
+        <h2 class="ms-h2">I sei benchmark<br><em>sui quattro pattern.</em></h2>
+      </div>
+      <p class="ms-note">Pallino pieno = pattern centrale nella campagna. Pallino mezzo = presente ma non dominante.</p>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="matrix-table" style="min-width:800px" id="mxTable">
+        <thead>
+          <tr>
+            <th style="text-align:left">Campagna</th>
+            <th>⏱ Precisione<br>temporale</th>
+            <th>🔄 Ribaltamento<br>emotivo</th>
+            <th>📡 Passaparola<br>spontaneo</th>
+            <th>🏗 Spazio<br>vincolato</th>
+            <th>Score<br>medio</th>
+          </tr>
+        </thead>
+        <tbody id="mxBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- SYNTHESIS -->
+<section class="synthesis-section">
+  <div class="wrap">
+    <span class="syn-lbl">Cosa estraggono i benchmark</span>
+    <h2 class="syn-h2">Quattro leggi<br><em>per il brief.</em></h2>
+    <div class="syn-grid">
+      <div class="syn-card" id="sc1">
+        <div class="syn-num">01</div>
+        <div class="syn-title">Il momento vale più del messaggio</div>
+        <p class="syn-body">In tutti i casi, la campagna funziona per il timing, non per la creatività del messaggio. <strong>Essere presenti con un messaggio mediocre nel momento giusto batte la campagna perfetta nel momento sbagliato.</strong> Per RimborsoalVolo: il passeggero in attesa con 4 ore davanti è più prezioso di qualsiasi audience builder.</p>
+      </div>
+      <div class="syn-card" id="sc2">
+        <div class="syn-num">02</div>
+        <div class="syn-title">La sorpresa crea il racconto</div>
+        <p class="syn-body">WestJet, KLM, Iberia: tutti basati su un gap enorme tra aspettativa bassa e realtà alta. <strong>Il VOC di RimborsoalVolo documenta esattamente questo gap nel prodotto reale</strong> — clienti che entrano scettici ed escono stupiti. La campagna deve rendere questo gap visibile prima ancora che avvenga.</p>
+      </div>
+      <div class="syn-card" id="sc3">
+        <div class="syn-num">03</div>
+        <div class="syn-title">Il passaparola non imbarazzante si progetta</div>
+        <p class="syn-body">La VIP Card ha un difetto: portare altri passeggeri al referral richiede un'azione imbarazzante. <strong>La soluzione è far viaggiare il messaggio su un supporto fisico</strong> — un cartoncino, un QR su un display, un adesivo sul pavimento — non sulla bocca di un passeggero davanti a sconosciuti.</p>
+      </div>
+      <div class="syn-card" id="sc4">
+        <div class="syn-num">04</div>
+        <div class="syn-title">Il vincolo fisico è il brief creativo</div>
+        <p class="syn-body">Il Casinò di Venezia e WestJet hanno realizzato le attivazioni più impattanti con i vincoli più stretti. <strong>Le restrizioni aeroportuali non sono un problema da aggirare: sono la domanda da rispondere.</strong> «Cosa posso fare con solo adesivi rimovibili e un QR?» spesso è la domanda che produce le idee migliori.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="next-section">
+  <div class="wrap">
+    <div class="next-inner">
+      <span class="next-label">Ultimo modulo</span>
+      <a href="m7.html" class="next-link">
+        <span class="next-link-text">M7 — Regolamentazione Aeroporti</span>
+        <span class="next-arrow">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-inner">
+      <div class="fl">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXUnktDf1BkU4tZMz6l8TUpkmiDo4iILkjmg&s" alt="" style="height:20px;filter:none;opacity:.6;mix-blend-mode:multiply" onerror="this.style.display='none'">
+        <span class="fl-sep">×</span>
+        <img src="https://www.ribrainstudio.com/wp-content/uploads/2025/01/Logo_ribrain_Nero.svg" alt="Ribrain" style="height:16px;opacity:.6;filter:none">
+      </div>
+      <span class="fr-foot">M6 · Benchmark Creativi · Aprile 2026</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+function loadYT(el){
+  const id=el.dataset.ytid;
+  window.open('https://www.youtube.com/watch?v='+id,'_blank','noopener,noreferrer');
+  // Feedback visivo: pulse sull'overlay
+  const overlay=el.querySelector('.yt-overlay');
+  if(overlay){overlay.style.background='rgba(255,0,0,.15)';setTimeout(()=>{overlay.style.background='';},300);}
+}
+gsap.registerPlugin(ScrollTrigger);
+const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px'});
+(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop)})();
+const prog=document.getElementById('prog');
+window.addEventListener('scroll',()=>{prog.style.width=(window.scrollY/(document.documentElement.scrollHeight-window.innerHeight)*100)+'%'});
+
+const CASES=[
+  {name:'WestJet Christmas Miracle',scores:[95,100,98,90],color:'#D94F2B'},
+  {name:'KLM Surprise',scores:[98,88,92,95],color:'#1B4F9B'},
+  {name:'BK Traffic Jam Whopper',scores:[100,95,78,88],color:'#E67E22'},
+  {name:'Casinò Venezia — Nastro bagagli',scores:[75,80,85,98],color:'#2D9E5F'},
+  {name:'Iberia — Escala en el Paraíso',scores:[90,98,95,70],color:'#E94560'},
+  {name:'AXA — Momento di crisi',scores:[95,65,40,50],color:'#8338EC'},
+];
+
+function buildMatrix(){
+  const tbody=document.getElementById('mxBody');
+  CASES.forEach((c,i)=>{
+    const avg=Math.round(c.scores.reduce((a,b)=>a+b,0)/4);
+    const tr=document.createElement('tr');
+    tr.style.opacity='0';tr.style.transform='translateX(-8px)';
+    const dotsCells=c.scores.map(s=>{
+      const full=s>=80,half=s>=50&&s<80;
+      const op=full?1:half?0.4:0.12;
+      return `<td style="text-align:center"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:${c.color};opacity:${op}"></span></td>`;
+    }).join('');
+    tr.innerHTML=`<td style="color:${c.color}">${c.name}</td>${dotsCells}<td><span style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:${c.color}">${avg}</span></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+window.addEventListener('load',()=>{
+  const tl=gsap.timeline({delay:.15});
+  tl.to('#hl',{opacity:1,y:0,duration:.7,ease:'power3.out'})
+    .to('#hh',{opacity:1,y:0,duration:1,ease:'power3.out'},'-=.3')
+    .to('#hbottom',{opacity:1,duration:.8,ease:'power3.out'},'-=.3');
+
+  gsap.to('#pg1,#pg2,#pg3,#pg4',{opacity:1,y:0,duration:.7,stagger:.1,ease:'power3.out',
+    scrollTrigger:{trigger:'#pGrid',start:'top 80%',once:true}});
+
+  ['#cb1','#cb2','#cb3','#cb4','#cb5','#cb6'].forEach((sel,i)=>{
+    ScrollTrigger.create({trigger:sel,start:'top 75%',once:true,
+      onEnter(){
+        const id=sel.replace('#cb','#cps');
+        document.querySelectorAll(id+' .cpsr-fill').forEach(bar=>{
+          gsap.to(bar,{width:bar.dataset.pct+'%',duration:1.3,ease:'power3.out',delay:.2});
+        });
+      }
+    });
+  });
+
+  buildMatrix();
+  ScrollTrigger.create({trigger:'#mxTable',start:'top 80%',once:true,
+    onEnter(){
+      document.querySelectorAll('#mxBody tr').forEach((tr,i)=>{
+        gsap.to(tr,{opacity:1,x:0,duration:.6,ease:'power3.out',delay:i*.08});
+      });
+    }
+  });
+
+  ['#sc1','#sc2','#sc3','#sc4'].forEach((sel,i)=>{
+    gsap.to(sel,{opacity:1,y:0,duration:.8,ease:'power3.out',delay:i*.1,
+      scrollTrigger:{trigger:sel,start:'top 85%',once:true}});
+  });
+
+  window.addEventListener('scroll',()=>{
+    const y=window.scrollY;
+    document.querySelector('.hero-h1').style.transform=`translateY(${y*.04}px)`;
+    document.querySelector('.hero-giant-text').style.transform=`translateY(${y*.025}px)`;
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M1 — Mercato & Gap di Consapevolezza · RimborsoalVolo × Ribrain</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<style>
+/* ── DESIGN SYSTEM (shared) ─────────────────────────── */
+:root {
+  --bg:         #F7F5F0;
+  --bg-warm:    #EDE9E1;
+  --brand:      #1B4F9B;
+  --brand-light:#E8F0FC;
+  --accent:     #D94F2B;
+  --ink:        #0C0C0C;
+  --ink-60:     rgba(12,12,12,.60);
+  --ink-30:     rgba(12,12,12,.28);
+  --ink-10:     rgba(12,12,12,.08);
+  --white:      #FFFFFF;
+  --rule:       rgba(12,12,12,.10);
+  --f-display:  'Cormorant Garamond', Georgia, serif;
+  --f-sans:     'DM Sans', system-ui, sans-serif;
+  --f-mono:     'DM Mono', monospace;
+  --ease:       cubic-bezier(0.16,1,0.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-sans);font-weight:300;line-height:1.6;overflow-x:hidden;cursor:none}
+
+/* cursor */
+.cursor{position:fixed;width:10px;height:10px;background:var(--ink);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:multiply}
+.cursor-ring{position:fixed;width:40px;height:40px;border:1px solid rgba(12,12,12,.3);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .5s var(--ease)}
+
+/* progress */
+.progress-bar{position:fixed;top:63px;left:0;height:2px;background:var(--brand);z-index:101;width:0%}
+
+/* noise */
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9997;opacity:.4}
+
+/* header */
+.site-header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(247,245,240,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--rule);height:64px;display:flex;align-items:center}
+.header-inner{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:1320px;margin:0 auto;padding:0 48px}
+.header-brand{display:flex;align-items:center;gap:16px;text-decoration:none;color:var(--ink)}
+.header-brand img{height:32px;filter:none;mix-blend-mode:multiply}
+.hd{width:1px;height:18px;background:var(--rule)}
+.hl{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-60)}
+.header-right{display:flex;align-items:center;gap:24px}
+.hback{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;color:var(--ink-30);text-decoration:none;transition:color .3s}
+.hback:hover{color:var(--brand)}
+.htag{font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:var(--brand);color:var(--white);padding:4px 10px;border-radius:2px}
+.hmod{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;color:var(--ink-60)}
+
+/* container */
+.wrap{max-width:1320px;margin:0 auto;padding:0 48px}
+@media(max-width:768px){.wrap{padding:0 24px}}
+
+/* ── HERO ─────────────────────────────────────────── */
+.hero{padding:148px 0 0;position:relative;overflow:hidden;min-height:100vh;display:flex;flex-direction:column;justify-content:center}
+.hero-bg-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--f-display);font-size:clamp(160px,22vw,340px);font-weight:300;color:rgba(12,12,12,.03);white-space:nowrap;pointer-events:none;letter-spacing:-.02em;user-select:none}
+.hero-inner{position:relative;z-index:1;padding-bottom:80px}
+.hero-label{display:flex;align-items:center;gap:14px;margin-bottom:40px;opacity:0;transform:translateY(16px)}
+.hero-label-line{width:36px;height:1px;background:var(--brand)}
+.hero-label span{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-60)}
+.hero-h1{font-family:var(--f-display);font-weight:300;font-size:clamp(72px,9vw,136px);line-height:1.0;margin-bottom:0;opacity:0;transform:translateY(40px)}
+.hero-h1 em{font-style:italic;color:var(--brand)}
+.hero-h1 .word-reveal{display:inline-block;overflow:hidden}
+.hero-h1 .word-inner{display:inline-block;transform:translateY(100%)}
+
+.hero-bottom{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--rule);margin-top:64px;opacity:0;transform:translateY(24px)}
+.hero-bottom-left{padding:48px 48px 48px 0;border-right:1px solid var(--rule)}
+.hero-bottom-right{padding:48px 0 48px 48px}
+.hero-bottom-label{font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-30);margin-bottom:20px}
+.hero-body{font-size:15px;line-height:1.8;color:var(--ink-60);max-width:480px}
+.hero-body strong{font-weight:500;color:var(--ink)}
+
+/* ── SECTION HEADERS ────────────────────────────── */
+.section{padding:120px 0}
+.section-label{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-30);margin-bottom:16px;display:block}
+.section-h2{font-family:var(--f-display);font-weight:300;font-size:clamp(44px,5vw,72px);line-height:1.08;margin-bottom:48px}
+.section-h2 em{font-style:italic;color:var(--brand)}
+hr.rule{border:none;border-top:1px solid var(--rule);margin:0}
+
+/* ── BIG NUMBER STRIP ───────────────────────────── */
+.numbers-strip{display:grid;grid-template-columns:repeat(4,1fr);background:var(--ink);position:relative;overflow:hidden}
+.numbers-strip::before{content:'';position:absolute;top:-50%;left:-20%;width:80vw;height:80vw;border-radius:50%;background:radial-gradient(circle,rgba(27,79,155,.15) 0%,transparent 60%);pointer-events:none}
+.ns-item{padding:56px 40px;border-right:1px solid rgba(255,255,255,.07);position:relative;overflow:hidden}
+.ns-item:last-child{border-right:none}
+.ns-num{font-family:var(--f-display);font-weight:300;font-size:clamp(56px,6vw,88px);line-height:1;color:var(--white);margin-bottom:12px;display:block}
+.ns-num .counter{color:var(--white)}
+.ns-unit{color:rgba(255,255,255,.4);font-size:.65em}
+.ns-label{font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);line-height:1.6}
+.ns-item:hover .ns-fill{transform:scaleX(1)}
+.ns-fill{position:absolute;bottom:0;left:0;width:100%;height:2px;background:var(--brand);transform:scaleX(0);transform-origin:left;transition:transform .6s var(--ease)}
+.ns-bar{position:absolute;bottom:0;left:0;width:0%;height:2px;background:var(--brand)}
+
+/* ── GAP VISUALISATION ──────────────────────────── */
+.gap-section{padding:120px 0;background:var(--white)}
+.gap-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;margin-top:64px}
+.gap-visual{position:relative}
+
+/* Circle diagram */
+.circle-diagram{position:relative;width:100%;max-width:420px;margin:0 auto}
+.circle-svg{width:100%;height:auto}
+.cd-ring-outer{fill:none;stroke:var(--bg-warm);stroke-width:24}
+.cd-ring-inner{fill:none;stroke:var(--brand);stroke-width:24;stroke-linecap:round;stroke-dasharray:0 1000;transition:stroke-dasharray 2s var(--ease)}
+.cd-ring-accent{fill:none;stroke:var(--accent);stroke-width:24;stroke-linecap:round;stroke-dasharray:0 1000;transition:stroke-dasharray 2s var(--ease)}
+.cd-center-num{font-family:var(--f-display);font-size:52px;font-weight:300;fill:var(--ink);text-anchor:middle;dominant-baseline:middle}
+.cd-center-label{font-family:var(--f-mono);font-size:11px;fill:var(--ink-60);text-anchor:middle;dominant-baseline:middle;letter-spacing:.08em}
+
+.gap-legend{margin-top:32px;display:flex;flex-direction:column;gap:16px}
+.gl-item{display:flex;align-items:center;gap:14px}
+.gl-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.gl-label{font-size:13px;color:var(--ink-60)}
+.gl-value{font-family:var(--f-display);font-size:20px;font-weight:300;margin-left:auto;color:var(--ink)}
+
+.gap-insights{display:flex;flex-direction:column;gap:0}
+.gi-item{padding:28px 0;border-top:1px solid var(--rule);opacity:0;transform:translateX(24px)}
+.gi-num{font-family:var(--f-display);font-size:48px;font-weight:300;line-height:1;margin-bottom:10px}
+.gi-num .hi{color:var(--brand)}
+.gi-title{font-family:var(--f-sans);font-size:13px;font-weight:500;margin-bottom:8px;letter-spacing:.02em;text-transform:uppercase;letter-spacing:.08em}
+.gi-body{font-size:14px;color:var(--ink-60);line-height:1.7}
+
+/* ── KEYWORD SCATTER ─────────────────────────────── */
+/* The "activation gap" represented as a particle scatter */
+.scatter-section{padding:80px 0 120px;overflow:hidden;background:var(--bg)}
+.scatter-header{margin-bottom:60px}
+.scatter-canvas-wrap{position:relative;height:360px;background:var(--white);border:1px solid var(--rule);overflow:hidden}
+.scatter-canvas{position:absolute;inset:0;width:100%;height:100%}
+.scatter-label-left{position:absolute;left:20px;top:50%;transform:translateY(-50%);font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-30);writing-mode:vertical-lr;transform:translateY(-50%) rotate(180deg)}
+.scatter-label-bottom{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-30)}
+.scatter-axis-x{position:absolute;bottom:36px;left:48px;right:20px;height:1px;background:var(--rule)}
+.scatter-axis-y{position:absolute;bottom:36px;left:48px;top:20px;width:1px;background:var(--rule)}
+
+/* ── SEASONALITY BAR ─────────────────────────────── */
+.season-section{padding:120px 0;background:var(--ink);position:relative;overflow:hidden}
+.season-section .section-label{color:rgba(255,255,255,.3)}
+.season-section .section-h2{color:var(--white)}
+.season-section .section-h2 em{color:rgba(255,255,255,.4)}
+.season-bars{display:grid;grid-template-columns:repeat(12,1fr);gap:8px;align-items:end;height:240px;margin:64px 0 32px;position:relative}
+.season-bars::before{content:'PICCO ESTIVO';position:absolute;right:20px;top:0;font-family:var(--f-mono);font-size:9px;letter-spacing:.1em;color:rgba(255,255,255,.15)}
+.sb-item{display:flex;flex-direction:column;align-items:center;gap:12px;height:100%}
+.sb-bar-wrap{flex:1;display:flex;align-items:flex-end;width:100%}
+.sb-bar{width:100%;background:rgba(255,255,255,.1);transform:scaleY(0);transform-origin:bottom;transition:transform 1.2s var(--ease);border-radius:2px 2px 0 0;position:relative;overflow:hidden}
+.sb-bar::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(27,79,155,.8),rgba(27,79,155,.2));opacity:0;transition:opacity .4s}
+.sb-bar.peak{background:var(--brand)}
+.sb-bar.peak::after{opacity:1}
+.sb-bar.accent-bar{background:var(--accent)}
+.sb-bar.is-visible{transform:scaleY(1)}
+.sb-month{font-family:var(--f-mono);font-size:9px;letter-spacing:.08em;color:rgba(255,255,255,.3);text-transform:uppercase}
+.season-legend{display:flex;align-items:center;gap:32px;margin-top:20px}
+.sl-item{display:flex;align-items:center;gap:10px;font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;color:rgba(255,255,255,.4)}
+.sl-dot{width:10px;height:10px;border-radius:2px}
+
+/* ── FUNNEL SECTION ──────────────────────────────── */
+.funnel-section{padding:120px 0;background:var(--bg)}
+.funnel-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;margin-top:64px}
+.funnel-visual{position:relative}
+.funnel-steps{display:flex;flex-direction:column;gap:0}
+.fstep{display:grid;grid-template-columns:80px 1fr;gap:0;opacity:0;transform:translateX(-24px)}
+.fstep-bar-wrap{display:flex;flex-direction:column;align-items:center;gap:0;padding-top:4px}
+.fstep-dot{width:14px;height:14px;border-radius:50%;background:var(--rule);border:2px solid var(--bg);flex-shrink:0;transition:background .4s .3s}
+.fstep.is-active .fstep-dot{background:var(--brand)}
+.fstep-line{width:1px;flex:1;background:var(--rule);transition:background .4s .4s;min-height:60px}
+.fstep.is-active .fstep-line{background:var(--brand)}
+.fstep-content{padding:4px 0 60px 0}
+.fstep-pct{font-family:var(--f-display);font-size:40px;font-weight:300;line-height:1;color:var(--ink-10);margin-bottom:6px;transition:color .4s}
+.fstep.is-active .fstep-pct{color:var(--brand)}
+.fstep-title{font-size:13px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.fstep-desc{font-size:13px;color:var(--ink-60);line-height:1.7}
+
+.funnel-right{display:flex;flex-direction:column;gap:0}
+.fr-insight{padding:32px 0;border-top:1px solid var(--rule);opacity:0;transform:translateY(16px)}
+.fr-insight:first-child{border-top:none;padding-top:0}
+.fri-label{font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-30);margin-bottom:12px}
+.fri-quote{font-family:var(--f-display);font-size:22px;font-weight:300;line-height:1.4;color:var(--ink);margin-bottom:10px}
+.fri-quote em{font-style:italic;color:var(--brand)}
+.fri-body{font-size:13px;color:var(--ink-60);line-height:1.7}
+
+/* ── KEYWORD CALLOUT ─────────────────────────────── */
+.callout-section{padding:0 0 120px}
+.callout-inner{background:var(--brand);padding:80px;position:relative;overflow:hidden}
+.callout-inner::before{content:'';position:absolute;top:-40%;right:-20%;width:80%;padding-bottom:80%;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.06) 0%,transparent 60%)}
+.callout-headline{font-family:var(--f-display);font-weight:300;font-size:clamp(40px,5vw,72px);line-height:1.1;color:var(--white);position:relative;z-index:1}
+.callout-headline em{font-style:italic;opacity:.55}
+.callout-sub{font-size:15px;color:rgba(255,255,255,.6);margin-top:24px;max-width:560px;line-height:1.8;position:relative;z-index:1}
+.callout-tag{display:inline-block;margin-top:32px;font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;border:1px solid rgba(255,255,255,.25);color:rgba(255,255,255,.6);padding:8px 16px;position:relative;z-index:1}
+
+/* ── GROWTH DRIVERS ──────────────────────────────── */
+.drivers-section{padding:120px 0;background:var(--white)}
+.drivers-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:64px}
+.driver-card{background:var(--bg);padding:48px 36px;position:relative;overflow:hidden;opacity:0;transform:translateY(24px)}
+.driver-card::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:2px;background:var(--brand);transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}
+.driver-card:hover::after{transform:scaleX(1)}
+.driver-card:hover{background:var(--brand-light)}
+.dc-index{font-family:var(--f-display);font-size:80px;font-weight:300;color:var(--ink-10);line-height:1;margin-bottom:28px;transition:color .4s}
+.driver-card:hover .dc-index{color:rgba(27,79,155,.12)}
+.dc-title{font-family:var(--f-display);font-size:24px;font-weight:400;margin-bottom:14px}
+.dc-body{font-size:13px;color:var(--ink-60);line-height:1.75}
+.dc-tag{display:inline-block;margin-top:20px;font-family:var(--f-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-30);border:1px solid var(--rule);padding:4px 10px}
+
+/* ── STRATEGIC TAKEAWAY ──────────────────────────── */
+.takeaway-section{padding:120px 0}
+.takeaway-grid{display:grid;grid-template-columns:2fr 1fr;gap:80px;align-items:start;margin-top:64px}
+.takeaway-main{}
+.tt-item{padding:40px 0;border-top:1px solid var(--rule);display:grid;grid-template-columns:48px 1fr;gap:24px;opacity:0}
+.tt-num{font-family:var(--f-display);font-size:20px;font-weight:300;color:var(--ink-30);padding-top:4px}
+.tt-content{}
+.tt-title{font-family:var(--f-sans);font-size:13px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.tt-body{font-size:14px;color:var(--ink-60);line-height:1.75}
+.tt-body .kw{
+  background:linear-gradient(to right,var(--brand),var(--brand));
+  background-size:0% 1px;
+  background-position:0 100%;
+  background-repeat:no-repeat;
+  padding-bottom:1px;
+  transition:background-size .6s var(--ease);
+  font-weight:500;
+  color:var(--ink);
+}
+.tt-item.is-visible .kw{background-size:100% 1px}
+
+.takeaway-sidebar{}
+.ts-box{background:var(--ink);padding:40px;margin-bottom:2px;opacity:0;transform:translateX(24px)}
+.ts-box-label{font-family:var(--f-mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:16px}
+.ts-box-content{font-family:var(--f-display);font-size:22px;font-weight:300;color:var(--white);line-height:1.4}
+.ts-box-content em{font-style:italic;color:rgba(255,255,255,.4)}
+
+/* ── NEXT ────────────────────────────────────────── */
+.next-section{padding:80px 0;border-top:1px solid var(--rule)}
+.next-inner{display:flex;align-items:center;justify-content:space-between}
+.next-label{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-30)}
+.next-link{display:flex;align-items:center;gap:16px;text-decoration:none;color:var(--ink);transition:gap .4s var(--ease)}
+.next-link:hover{gap:24px}
+.next-link-text{font-family:var(--f-display);font-size:clamp(28px,3vw,44px);font-weight:300}
+.next-arrow{font-size:32px;color:var(--brand)}
+
+/* footer */
+.site-footer{padding:48px 0;border-top:1px solid var(--rule)}
+.footer-inner{display:flex;align-items:center;justify-content:space-between}
+.fl{display:flex;align-items:center;gap:14px}
+.fl img{height:20px;filter:none;opacity:.6}
+.fl-sep{font-family:var(--f-mono);font-size:11px;color:var(--ink-30)}
+.fl-brand{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;color:var(--ink-60);text-transform:uppercase}
+.fr{font-family:var(--f-mono);font-size:11px;color:var(--ink-30)}
+
+@media(max-width:1024px){
+  .gap-grid,.funnel-grid,.takeaway-grid{grid-template-columns:1fr;gap:48px}
+  .numbers-strip{grid-template-columns:repeat(2,1fr)}
+  .drivers-grid{grid-template-columns:repeat(2,1fr)}
+  .season-bars{height:180px}
+}
+@media(max-width:768px){
+  .numbers-strip{grid-template-columns:1fr 1fr}
+  .drivers-grid{grid-template-columns:1fr}
+  .hero-bottom{grid-template-columns:1fr}
+  .hero-bottom-left{border-right:none;border-bottom:1px solid var(--rule);padding:32px 0}
+  .hero-bottom-right{padding:32px 0 0}
+  .callout-inner{padding:48px 24px}
+  .season-bars{height:160px;gap:4px}
+  .sb-month{font-size:7px}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="progress-bar" id="prog"></div>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <a class="header-brand" href="index.html">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXUnktDf1BkU4tZMz6l8TUpkmiDo4iILkjmg&s" alt="Logo" onerror="this.style.display='none'">
+      
+      <div class="hd"></div>
+      <img src="https://www.ribrainstudio.com/wp-content/uploads/2025/01/Logo_ribrain_Nero.svg" alt="Ribrain" style="height:18px;opacity:.75;filter:none">
+    </a>
+    <div class="header-right">
+      <a class="hback" href="index.html">← Tutti i moduli</a>
+      <span class="hmod">M1 / 7</span>
+      <span class="htag">Mercato</span>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-text">MERCATO</div>
+  <div class="wrap hero-inner">
+
+    <div class="hero-label" id="hl">
+      <div class="hero-label-line"></div>
+      <span>M1 — Mercato & Gap di Consapevolezza</span>
+    </div>
+
+    <h1 class="hero-h1" id="hh">
+      <span class="word-reveal"><span class="word-inner">Il</span></span>
+      <span class="word-reveal"><span class="word-inner"> problema</span></span>
+      <span class="word-reveal"><span class="word-inner"> non</span></span>
+      <span class="word-reveal"><span class="word-inner"> è<br></span></span>
+      <span class="word-reveal"><span class="word-inner"> la</span></span>
+      <span class="word-reveal"><span class="word-inner"> <em>concorrenza.</em></span></span>
+    </h1>
+
+    <div class="hero-bottom" id="hb">
+      <div class="hero-bottom-left">
+        <div class="hero-bottom-label">Il vero avversario</div>
+        <p class="hero-body">
+          Il competitor principale di RimborsoalVolo non è AirHelp, non è ItaliaRimborso.
+          È il <strong>non fare niente</strong>. Il 78% dei passeggeri che ha diritto al rimborso
+          lascia perdere. Non perché scelga un altro: perché non sceglie nessuno.
+          Questo è il mercato che nessuno sta ancora conquistando.
+        </p>
+      </div>
+      <div class="hero-bottom-right">
+        <div class="hero-bottom-label">Il punto di partenza</div>
+        <p class="hero-body">
+          220 milioni di passeggeri in Italia nel 2024. Un bacino economico potenziale
+          nell'ordine dei <strong>199 milioni di euro</strong> in risarcimenti e rimborsi.
+          Un tasso di richiesta effettiva che, nel migliore dei casi europei,
+          si ferma al <strong>38%</strong> dei passeggeri eleggibili.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NUMBERS STRIP -->
+<div class="numbers-strip" id="numstrip">
+  <div class="ns-item">
+    <span class="ns-num"><span class="counter" data-target="220">0</span><span class="ns-unit">M</span></span>
+    <div class="ns-label">Passeggeri negli<br>aeroporti italiani 2024</div>
+    <div class="ns-bar" data-pct="100"></div>
+  </div>
+  <div class="ns-item">
+    <span class="ns-num"><span class="counter" data-target="1.1">0</span><span class="ns-unit">Mld</span></span>
+    <div class="ns-label">Passeggeri aerei<br>nell'Unione Europea</div>
+    <div class="ns-bar" data-pct="85"></div>
+  </div>
+  <div class="ns-item">
+    <span class="ns-num"><span class="counter" data-target="38">0</span><span class="ns-unit">%</span></span>
+    <div class="ns-label">Passeggeri eleggibili<br>che agiscono (UE, 2024)</div>
+    <div class="ns-bar" data-pct="38"></div>
+  </div>
+  <div class="ns-item">
+    <span class="ns-num"><span class="counter" data-target="6.5">0</span><span class="ns-unit">Mld€</span></span>
+    <div class="ns-label">Compensation pool<br>europeo stimato</div>
+    <div class="ns-bar" data-pct="70"></div>
+  </div>
+</div>
+
+<hr class="rule">
+
+<!-- GAP SECTION -->
+<section class="section gap-section">
+  <div class="wrap">
+    <span class="section-label">Il nodo centrale</span>
+    <h2 class="section-h2">Chi ha diritto<br>e chi <em>agisce davvero.</em></h2>
+
+    <div class="gap-grid">
+
+      <!-- SVG circle diagram -->
+      <div class="gap-visual">
+        <div class="circle-diagram">
+          <svg class="circle-svg" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background ring -->
+            <circle class="cd-ring-outer" cx="200" cy="200" r="148"/>
+            <!-- 38% blue ring — eleggibili che agiscono -->
+            <circle id="ring-blue" class="cd-ring-inner" cx="200" cy="200" r="148"
+              transform="rotate(-90 200 200)"/>
+            <!-- 62% accent ring — non agiscono -->
+            <circle id="ring-red" class="cd-ring-accent" cx="200" cy="200" r="100"
+              transform="rotate(-90 200 200)"/>
+            <!-- center -->
+            <text class="cd-center-num" x="200" y="188" id="cd-num">0%</text>
+            <text class="cd-center-label" x="200" y="216">eleggibili che agiscono</text>
+          </svg>
+        </div>
+        <div class="gap-legend">
+          <div class="gl-item">
+            <div class="gl-dot" style="background:var(--brand)"></div>
+            <span class="gl-label">Passeggeri eleggibili che agiscono (UE)</span>
+            <span class="gl-value">38%</span>
+          </div>
+          <div class="gl-item">
+            <div class="gl-dot" style="background:var(--accent)"></div>
+            <span class="gl-label">Lasciano perdere — il mercato non attivato</span>
+            <span class="gl-value">62%</span>
+          </div>
+          <div class="gl-item">
+            <div class="gl-dot" style="background:var(--rule);border:1px solid var(--ink-10)"></div>
+            <span class="gl-label">Non conoscono i propri diritti (survey UE 2024)</span>
+            <span class="gl-value">70%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Insights -->
+      <div class="gap-insights">
+        <div class="gi-item" id="gi1">
+          <div class="gi-num"><span class="hi">8</span>%</div>
+          <div class="gi-title">Tasso di attivazione nel 2011</div>
+          <div class="gi-body">Il mercato ha più che quadruplicato la propria attivazione in 13 anni. Non è un settore maturo: è un settore che sta ancora costruendo la propria massa critica di consapevolezza.</div>
+        </div>
+        <div class="gi-item" id="gi2">
+          <div class="gi-num"><span class="hi">30</span>%</div>
+          <div class="gi-title">Cittadini UE che conoscono i propri diritti</div>
+          <div class="gi-body">La norma CE 261/2004 esiste da oltre 20 anni. Eppure solo 3 persone su 10 sanno di averla a disposizione. La battaglia non è sulla qualità del servizio: è sulla <strong>memoria mentale</strong>.</div>
+        </div>
+        <div class="gi-item" id="gi3">
+          <div class="gi-num"><span class="hi">199</span>M€</div>
+          <div class="gi-title">Bacino economico potenziale in Italia</div>
+          <div class="gi-body">Stima di settore 2024. Il fatturato reale degli operatori è molto più piccolo — nell'ordine delle decine di milioni. Il delta tra i due numeri è il mercato da conquistare.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- SEASONALITY -->
+<section class="season-section">
+  <div class="wrap">
+    <span class="section-label">Quando il mercato si accende</span>
+    <h2 class="section-h2">Stagionalità<br><em>dei disservizi.</em></h2>
+
+    <div class="season-bars" id="season-bars">
+      <!-- 12 mesi, altezze relative ai disservizi -->
+      <div class="sb-item"><div class="sb-bar-wrap"><div class="sb-bar" style="height:22%"></div></div><span class="sb-month">Gen</span></div>
+      <div class="sb-item"><div class="sb-bar-wrap"><div class="sb-bar" style="height:20%"></div></div><span class="sb-month">Feb</span></div>
+      <div class="sb-item"><div class="sb-bar-wrap"><div class="sb-bar" style="height:28%"></div></div><span class="sb-month">Mar</span></div>
+      <div class="sb-item"><div class="sb-bar-wrap"><div class="sb-bar" style="height:38%"></div></div><span class="sb-month">Apr</span></div>
+      <div class="sb-item"><div class="sb-bar-wrap"><div class="sb-bar" style="height:52%"></div></div><span class="sb-month">Mag</span></div>
+      <div class="sb-item"><div class="sb-bar-wrap"><div class="sb-bar peak" style="height:74%"></div></div><span class="sb-month">Giu</span></div>
+      <div class="sb-item"><div class="sb-bar-wrap"><div class="sb-bar peak" style="height:92%"></div></div><span class="sb-month">Lug</span></div>
+      <div class="sb-item"><div class="sb-bar-wrap"><div class="sb-bar peak accent-bar" style="height:100%"></div></div><span class="sb-month">Ago</span></div>
+      <div class="sb-item"><div class="sb-bar-wrap"><div class="sb-bar" style="height:65%"></div></div><span class="sb-month">Set</span></div>
+      <div class="sb-item"><div class="sb-bar-wrap"><div class="sb-bar" style="height:35%"></div></div><span class="sb-month">Ott</span></div>
+      <div class="sb-item"><div class="sb-bar-wrap"><div class="sb-bar" style="height:24%"></div></div><span class="sb-month">Nov</span></div>
+      <div class="sb-item"><div class="sb-bar-wrap"><div class="sb-bar" style="height:28%"></div></div><span class="sb-month">Dic</span></div>
+    </div>
+
+    <div class="season-legend">
+      <div class="sl-item"><div class="sl-dot" style="background:rgba(255,255,255,.1)"></div>Bassa incidenza disservizi</div>
+      <div class="sl-item"><div class="sl-dot" style="background:var(--brand)"></div>Alta pressione — Jun/Jul</div>
+      <div class="sl-item"><div class="sl-dot" style="background:var(--accent)"></div>Picco massimo — Agosto</div>
+    </div>
+
+    <!-- inline insight -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:64px">
+      <div style="background:rgba(255,255,255,.04);padding:36px 28px">
+        <div style="font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:16px">Apr — Mag</div>
+        <div style="font-family:var(--f-display);font-size:22px;font-weight:300;color:var(--white);margin-bottom:10px">Preparazione</div>
+        <div style="font-size:13px;color:rgba(255,255,255,.45);line-height:1.7">Awareness leggera, aumento salienza prima del picco. Il momento per piantare il seme nella mente del passeggero.</div>
+      </div>
+      <div style="background:rgba(27,79,155,.25);padding:36px 28px">
+        <div style="font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:16px">Giu — Ago</div>
+        <div style="font-family:var(--f-display);font-size:22px;font-weight:300;color:var(--white);margin-bottom:10px">Campagna attiva</div>
+        <div style="font-size:13px;color:rgba(255,255,255,.55);line-height:1.7">Forte pressione. Creatività situazionali, presidio media intenso, <strong style="color:white;font-weight:500">campagna fisica in aeroporto</strong>.</div>
+      </div>
+      <div style="background:rgba(255,255,255,.04);padding:36px 28px">
+        <div style="font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:16px">Settembre</div>
+        <div style="font-family:var(--f-display);font-size:22px;font-weight:300;color:var(--white);margin-bottom:10px">Recupero tardivo</div>
+        <div style="font-size:13px;color:rgba(255,255,255,.45);line-height:1.7">Intercettare chi ha vissuto il disagio in estate e non ha ancora agito. La domanda latente è ancora viva.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FUNNEL / ATTIVAZIONE -->
+<section class="section funnel-section">
+  <div class="wrap">
+    <span class="section-label">Anatomia del gap</span>
+    <h2 class="section-h2">Dal diritto<br>all'<em>azione.</em></h2>
+
+    <div class="funnel-grid">
+
+      <div class="funnel-steps" id="fsteps">
+        <div class="fstep" id="fs1">
+          <div class="fstep-bar-wrap">
+            <div class="fstep-dot"></div>
+            <div class="fstep-line"></div>
+          </div>
+          <div class="fstep-content">
+            <div class="fstep-pct">100%</div>
+            <div class="fstep-title">Passeggeri con disservizio</div>
+            <div class="fstep-desc">Il punto di partenza. Ritardo oltre 3 ore, cancellazione, overbooking. Il diritto esiste, è codificato nel CE 261/2004.</div>
+          </div>
+        </div>
+        <div class="fstep" id="fs2">
+          <div class="fstep-bar-wrap">
+            <div class="fstep-dot"></div>
+            <div class="fstep-line"></div>
+          </div>
+          <div class="fstep-content">
+            <div class="fstep-pct">30%</div>
+            <div class="fstep-title">Consapevoli del diritto</div>
+            <div class="fstep-desc">Solo 3 su 10 sanno di poter richiedere un rimborso. Gli altri non agiscono non per scelta: per ignoranza del diritto stesso.</div>
+          </div>
+        </div>
+        <div class="fstep" id="fs3">
+          <div class="fstep-bar-wrap">
+            <div class="fstep-dot"></div>
+            <div class="fstep-line"></div>
+          </div>
+          <div class="fstep-content">
+            <div class="fstep-pct">38%</div>
+            <div class="fstep-title">Eleggibili che agiscono (UE)</div>
+            <div class="fstep-desc">Il benchmark europeo più solido. Cresciuto dall'8% del 2011. Il mercato si sta attivando, ma la grande maggioranza lascia ancora perdere.</div>
+          </div>
+        </div>
+        <div class="fstep" id="fs4">
+          <div class="fstep-bar-wrap">
+            <div class="fstep-dot"></div>
+            <div class="fstep-line"></div>
+          </div>
+          <div class="fstep-content">
+            <div class="fstep-pct" style="color:var(--accent)">62%</div>
+            <div class="fstep-title">Non agisce — il mercato da conquistare</div>
+            <div class="fstep-desc">Pigrizia amministrativa, percepita complessità, sfiducia nel risultato, importo percepito troppo basso. Queste persone sono il vostro mercato reale.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="funnel-right">
+        <div class="fr-insight" id="fri1">
+          <div class="fri-label">La barriera principale</div>
+          <div class="fri-quote">Non lo faccio perché <em>non so come farlo.</em></div>
+          <div class="fri-body">La norma esiste da 20 anni. Eppure l'asimmetria informativa è ancora enorme. Chi riduce questa distanza vince. Non chi ha il migliore avvocato.</div>
+        </div>
+        <div class="fr-insight" id="fri2">
+          <div class="fri-label">La seconda barriera</div>
+          <div class="fri-quote">Non ne vale <em>lo sbattimento.</em></div>
+          <div class="fri-body">Per molti passeggeri la percezione di sforzo supera la percezione di valore. La promessa di semplicità assoluta — «non devi fare niente» — è il differenziatore che funziona, confermato da 12.154 recensioni.</div>
+        </div>
+        <div class="fr-insight" id="fri3">
+          <div class="fri-label">L'insight operativo</div>
+          <div class="fri-quote">Il timing conta <em>più del volume.</em></div>
+          <div class="fri-body">La brand awareness efficace nel flight compensation non è educazione astratta permanente: è una memoria mentale pronta ad attivarsi nel momento del disservizio. Il picco estivo è la finestra.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CALLOUT -->
+<div class="wrap callout-section">
+  <div class="callout-inner" id="callout">
+    <h3 class="callout-headline">
+      Il vantaggio competitivo<br>
+      non sarà di chi spiega<br>
+      <em>meglio il regolamento.</em>
+    </h3>
+    <p class="callout-sub">
+      Sarà di chi riduce meglio il tempo, la complessità e l'incertezza
+      che separano il passeggero dal claim. Velocità, chiarezza, presenza
+      nel momento giusto — non pedagogy sui diritti aerei.
+    </p>
+    <span class="callout-tag">Fonte: elaborazione Ribrain su dati Commissione UE, ENAC, Eurostat 2024</span>
+  </div>
+</div>
+
+<!-- GROWTH DRIVERS -->
+<section class="section drivers-section">
+  <div class="wrap">
+    <span class="section-label">Perché il mercato crescerà ancora</span>
+    <h2 class="section-h2">I cinque driver<br>di <em>crescita.</em></h2>
+
+    <div class="drivers-grid">
+      <div class="driver-card" id="dc1">
+        <div class="dc-index">01</div>
+        <div class="dc-title">Traffico aereo in espansione</div>
+        <div class="dc-body">Il traffico europeo ha superato 1,1 miliardi di passeggeri nel 2024. Più voli significano più esposizione strutturale al rischio disservizio — indipendentemente dall'efficienza delle compagnie.</div>
+        <span class="dc-tag">Base quantitativa</span>
+      </div>
+      <div class="driver-card" id="dc2">
+        <div class="dc-index">02</div>
+        <div class="dc-title">Complessità operativa sistemica</div>
+        <div class="dc-body">Congestione ATC, scioperi, effetto domino nelle rotazioni degli aeromobili. I disservizi non sono episodici: sono strutturali. Il sistema non eliminerà questa fragilità nei prossimi anni.</div>
+        <span class="dc-tag">Strutturale</span>
+      </div>
+      <div class="driver-card" id="dc3">
+        <div class="dc-index">03</div>
+        <div class="dc-title">Maggiore attivazione del passeggero</div>
+        <div class="dc-body">Dal 8% al 38% in 13 anni. La crescita è reale e documentata. La categoria si sta consolidando nella mente del consumatore — il lavoro che resta da fare è enorme, ma la direzione è chiara.</div>
+        <span class="dc-tag">Behavioural</span>
+      </div>
+      <div class="driver-card" id="dc4">
+        <div class="dc-index">04</div>
+        <div class="dc-title">AI e automazione del claim</div>
+        <div class="dc-body">Check automatici di eleggibilità, workflow documentali guidati, CRM con reminder post-volo. L'AI non cambia il diritto del passeggero: cambia la velocità con cui quel diritto può essere esercitato.</div>
+        <span class="dc-tag">Tecnologico</span>
+      </div>
+      <div class="driver-card" id="dc5">
+        <div class="dc-index">05</div>
+        <div class="dc-title">Aggregatori come touchpoint emergenti</div>
+        <div class="dc-body">OTA, app di travel e aggregatori che presidiano la customer journey diventano il primo touchpoint informativo. Presidiare la search intenzionale non basta più: serve intercettare il momento dell'evento.</div>
+        <span class="dc-tag">Distribuzione</span>
+      </div>
+      <div class="driver-card" id="dc6">
+        <div class="dc-index">06</div>
+        <div class="dc-title">Revisione CE 261/2004 in corso</div>
+        <div class="dc-body">Il Parlamento UE difende le soglie attuali (3 ore) spingendo sulla semplificazione procedurale. Qualunque sia l'esito, la direzione è più standardizzazione — chi vince non sarà chi spiega la norma, ma chi la rende accessibile.</div>
+        <span class="dc-tag">Normativo</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TAKEAWAY -->
+<section class="section takeaway-section">
+  <div class="wrap">
+    <span class="section-label">Implicazioni strategiche</span>
+    <h2 class="section-h2">Sei conclusioni<br>che <em>contano.</em></h2>
+
+    <div class="takeaway-grid">
+      <div class="takeaway-main">
+        <div class="tt-item" id="tt1">
+          <div class="tt-num">01</div>
+          <div class="tt-content">
+            <div class="tt-title">Il mercato non è saturo nel punto che conta</div>
+            <div class="tt-body">La concorrenza combatte per lo stesso <span class="kw">traffico intenzionale di fondo funnel</span>. Resta spazio enorme per lavorare sulla formazione della domanda e sulla brand salience pre-disservizio.</div>
+          </div>
+        </div>
+        <div class="tt-item" id="tt2">
+          <div class="tt-num">02</div>
+          <div class="tt-content">
+            <div class="tt-title">Il vero avversario è l'inerzia</div>
+            <div class="tt-body">Non il competitor. Il 62% che non fa niente è il <span class="kw">mercato non contestato</span>. La strategia non dovrebbe concentrarsi solo sulla differenziazione competitiva classica.</div>
+          </div>
+        </div>
+        <div class="tt-item" id="tt3">
+          <div class="tt-num">03</div>
+          <div class="tt-content">
+            <div class="tt-title">La brand awareness utile è situazionale, non didattica</div>
+            <div class="tt-body">Il tema interessa davvero solo quando il problema è recente e reale. La brand awareness efficace deve assomigliare a una <span class="kw">memoria mentale pronta ad attivarsi</span>, non a una lezione sul Regolamento CE.</div>
+          </div>
+        </div>
+        <div class="tt-item" id="tt4">
+          <div class="tt-num">04</div>
+          <div class="tt-content">
+            <div class="tt-title">Il timing vale più del volume di contenuti</div>
+            <div class="tt-body">Aprile-maggio per preparazione, <span class="kw">giugno-agosto per la campagna attiva</span>, settembre per il recupero tardivo. Un piano stagionale batte una pressione media costante.</div>
+          </div>
+        </div>
+        <div class="tt-item" id="tt5">
+          <div class="tt-num">05</div>
+          <div class="tt-content">
+            <div class="tt-title">Il dato del 22% italiano non è verificato</div>
+            <div class="tt-body">Non risulta da fonti istituzionali consolidate. Il <span class="kw">benchmark più solido è il 38% UE</span>. Usare il 22% in comunicazioni formali espone a contestazione — meglio ancorare le affermazioni ai dati europei.</div>
+          </div>
+        </div>
+        <div class="tt-item" id="tt6">
+          <div class="tt-num">06</div>
+          <div class="tt-content">
+            <div class="tt-title">Il vantaggio futuro non è normativo</div>
+            <div class="tt-body">Chi costruirà il posizionamento solo su "conosciamo il regolamento" è esposto alla standardizzazione normativa in corso. Il vantaggio competitivo duraturo è su <span class="kw">velocità, chiarezza e presenza contestuale</span>.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="takeaway-sidebar">
+        <div class="ts-box" id="tsb1">
+          <div class="ts-box-label">Da ricordare</div>
+          <div class="ts-box-content">
+            Il mercato esiste. Il bisogno è reale. L'attivazione è ancora bassa.
+            C'è spazio concreto per costruire brand awareness con una logica
+            <em>molto più sofisticata della semplice education sui diritti.</em>
+          </div>
+        </div>
+        <div class="ts-box" id="tsb2" style="background:var(--brand)">
+          <div class="ts-box-label">Il posizionamento vincente</div>
+          <div class="ts-box-content">
+            Non "un altro servizio per rimborsi". Il motore semplice e affidabile
+            che <em>trasforma un disservizio in un esito concreto.</em>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT MODULE -->
+<section class="next-section">
+  <div class="wrap">
+    <div class="next-inner">
+      <span class="next-label">Prossimo modulo</span>
+      <a href="m2.html" class="next-link">
+        <span class="next-link-text">M2 — Competitor Map</span>
+        <span class="next-arrow">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-inner">
+      <div class="fl">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXUnktDf1BkU4tZMz6l8TUpkmiDo4iILkjmg&s" alt="" onerror="this.style.display='none'">
+        <span class="fl-sep">×</span>
+        <img src="https://www.ribrainstudio.com/wp-content/uploads/2025/01/Logo_ribrain_Nero.svg" alt="Ribrain" style="height:16px;opacity:.6;filter:none">
+      </div>
+      <span class="fr">M1 · Mercato & Gap · Aprile 2026</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+// ── cursor ────────────────────────────────────────────
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px'});
+(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop)})();
+
+// ── progress ──────────────────────────────────────────
+const prog=document.getElementById('prog');
+window.addEventListener('scroll',()=>{
+  prog.style.width=(window.scrollY/(document.documentElement.scrollHeight-window.innerHeight)*100)+'%';
+});
+
+// ── hero entrance ─────────────────────────────────────
+window.addEventListener('load',()=>{
+  const tl = gsap.timeline({delay:.15});
+
+  tl.to('#hl',{opacity:1,y:0,duration:.7,ease:'power3.out'})
+
+  // word-by-word reveal
+  .to('.word-inner',{
+    y:0, duration:.9, stagger:.08, ease:'power4.out',
+    onStart(){ document.getElementById('hh').style.opacity=1 }
+  },'-=.3')
+  .to('#hb',{opacity:1,y:0,duration:.8,ease:'power3.out'},'-=.3');
+
+  // numbers strip — counter animation
+  gsap.from('.ns-item',{
+    opacity:0, y:32, duration:.8, stagger:.12, ease:'power3.out',
+    scrollTrigger:{trigger:'#numstrip',start:'top 85%'}
+  });
+
+  // counter numbers
+  document.querySelectorAll('.counter').forEach(el=>{
+    const target = parseFloat(el.dataset.target);
+    const isDecimal = String(target).includes('.');
+    ScrollTrigger.create({
+      trigger: el, start:'top 85%', once:true,
+      onEnter(){
+        const obj = {val:0};
+        gsap.to(obj,{
+          val:target, duration:2.2, ease:'power2.out',
+          onUpdate(){
+            el.textContent = isDecimal
+              ? obj.val.toFixed(1)
+              : Math.round(obj.val);
+          }
+        });
+      }
+    });
+  });
+
+  // bar inside number strip
+  document.querySelectorAll('.ns-bar').forEach(bar=>{
+    const pct = bar.dataset.pct || 100;
+    ScrollTrigger.create({
+      trigger:bar, start:'top 90%', once:true,
+      onEnter(){gsap.to(bar,{width:pct+'%',duration:1.8,ease:'power3.out',delay:.3})}
+    });
+  });
+
+  // circle diagram
+  ScrollTrigger.create({
+    trigger:'.circle-diagram', start:'top 75%', once:true,
+    onEnter(){
+      const circ = 2 * Math.PI * 148; // circumference outer
+      const circ2 = 2 * Math.PI * 100;
+
+      // 38% blue outer
+      gsap.to('#ring-blue',{
+        attr:{'stroke-dasharray': (circ*.38)+' '+circ},
+        duration:2, ease:'power3.out', delay:.2
+      });
+      // 62% red inner
+      gsap.to('#ring-red',{
+        attr:{'stroke-dasharray': (circ2*.62)+' '+circ2},
+        duration:2, ease:'power3.out', delay:.6
+      });
+      // center number
+      const cdNum = document.getElementById('cd-num');
+      const cdObj = {val:0};
+      gsap.to(cdObj,{val:38,duration:2.2,ease:'power2.out',delay:.2,
+        onUpdate(){cdNum.textContent=Math.round(cdObj.val)+'%'}
+      });
+    }
+  });
+
+  // gap insights stagger
+  ['#gi1','#gi2','#gi3'].forEach((sel,i)=>{
+    gsap.to(sel,{
+      opacity:1, x:0, duration:.8, ease:'power3.out', delay:i*.15,
+      scrollTrigger:{trigger:sel,start:'top 85%',once:true}
+    });
+  });
+
+  // seasonality bars
+  ScrollTrigger.create({
+    trigger:'#season-bars', start:'top 75%', once:true,
+    onEnter(){
+      document.querySelectorAll('.sb-bar').forEach((bar,i)=>{
+        gsap.to(bar,{scaleY:1,duration:.9,ease:'power3.out',delay:i*.06});
+      });
+    }
+  });
+
+  // funnel steps
+  ['#fs1','#fs2','#fs3','#fs4'].forEach((sel,i)=>{
+    const el = document.querySelector(sel);
+    gsap.to(el,{
+      opacity:1, x:0, duration:.8, ease:'power3.out', delay:i*.15,
+      scrollTrigger:{trigger:sel,start:'top 85%',once:true,
+        onEnter(){el.classList.add('is-active')}
+      }
+    });
+  });
+
+  // funnel right
+  ['#fri1','#fri2','#fri3'].forEach((sel,i)=>{
+    gsap.to(sel,{
+      opacity:1, y:0, duration:.8, ease:'power3.out', delay:i*.12,
+      scrollTrigger:{trigger:sel,start:'top 85%',once:true}
+    });
+  });
+
+  // callout
+  gsap.from('#callout',{
+    opacity:0, y:40, duration:1, ease:'power3.out',
+    scrollTrigger:{trigger:'#callout',start:'top 80%'}
+  });
+
+  // driver cards
+  gsap.from('[id^="dc"]',{
+    opacity:0, y:32, duration:.8, stagger:.1, ease:'power3.out',
+    scrollTrigger:{trigger:'.drivers-grid',start:'top 80%'}
+  });
+
+  // takeaway items
+  ['#tt1','#tt2','#tt3','#tt4','#tt5','#tt6'].forEach((sel,i)=>{
+    const el = document.querySelector(sel);
+    gsap.to(el,{
+      opacity:1, duration:.7, ease:'power3.out', delay:i*.08,
+      scrollTrigger:{trigger:sel,start:'top 88%',once:true,
+        onEnter(){el.classList.add('is-visible')}
+      }
+    });
+  });
+
+  // sidebar boxes
+  ['#tsb1','#tsb2'].forEach((sel,i)=>{
+    gsap.to(sel,{
+      opacity:1, x:0, duration:.8, ease:'power3.out', delay:i*.15,
+      scrollTrigger:{trigger:sel,start:'top 85%',once:true}
+    });
+  });
+
+  // hero parallax
+  window.addEventListener('scroll',()=>{
+    const y=window.scrollY;
+    document.querySelector('.hero-h1').style.transform=`translateY(${y*.06}px)`;
+    document.querySelector('.hero-bg-text').style.transform=
+      `translate(-50%,-50%) translateY(${y*.04}px)`;
+  });
+
+  // keyword underline hover activation on scroll
+  document.querySelectorAll('.kw').forEach(kw=>{
+    kw.addEventListener('mouseenter',()=>{
+      kw.style.backgroundSize='100% 1px';
+    });
+  });
+});
+</script>
+</body>
+</html>

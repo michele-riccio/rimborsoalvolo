@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M7 — Regolamentazione Aeroporti · RimborsoalVolo × Ribrain</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<style>
+:root{
+  --bg:#F7F5F0;--bg-warm:#EDE9E1;--brand:#1B4F9B;--brand-light:#E8F0FC;
+  --accent:#D94F2B;--ink:#0C0C0C;--ink-60:rgba(12,12,12,.6);
+  --ink-30:rgba(12,12,12,.28);--ink-10:rgba(12,12,12,.08);
+  --white:#fff;--rule:rgba(12,12,12,.1);
+  --verde:#2D9E5F;--giallo:#E67E22;--rosso:#C62828;
+  --verde-bg:rgba(45,158,95,.08);--giallo-bg:rgba(230,126,34,.08);--rosso-bg:rgba(198,40,40,.08);
+  --f-display:'Cormorant Garamond',Georgia,serif;
+  --f-sans:'DM Sans',system-ui,sans-serif;
+  --f-mono:'DM Mono',monospace;
+  --ease:cubic-bezier(0.16,1,0.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-sans);font-weight:300;line-height:1.6;overflow-x:hidden;cursor:none}
+.cursor{position:fixed;width:10px;height:10px;background:var(--ink);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:multiply}
+.cursor-ring{position:fixed;width:40px;height:40px;border:1px solid rgba(12,12,12,.3);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .5s var(--ease)}
+.progress-bar{position:fixed;top:63px;left:0;height:2px;background:var(--brand);z-index:101;width:0%}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9997;opacity:.4}
+
+.site-header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(247,245,240,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--rule);height:64px;display:flex;align-items:center}
+.header-inner{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:1440px;margin:0 auto;padding:0 56px}
+.hb{display:flex;align-items:center;gap:16px;text-decoration:none;color:var(--ink)}
+.hd{width:1px;height:18px;background:var(--rule)}
+.hr2{display:flex;align-items:center;gap:24px}
+.hback{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;color:var(--ink-30);text-decoration:none;transition:color .3s}
+.hback:hover{color:var(--brand)}
+.htag{font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:var(--brand);color:var(--white);padding:4px 12px;border-radius:2px}
+.hmod{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;color:var(--ink-60)}
+.wrap{max-width:1440px;margin:0 auto;padding:0 56px}
+
+/* HERO */
+.hero{padding:140px 0 72px;min-height:88vh;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden}
+.hero-giant{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;pointer-events:none;user-select:none;padding-left:56px}
+.hero-giant-text{font-family:var(--f-display);font-size:clamp(120px,18vw,300px);font-weight:300;color:rgba(12,12,12,.028);white-space:nowrap;line-height:1}
+.hlabel{display:flex;align-items:center;gap:14px;margin-bottom:28px;opacity:0;transform:translateY(16px)}
+.hlabel-line{width:48px;height:1px;background:var(--brand)}
+.hlabel span{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-60)}
+.hero-h1{font-family:var(--f-display);font-weight:300;font-size:clamp(72px,9vw,136px);line-height:.95;opacity:0;transform:translateY(40px);margin-bottom:48px}
+.hero-h1 em{font-style:italic;color:var(--brand)}
+.hero-note{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;border-top:1px solid var(--rule);opacity:0}
+.hn-col{padding:24px 32px 24px 0;border-right:1px solid var(--rule)}
+.hn-col:last-child{border-right:none;padding-right:0}
+.hn-lbl{font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-30);margin-bottom:8px}
+.hn-val{font-size:13px;color:var(--ink-60);line-height:1.65}
+.hn-val strong{font-weight:500;color:var(--ink)}
+
+/* SEMAPHORE — the visual centrepiece */
+.semaphore-section{background:var(--ink);padding:80px 0;overflow:hidden;position:relative}
+.semaphore-section::before{content:'';position:absolute;top:-30%;right:-10%;width:60%;padding-bottom:60%;border-radius:50%;background:radial-gradient(circle,rgba(27,79,155,.08) 0%,transparent 60%);pointer-events:none}
+.sem-top{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:56px}
+.sem-lbl{font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:10px;display:block}
+.sem-h2{font-family:var(--f-display);font-weight:300;font-size:clamp(40px,5vw,72px);line-height:1;color:var(--white)}
+.sem-h2 em{font-style:italic;color:rgba(255,255,255,.3)}
+.sem-note{font-size:12px;color:rgba(255,255,255,.3);line-height:1.7;max-width:320px;text-align:right}
+
+/* 3-column semaphore grid */
+.sem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.06)}
+.sem-col{padding:0}
+.sem-col-header{padding:32px 36px;position:relative;overflow:hidden;display:flex;align-items:center;gap:20px}
+.sem-dot{width:40px;height:40px;border-radius:50%;flex-shrink:0;position:relative}
+.sem-dot::after{content:'';position:absolute;inset:0;border-radius:50%;background:inherit;animation:pulse-dot 2s ease-in-out infinite}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.92)}}
+.sem-col:nth-child(1) .sem-col-header{background:rgba(45,158,95,.1)}
+.sem-col:nth-child(2) .sem-col-header{background:rgba(230,126,34,.08)}
+.sem-col:nth-child(3) .sem-col-header{background:rgba(198,40,40,.08)}
+.sem-col-title{font-family:var(--f-display);font-size:28px;font-weight:400;color:var(--white);line-height:1.2}
+.sem-col-subtitle{font-size:11px;color:rgba(255,255,255,.4);line-height:1.5;margin-top:4px}
+.sem-items{padding:28px 36px;display:flex;flex-direction:column;gap:0;background:var(--ink)}
+
+.sem-item{padding:14px 0;border-top:1px solid rgba(255,255,255,.06);display:flex;align-items:flex-start;gap:12px;opacity:0;transform:translateY(8px)}
+.sem-item-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.sem-item-text{font-size:12px;color:rgba(255,255,255,.5);line-height:1.65}
+.sem-item-text strong{font-weight:400;color:rgba(255,255,255,.8)}
+.sem-item-note{font-family:var(--f-mono);font-size:9px;letter-spacing:.06em;color:rgba(255,255,255,.25);margin-top:4px}
+
+/* WHY */
+.why-section{padding:72px 0;background:var(--white)}
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:40px}
+.why-block{padding:40px 48px 40px 0;border-right:1px solid var(--rule);opacity:0;transform:translateY(16px)}
+.why-block:last-child{border-right:none;padding:40px 0 40px 48px}
+.why-icon{font-size:36px;margin-bottom:16px;display:block}
+.why-title{font-family:var(--f-display);font-size:24px;font-weight:400;margin-bottom:12px;line-height:1.3}
+.why-body{font-size:14px;color:var(--ink-60);line-height:1.8}
+.why-body strong{font-weight:500;color:var(--ink)}
+.why-quote{margin-top:16px;padding:16px 20px;background:var(--bg);border-left:3px solid var(--brand);font-family:var(--f-display);font-size:17px;font-weight:300;font-style:italic;color:var(--ink-60);line-height:1.5}
+
+/* AIRPORTS */
+.airports-section{padding:72px 0;background:var(--bg)}
+.airports-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;margin-top:40px}
+.airport-card{background:var(--white);opacity:0;transform:translateY(20px);position:relative;overflow:hidden}
+.airport-card::after{content:'';position:absolute;bottom:0;left:0;width:0%;height:3px;transition:width .5s var(--ease)}
+.airport-card:hover::after{width:100%}
+.airport-card:nth-child(1)::after{background:#1B4F9B}
+.airport-card:nth-child(2)::after{background:#E67E22}
+.airport-card:nth-child(3)::after{background:#2D9E5F}
+.airport-card:nth-child(4)::after{background:#8338EC}
+.airport-card:nth-child(5)::after{background:#E94560}
+.ac-header{padding:24px 22px 16px;border-bottom:1px solid var(--rule)}
+.ac-iata{font-family:var(--f-display);font-size:44px;font-weight:300;line-height:1;margin-bottom:4px}
+.ac-name{font-size:12px;color:var(--ink-60);line-height:1.4}
+.ac-manager{font-family:var(--f-mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-30);margin-top:6px}
+.ac-body{padding:16px 22px}
+.ac-row{padding:8px 0;border-bottom:1px solid var(--rule);font-size:11px;color:var(--ink-60)}
+.ac-row:last-child{border-bottom:none}
+.ac-row-key{font-family:var(--f-mono);font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-30);margin-bottom:3px}
+.ac-row-val{line-height:1.5}
+.ac-row-val strong{font-weight:500;color:var(--ink)}
+.ac-contact{padding:14px 22px 18px;background:var(--bg);display:flex;align-items:center;gap:8px}
+.ac-contact-icon{font-size:12px}
+.ac-contact-text{font-family:var(--f-mono);font-size:9px;letter-spacing:.06em;color:var(--brand);text-decoration:none;transition:opacity .3s}
+.ac-contact-text:hover{opacity:.7}
+
+/* GREY ZONES — the opportunity map */
+.grey-section{padding:72px 0;background:var(--white)}
+.grey-intro{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-bottom:48px}
+.gi-left{padding-right:56px;border-right:1px solid var(--rule)}
+.gi-right{padding-left:56px}
+.gi-label{font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-30);margin-bottom:10px;display:block}
+.gi-title{font-family:var(--f-display);font-size:clamp(36px,4vw,56px);font-weight:300;line-height:1.1}
+.gi-title em{font-style:italic;color:var(--brand)}
+.gi-body{font-size:14px;color:var(--ink-60);line-height:1.8;margin-top:12px}
+.gi-body strong{font-weight:500;color:var(--ink)}
+.gi-context{font-size:13px;color:var(--ink-60);line-height:1.8;margin-top:16px}
+.gi-context strong{font-weight:500;color:var(--ink)}
+
+/* Zone opportunities visual */
+.zones-visual{display:grid;grid-template-columns:repeat(4,1fr);gap:2px}
+.zone-card{padding:32px 28px;position:relative;overflow:hidden;opacity:0;transform:translateX(-12px)}
+.zone-card:nth-child(1){background:rgba(45,158,95,.08);border:1px solid rgba(45,158,95,.15)}
+.zone-card:nth-child(2){background:rgba(27,79,155,.07);border:1px solid rgba(27,79,155,.12)}
+.zone-card:nth-child(3){background:rgba(45,158,95,.06);border:1px solid rgba(45,158,95,.12)}
+.zone-card:nth-child(4){background:rgba(230,126,34,.06);border:1px solid rgba(230,126,34,.12)}
+.zone-icon{font-size:36px;margin-bottom:16px;display:block}
+.zone-name{font-family:var(--f-display);font-size:22px;font-weight:400;margin-bottom:8px;line-height:1.2}
+.zone-badge{display:inline-block;font-family:var(--f-mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:2px;margin-bottom:12px}
+.zone-desc{font-size:12px;color:var(--ink-60);line-height:1.7;margin-bottom:14px}
+.zone-desc strong{font-weight:500;color:var(--ink)}
+.zone-why{font-size:11px;color:var(--ink-30);line-height:1.6;font-style:italic}
+
+/* COSTS */
+.costs-section{padding:72px 0;background:var(--ink)}
+.costs-lbl{font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:10px;display:block}
+.costs-h2{font-family:var(--f-display);font-weight:300;font-size:clamp(36px,4.5vw,64px);line-height:1;color:var(--white);margin-bottom:48px}
+.costs-h2 em{font-style:italic;color:rgba(255,255,255,.3)}
+.costs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-bottom:40px}
+.cost-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);padding:32px 28px;opacity:0;transform:translateY(16px)}
+.cost-card--highlight{background:rgba(27,79,155,.12);border-color:rgba(27,79,155,.3)}
+.cc-label{font-family:var(--f-mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:12px}
+.cc-name{font-family:var(--f-display);font-size:22px;font-weight:400;color:var(--white);margin-bottom:6px;line-height:1.3}
+.cc-airport{font-size:11px;color:rgba(255,255,255,.35);margin-bottom:20px}
+.cc-price{font-family:var(--f-display);font-size:44px;font-weight:300;line-height:1;margin-bottom:6px}
+.cost-card:nth-child(1) .cc-price{color:#FB8500}
+.cost-card:nth-child(2) .cc-price{color:#3A86FF}
+.cost-card:nth-child(3) .cc-price{color:#2D9E5F}
+.cc-period{font-family:var(--f-mono);font-size:9px;letter-spacing:.08em;color:rgba(255,255,255,.3)}
+.cc-desc{font-size:12px;color:rgba(255,255,255,.4);line-height:1.65;margin-top:14px;border-top:1px solid rgba(255,255,255,.06);padding-top:14px}
+.cc-desc strong{color:rgba(255,255,255,.7);font-weight:400}
+
+/* Canvas bar chart per costi */
+.costs-chart-wrap{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);padding:32px}
+.ccw-label{font-family:var(--f-mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:20px;display:block}
+
+/* PROCESS TIMELINE */
+.process-section{padding:72px 0;background:var(--bg)}
+.process-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:48px;position:relative}
+.process-steps::before{content:'';position:absolute;top:24px;left:10%;right:10%;height:1px;background:var(--rule)}
+.ps-step{text-align:center;padding:0 16px;opacity:0;transform:translateY(16px)}
+.ps-circle{width:48px;height:48px;border-radius:50%;background:var(--white);border:2px solid var(--rule);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-family:var(--f-mono);font-size:11px;font-weight:400;color:var(--ink-60);position:relative;z-index:1;transition:border-color .3s,background .3s}
+.ps-step.active .ps-circle{background:var(--brand);border-color:var(--brand);color:var(--white)}
+.ps-step:hover .ps-circle{border-color:var(--brand)}
+.ps-time{font-family:var(--f-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-30);margin-bottom:6px}
+.ps-title{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:6px;line-height:1.3}
+.ps-desc{font-size:11px;color:var(--ink-60);line-height:1.6}
+
+/* STRATEGIC RECO */
+.reco-section{padding:72px 0;background:var(--ink);overflow:hidden;position:relative}
+.reco-section::before{content:'';position:absolute;top:-40%;left:-10%;width:70%;padding-bottom:70%;border-radius:50%;background:radial-gradient(circle,rgba(27,79,155,.12) 0%,transparent 60%);pointer-events:none}
+.reco-lbl{font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:12px;display:block}
+.reco-h2{font-family:var(--f-display);font-weight:300;font-size:clamp(40px,5vw,72px);line-height:1;color:var(--white);margin-bottom:48px}
+.reco-h2 em{font-style:italic;color:rgba(255,255,255,.3)}
+.reco-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+.reco-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);padding:40px 36px;opacity:0;transform:translateY(20px)}
+.reco-card--primary{background:rgba(27,79,155,.12);border-color:rgba(27,79,155,.3)}
+.rc-num{font-family:var(--f-display);font-size:56px;font-weight:300;line-height:1;color:rgba(255,255,255,.07);margin-bottom:12px}
+.rc-title{font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.5);margin-bottom:12px}
+.rc-body{font-size:14px;color:rgba(255,255,255,.4);line-height:1.8}
+.rc-body strong{color:rgba(255,255,255,.7);font-weight:400}
+
+/* NEXT + FOOTER */
+.next-section{padding:56px 0;border-top:1px solid var(--rule)}
+.next-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px}
+.next-label{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-30)}
+.next-link{display:flex;align-items:center;gap:16px;text-decoration:none;color:var(--ink);transition:gap .4s var(--ease)}
+.next-link:hover{gap:24px}
+.next-link-text{font-family:var(--f-display);font-size:clamp(28px,3.5vw,48px);font-weight:300}
+.next-arrow{font-size:32px;color:var(--brand)}
+.site-footer{padding:36px 0;border-top:1px solid var(--rule)}
+.footer-inner{display:flex;align-items:center;justify-content:space-between}
+.fl{display:flex;align-items:center;gap:12px}
+.fl-sep{font-family:var(--f-mono);font-size:11px;color:var(--ink-30)}
+.fr-foot{font-family:var(--f-mono);font-size:11px;color:var(--ink-30)}
+
+@media(max-width:1200px){
+  .wrap,.header-inner{padding-left:40px;padding-right:40px}
+  .sem-grid,.airports-grid{grid-template-columns:repeat(2,1fr)}
+  .zones-visual,.costs-grid,.reco-grid{grid-template-columns:1fr}
+  .process-steps{grid-template-columns:repeat(2,1fr)}
+  .process-steps::before{display:none}
+}
+@media(max-width:768px){
+  .wrap,.header-inner{padding-left:24px;padding-right:24px}
+  .hero-note,.why-grid,.grey-intro{grid-template-columns:1fr}
+  .hn-col,.why-block,.gi-left{border-right:none;border-bottom:1px solid var(--rule);padding-right:0}
+  .hn-col:last-child,.why-block:last-child,.gi-right{border-bottom:none;padding-left:0;padding-top:20px}
+  .airports-grid,.sem-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="progress-bar" id="prog"></div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="hb" href="index.html">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXUnktDf1BkU4tZMz6l8TUpkmiDo4iILkjmg&s" alt="RimborsoalVolo" style="height:32px;filter:none;object-fit:contain;mix-blend-mode:multiply" onerror="this.style.display='none'">
+      <div class="hd"></div>
+      <img src="https://www.ribrainstudio.com/wp-content/uploads/2025/01/Logo_ribrain_Nero.svg" alt="Ribrain" style="height:18px;opacity:.75;filter:none">
+    </a>
+    <div class="hr2">
+      <a class="hback" href="m6.html">← M6</a>
+      <span class="hmod">M7 / 7</span>
+      <span class="htag">Regolamentazione Aeroporti</span>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-giant"><div class="hero-giant-text">AEROPORTI</div></div>
+  <div class="wrap">
+    <div class="hlabel" id="hl"><div class="hlabel-line"></div><span>M7 — Regolamentazione Spazi Aeroportuali · Italia</span></div>
+    <h1 class="hero-h1" id="hh">Cosa si può fare,<br>dove, <em>e con chi parlare.</em></h1>
+    <div class="hero-note" id="hn">
+      <div class="hn-col">
+        <div class="hn-lbl">Il problema</div>
+        <p class="hn-val">Dentro il terminal: <strong>advertising sì, promozione attiva no.</strong> I gestori aeroportuali hanno le compagnie aeree come clienti primari — non possono fare promozione che interferisce con i vettori.</p>
+      </div>
+      <div class="hn-col">
+        <div class="hn-lbl">La soluzione</div>
+        <p class="hn-val">Fuori dal terminal: <strong>parcheggi, aree di sosta, kiss&fly sono territorio libero.</strong> Le zone grigie di bordo terminal offrono opportunità spesso non presidiate da nessuno.</p>
+      </div>
+      <div class="hn-col">
+        <div class="hn-lbl">Confermato dalla call</div>
+        <p class="hn-val">2019: maxischermi ai gate in 5 aeroporti — <strong>risultato zero.</strong> La pubblicità passiva nel momento sbagliato non converte. Serve interazione, non esposizione.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SEMAPHORE -->
+<section class="semaphore-section">
+  <div class="wrap">
+    <div class="sem-top">
+      <div>
+        <span class="sem-lbl">Il semaforo normativo</span>
+        <h2 class="sem-h2">Verde, Giallo, Rosso.<br><em>Cosa si può fare davvero.</em></h2>
+      </div>
+      <p class="sem-note">Le tre fasce si riferiscono alla tipologia di attività. Un'attività Gialla con la progettazione giusta può diventare Verde. Un'attività Rossa è strutturalmente impossibile indipendentemente dall'accordo.</p>
+    </div>
+    <div class="sem-grid" id="semGrid">
+
+      <!-- VERDE -->
+      <div class="sem-col">
+        <div class="sem-col-header">
+          <div class="sem-dot" style="background:var(--verde)"></div>
+          <div>
+            <div class="sem-col-title">Verde</div>
+            <div class="sem-col-subtitle">Consentito — inventory standard disponibile</div>
+          </div>
+        </div>
+        <div class="sem-items" id="verde-items">
+          <div class="sem-item"><span class="sem-item-icon">📺</span><div><div class="sem-item-text"><strong>Schermi LCD / Digital signage</strong> — Disponibili tramite concessionari ufficiali (IGPDecaux per SEA, ADR per Roma). Budget da €20K/2 settimane per piccoli circuiti.</div><div class="sem-item-note">Formato standard · nessun accordo speciale necessario</div></div></div>
+          <div class="sem-item"><span class="sem-item-icon">🪧</span><div><div class="sem-item-text"><strong>Cartellonistica statica e retroilluminata</strong> — Backlit, lightbox, poster frames nelle aree di passaggio. Tempi: acquisto spazio 2–4 settimane.</div><div class="sem-item-note">Acquisto diretto dal gestore o via concessionario</div></div></div>
+          <div class="sem-item"><span class="sem-item-icon">🅿️</span><div><div class="sem-item-text"><strong>Pubblicità nei parcheggi</strong> — Barriere, colonnine, pavimentazione. Gestori separati (APCOA, Saba) con processi più semplici e costi inferiori ai terminal.</div><div class="sem-item-note">Territorio strategico — alta ricettività del target</div></div></div>
+          <div class="sem-item"><span class="sem-item-icon">🚗</span><div><div class="sem-item-text"><strong>Kiss&fly e aree sosta esterne</strong> — Spazi pubblicitari nelle aree pick-up/drop-off. Traffico denso, target presente sia in arrivo che in partenza.</div><div class="sem-item-note">Spazio spesso non saturo — opportunità di presidio</div></div></div>
+          <div class="sem-item"><span class="sem-item-icon">🛄</span><div><div class="sem-item-text"><strong>Area ritiro bagagli — adesivi d'ambiente</strong> — Superfici pavimento e pareti con grafica removibile. Precedente: Casinò di Venezia a Marco Polo. Permesso standard d'ambiente.</div><div class="sem-item-note">Il nastro bagagli è il touchpoint più strategico disponibile</div></div></div>
+          <div class="sem-item"><span class="sem-item-icon">🚶</span><div><div class="sem-item-text"><strong>Moving walkway / tapis roulant</strong> — Superfici laterali e pavimentazione. Passeggero captive per 2–4 minuti, telefono in tasca. Alta attenzione visiva.</div><div class="sem-item-note">Zona spesso non satura — primo arrivato primo servito</div></div></div>
+        </div>
+      </div>
+
+      <!-- GIALLO -->
+      <div class="sem-col">
+        <div class="sem-col-header">
+          <div class="sem-dot" style="background:var(--giallo)"></div>
+          <div>
+            <div class="sem-col-title">Giallo</div>
+            <div class="sem-col-subtitle">Possibile — richiede accordo e progetto specifico</div>
+          </div>
+        </div>
+        <div class="sem-items" id="giallo-items">
+          <div class="sem-item"><span class="sem-item-icon">📦</span><div><div class="sem-item-text"><strong>Totem e installazioni temporanee</strong> — Strutture fisiche nelle aree pubbliche landside. Richiede approvazione del gestore caso per caso. Tempi: 4–8 settimane.</div><div class="sem-item-note">Dipende dal gestore · ADR più flessibile di SEA</div></div></div>
+          <div class="sem-item"><span class="sem-item-icon">🎪</span><div><div class="sem-item-text"><strong>Pop-up e installazioni esperienziali</strong> — Possibili in zone commerciali e landside con progetto presentato e approvato. Richiede accordo commerciale con il gestore.</div><div class="sem-item-note">Da discutere direttamente con l'ufficio marketing del gestore</div></div></div>
+          <div class="sem-item"><span class="sem-item-icon">📲</span><div><div class="sem-item-text"><strong>QR code su materiali esistenti</strong> — Integrare QR su superfici già autorizzate (schermi, cartelli) è possibile senza permessi aggiuntivi se il format è già approvato.</div><div class="sem-item-note">Soluzione ibrida a costo zero aggiuntivo</div></div></div>
+          <div class="sem-item"><span class="sem-item-icon">🎁</span><div><div class="sem-item-text"><strong>Distribuzione materiali fisici landside</strong> — Cartoline, brochure, card in aree commerciali. Richiede accordo con gestore. Non in zona airside (post-security).</div><div class="sem-item-note">Dipende dall'aeroporto · verificare caso per caso</div></div></div>
+          <div class="sem-item"><span class="sem-item-icon">📡</span><div><div class="sem-item-text"><strong>Beacon e attivazioni digitali in-airport</strong> — Notifiche push geolocalizzate tramite app propria (non tramite il sistema dell'aeroporto). Legalmente neutro se l'utente ha già installato l'app.</div><div class="sem-item-note">Nessun accordo necessario se via app proprietaria</div></div></div>
+        </div>
+      </div>
+
+      <!-- ROSSO -->
+      <div class="sem-col">
+        <div class="sem-col-header">
+          <div class="sem-dot" style="background:var(--rosso)"></div>
+          <div>
+            <div class="sem-col-title">Rosso</div>
+            <div class="sem-col-subtitle">Non consentito — strutturalmente impossibile</div>
+          </div>
+        </div>
+        <div class="sem-items" id="rosso-items">
+          <div class="sem-item"><span class="sem-item-icon">🚫</span><div><div class="sem-item-text"><strong>Hostess/steward promozionali airside</strong> — Personale che avvicina i passeggeri dopo i controlli di sicurezza. Non consentito per conflitto diretto con le compagnie aeree.</div><div class="sem-item-note">Confermato dalla call — questo è stato il vincolo principale</div></div></div>
+          <div class="sem-item"><span class="sem-item-icon">🚫</span><div><div class="sem-item-text"><strong>Corner promozionali ai gate</strong> — Postazioni fisse nelle aree imbarco. Le compagnie aeree pagano per l'esclusiva di comunicazione nelle loro aree di competenza.</div><div class="sem-item-note">Impedisce qualsiasi forma di presidio attivo nei gate</div></div></div>
+          <div class="sem-item"><span class="sem-item-icon">🚫</span><div><div class="sem-item-text"><strong>Distribuzione materiali in zona airside</strong> — Volantini, card o qualsiasi materiale distribuito dopo i controlli di sicurezza. Richiede accredito che i gestori non concedono per concorrenti delle compagnie.</div><div class="sem-item-note">Zona esclusiva per operatori aeronautici</div></div></div>
+          <div class="sem-item"><span class="sem-item-icon">🚫</span><div><div class="sem-item-text"><strong>Attivazioni promozionali non autorizzate</strong> — Qualsiasi attivazione non pre-approvata è soggetta a rimozione immediata e potenziale ban dall'aeroporto.</div><div class="sem-item-note">Rischio reputazionale — da evitare assolutamente</div></div></div>
+          <div class="sem-item"><span class="sem-item-icon">⚠️</span><div><div class="sem-item-text"><strong>Guerrilla non autorizzato</strong> — Flash mob, azioni di street marketing non concordate con il gestore. Gli aeroporti sono spazi a sicurezza elevata. Tolleranza zero.</div><div class="sem-item-note">Si tratta di zona vigilata — le eccezioni non esistono</div></div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- WHY THE PASSIVE FAILS -->
+<section class="why-section">
+  <div class="wrap">
+    <span style="font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-30);margin-bottom:12px;display:block">Il vincolo confermato dai dati</span>
+    <h2 style="font-family:var(--f-display);font-weight:300;font-size:clamp(36px,4.5vw,60px);line-height:1;margin-bottom:0">Perché il passivo<br><em>non funziona per questo brand.</em></h2>
+    <div class="why-grid">
+      <div class="why-block" id="wb1">
+        <span class="why-icon">📊</span>
+        <div class="why-title">2019 — Gate screens: 0 risultati</div>
+        <p class="why-body">Maxischermi nei 5 aeroporti principali italiani per due settimane. Budget significativo. Risultato: <strong>flussi identici all'anno precedente</strong>. Il passeggero vede lo schermo e passa oltre — è in Fase 1 (crisi immediata), non in Fase 2 (attesa ricettiva). Il messaggio era nel posto giusto, nel momento sbagliato.</p>
+        <div class="why-quote">«Abbiamo fatto schermi ai gate nel 2019. Zero risultati. Flussi identici all'anno precedente.» — Alessandro Zazza, call 13 aprile 2026</div>
+      </div>
+      <div class="why-block" id="wb2">
+        <span class="why-icon">🧠</span>
+        <div class="why-title">La ragione neurologica</div>
+        <p class="why-body">Nella Fase 1 (notifica del disservizio) il cervello è in modalità problem-solving immediato: dove vado, cosa faccio, chi avviso. <strong>La pubblicità passiva non penetra in questa modalità.</strong> È documentato nella letteratura sul consumer behavior in disruption: l'awareness da esposizione passiva in stato di stress ha recall rate prossimo allo zero.</p>
+        <div class="why-quote">Il valore degli schermi ai gate non è zero — è mnemonico. Ma solo se chi li vede poi trova qualcosa di interattivo in Fase 2.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AIRPORTS -->
+<section class="airports-section">
+  <div class="wrap">
+    <span style="font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-30);margin-bottom:12px;display:block">I 5 gestori principali</span>
+    <h2 style="font-family:var(--f-display);font-weight:300;font-size:clamp(36px,4.5vw,60px);line-height:1;margin-bottom:40px">Chi contattare,<br><em>come e dove.</em></h2>
+    <div class="airports-grid" id="airportsGrid">
+
+      <div class="airport-card" id="ac1">
+        <div class="ac-header">
+          <div class="ac-iata" style="color:#1B4F9B">FCO/CIA</div>
+          <div class="ac-name">Roma Fiumicino &amp; Ciampino</div>
+          <div class="ac-manager">ADR — Aeroporti di Roma</div>
+        </div>
+        <div class="ac-body">
+          <div class="ac-row"><div class="ac-row-key">Passeggeri/anno</div><div class="ac-row-val"><strong>~40M</strong> Fiumicino · 6M Ciampino</div></div>
+          <div class="ac-row"><div class="ac-row-key">Concessionario adv</div><div class="ac-row-val">JCDecaux Roma (aree terminal) + ADR diretta</div></div>
+          <div class="ac-row"><div class="ac-row-key">Parcheggio</div><div class="ac-row-val">Gestione ADR · spazi pubblicitari disponibili</div></div>
+          <div class="ac-row"><div class="ac-row-key">Flessibilità</div><div class="ac-row-val"><strong>Alta</strong> — ADR ha un ufficio partnership dedicato alle attivazioni non standard</div></div>
+          <div class="ac-row"><div class="ac-row-key">Contatti utili</div><div class="ac-row-val">advertising@adr.it</div></div>
+        </div>
+        <a href="mailto:advertising@adr.it" class="ac-contact"><span class="ac-contact-icon">✉</span><span class="ac-contact-text">advertising@adr.it</span></a>
+      </div>
+
+      <div class="airport-card" id="ac2">
+        <div class="ac-header">
+          <div class="ac-iata" style="color:#E67E22">MXP/LIN</div>
+          <div class="ac-name">Milano Malpensa &amp; Linate</div>
+          <div class="ac-manager">SEA — Società Esercizi Aeroportuali</div>
+        </div>
+        <div class="ac-body">
+          <div class="ac-row"><div class="ac-row-key">Passeggeri/anno</div><div class="ac-row-val"><strong>~30M</strong> Malpensa · 9M Linate</div></div>
+          <div class="ac-row"><div class="ac-row-key">Concessionario adv</div><div class="ac-row-val"><strong>IGPDecaux esclusivista</strong> — tutta la pubblicità passa da loro</div></div>
+          <div class="ac-row"><div class="ac-row-key">Listino 2026</div><div class="ac-row-val">Circuito LCD Malpensa 97 schermi: <strong>€82.000/14gg</strong></div></div>
+          <div class="ac-row"><div class="ac-row-key">Parcheggio</div><div class="ac-row-val">APCOA · contatto separato da SEA</div></div>
+          <div class="ac-row"><div class="ac-row-key">Flessibilità</div><div class="ac-row-val"><strong>Media</strong> — SEA ha processi più strutturati e meno flessibilità su formati non standard</div></div>
+        </div>
+        <a href="https://www.igpdecaux.it/aeroporti" target="_blank" rel="noopener" class="ac-contact"><span class="ac-contact-icon">🔗</span><span class="ac-contact-text">igpdecaux.it/aeroporti</span></a>
+      </div>
+
+      <div class="airport-card" id="ac3">
+        <div class="ac-header">
+          <div class="ac-iata" style="color:#2D9E5F">NAP</div>
+          <div class="ac-name">Napoli Capodichino</div>
+          <div class="ac-manager">GESAC — Gestione Aeroporti S.p.A.</div>
+        </div>
+        <div class="ac-body">
+          <div class="ac-row"><div class="ac-row-key">Passeggeri/anno</div><div class="ac-row-val"><strong>~12M</strong> · quarto aeroporto italiano</div></div>
+          <div class="ac-row"><div class="ac-row-key">Concessionario adv</div><div class="ac-row-val">GESAC gestione diretta o accordo con concessionario locale</div></div>
+          <div class="ac-row"><div class="ac-row-key">Parcheggio</div><div class="ac-row-val">Gestione GESAC con operatori partner</div></div>
+          <div class="ac-row"><div class="ac-row-key">Flessibilità</div><div class="ac-row-val"><strong>Alta</strong> — aeroporto in crescita, interesse verso brand innovativi</div></div>
+          <div class="ac-row"><div class="ac-row-key">Rilevanza</div><div class="ac-row-val">Sede operativa Ribrain · potenziale contatto diretto privilegiato</div></div>
+        </div>
+        <a href="mailto:adv@gesac.it" class="ac-contact"><span class="ac-contact-icon">✉</span><span class="ac-contact-text">adv@gesac.it</span></a>
+      </div>
+
+      <div class="airport-card" id="ac4">
+        <div class="ac-header">
+          <div class="ac-iata" style="color:#8338EC">CAG</div>
+          <div class="ac-name">Cagliari Elmas</div>
+          <div class="ac-manager">SOGAER — Società di Gestione Aeroporto</div>
+        </div>
+        <div class="ac-body">
+          <div class="ac-row"><div class="ac-row-key">Passeggeri/anno</div><div class="ac-row-val"><strong>~5M</strong> · forte stagionalità estiva</div></div>
+          <div class="ac-row"><div class="ac-row-key">Concessionario adv</div><div class="ac-row-val">SOGAER gestione diretta con tariffe competitive</div></div>
+          <div class="ac-row"><div class="ac-row-key">Stagionalità</div><div class="ac-row-val">Picco giugno–settembre · perfetto per campagna estiva</div></div>
+          <div class="ac-row"><div class="ac-row-key">Flessibilità</div><div class="ac-row-val"><strong>Molto alta</strong> — aeroporto aperto a collaborazioni creative</div></div>
+          <div class="ac-row"><div class="ac-row-key">Nota</div><div class="ac-row-val">Traffico domestic + charter · target P1 Leisure molto concentrato</div></div>
+        </div>
+        <a href="https://www.sogaer.it" target="_blank" rel="noopener" class="ac-contact"><span class="ac-contact-icon">🔗</span><span class="ac-contact-text">sogaer.it</span></a>
+      </div>
+
+      <div class="airport-card" id="ac5">
+        <div class="ac-header">
+          <div class="ac-iata" style="color:#E94560">VCE</div>
+          <div class="ac-name">Venezia Marco Polo</div>
+          <div class="ac-manager">SAVE — Aeroporto di Venezia</div>
+        </div>
+        <div class="ac-body">
+          <div class="ac-row"><div class="ac-row-key">Passeggeri/anno</div><div class="ac-row-val"><strong>~12M</strong> · alto turismo internazionale</div></div>
+          <div class="ac-row"><div class="ac-row-key">Precedente</div><div class="ac-row-val"><strong>Casinò di Venezia</strong> — nastro bagagli come roulette. Precedente diretto per attivazioni creative.</div></div>
+          <div class="ac-row"><div class="ac-row-key">Concessionario adv</div><div class="ac-row-val">SAVE + concessionari locali per spazi speciali</div></div>
+          <div class="ac-row"><div class="ac-row-key">Flessibilità</div><div class="ac-row-val"><strong>Alta</strong> — il precedente del Casinò apre la porta a proposte analoghe</div></div>
+          <div class="ac-row"><div class="ac-row-key">Opportunità</div><div class="ac-row-val">Nastro bagagli arrivi — il touchpoint più strategico del cruscotto</div></div>
+        </div>
+        <a href="https://www.veniceairport.it" target="_blank" rel="noopener" class="ac-contact"><span class="ac-contact-icon">🔗</span><span class="ac-contact-text">veniceairport.it</span></a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- GREY ZONES -->
+<section class="grey-section">
+  <div class="wrap">
+    <div class="grey-intro">
+      <div class="gi-left">
+        <span class="gi-label">Le zone grigie</span>
+        <h2 class="gi-title">Quattro spazi<br><em>non presidiati.</em></h2>
+        <p class="gi-body">Queste aree sono tecnicamente consentite, spesso non sature di advertising, e posizionate esattamente dove si trova il passeggero in Fase 2 — la fase di massima ricettività identificata in M5.</p>
+      </div>
+      <div class="gi-right">
+        <p class="gi-context">La chiamata di Kathrin ha chiarito che il brand ha già relazioni con alcuni gestori. Le zone grigie sotto non richiedono accordi straordinari: rientrano nella pubblicità d'ambiente standard, che ogni gestore vende senza particolari vincoli creativi. <strong>Il vantaggio del first-mover in questi spazi è reale</strong> — nessun competitor del settore li presidia sistematicamente.</p>
+      </div>
+    </div>
+    <div class="zones-visual" id="zonesGrid">
+      <div class="zone-card" id="zc1">
+        <span class="zone-icon">🅿️</span>
+        <div class="zone-name">Parcheggio aeroportuale</div>
+        <span class="zone-badge" style="background:rgba(45,158,95,.12);color:var(--verde)">Massima priorità</span>
+        <p class="zone-desc">Barriere d'entrata/uscita, colonnine di pagamento, pavimentazione. Il passeggero è in Fase 2: è tornato all'auto, ha il telefono in mano, ha ancora la rabbia del ritardo. <strong>È esattamente il momento in cui può agire.</strong></p>
+        <p class="zone-why">Gestori separati dal terminal (APCOA, Saba, diretti) · costi inferiori · processi più veloci · nessun conflitto con compagnie aeree</p>
+      </div>
+      <div class="zone-card" id="zc2">
+        <span class="zone-icon">🛄</span>
+        <div class="zone-name">Nastro bagagli arrivi</div>
+        <span class="zone-badge" style="background:rgba(27,79,155,.1);color:var(--brand)">Benchmark Casinò Venezia</span>
+        <p class="zone-desc">Adesivi rimovibili sul pavimento intorno al nastro + grafica laterale sui bordi. Il Casinò di Venezia ha +60% visitatori con questa meccanica. <strong>Nessun competitor ha ancora fatto questa cosa nel settore flight compensation.</strong></p>
+        <p class="zone-why">Permesso standard per pubblicità d'ambiente · approccio rimovibile non invasivo · costo: solo materiali e allestimento</p>
+      </div>
+      <div class="zone-card" id="zc3">
+        <span class="zone-icon">🚶</span>
+        <div class="zone-name">Moving walkway / tapis roulant</div>
+        <span class="zone-badge" style="background:rgba(45,158,95,.08);color:var(--verde)">Spazio spesso vuoto</span>
+        <p class="zone-desc">Corridoi coperti tra terminal o tra terminal e gate. Il passeggero è fermo, obbligato a guardare. Attenzione captive per 2–4 minuti. <strong>Spazio normalmente non saturo</strong> in tutti gli aeroporti italiani minori.</p>
+        <p class="zone-why">Superfici laterali = pubblicità d'ambiente standard · ottima leggibilità · spazio quasi mai occupato da competitor</p>
+      </div>
+      <div class="zone-card" id="zc4">
+        <span class="zone-icon">🚗</span>
+        <div class="zone-name">Kiss&fly e accessi veicolari</div>
+        <span class="zone-badge" style="background:rgba(230,126,34,.1);color:var(--giallo)">Alta frequenza</span>
+        <p class="zone-desc">Aree di sosta breve all'uscita degli arrivi. Chi aspetta qualcuno che ha il volo in ritardo è nel limbo: sa che c'è un problema, aspetta. È nella stessa finestra emotiva del passeggero.</p>
+        <p class="zone-why">Traffico denso · target presente sia come passeggero che come chi aspetta · duplica il potenziale di reach</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COSTS -->
+<section class="costs-section">
+  <div class="wrap">
+    <span class="costs-lbl">Benchmark costi 2026</span>
+    <h2 class="costs-h2">Quanto costa.<br><em>Per singolo aeroporto.</em></h2>
+    <div class="costs-grid">
+      <div class="cost-card" id="cc1">
+        <div class="cc-label">Circuito LCD — Malpensa</div>
+        <div class="cc-name">IGPDecaux · 97 schermi</div>
+        <div class="cc-airport">Milano Malpensa (SEA) · Circuito completo</div>
+        <div class="cc-price">€82.000</div>
+        <div class="cc-period">per 14 giorni · listino 2026</div>
+        <div class="cc-desc">Formato: <strong>circuito full terminal</strong>. Include tutte le aree landside. Acquisto tramite IGPDecaux esclusivista. Per circuiti parziali (es. solo arrivi) il costo scende proporzionalmente.</div>
+      </div>
+      <div class="cost-card cost-card--highlight" id="cc2">
+        <div class="cc-label">Parcheggio — stima media</div>
+        <div class="cc-name">Barriere + colonnine + pavimento</div>
+        <div class="cc-airport">Aeroporti medi · stima basata su comparable</div>
+        <div class="cc-price">€8–15K</div>
+        <div class="cc-period">per 4 settimane · produzione inclusa</div>
+        <div class="cc-desc"><strong>Opportunità cost-efficiente</strong>: spazio fisicamente più vicino alla Fase 2 del customer journey, costo 5–10× inferiore ai circuiti terminal. Gestori separati con processi più agili. Produzione adesivi inclusa nella stima.</div>
+      </div>
+      <div class="cost-card" id="cc3">
+        <div class="cc-label">Nastro bagagli — adesivi ambiente</div>
+        <div class="cc-name">Pavimento + superfici removibili</div>
+        <div class="cc-airport">Qualsiasi aeroporto · accordo diretto</div>
+        <div class="cc-price">€3–8K</div>
+        <div class="cc-period">installazione + 2 settimane · produzione inclusa</div>
+        <div class="cc-desc">La soluzione più cost-efficiente del cruscotto. <strong>Permesso: standard d'ambiente</strong>, non speciale. Materiali: adesivi removibili professionali da pavimento. Precedente diretto: Casinò di Venezia. Alta visibilità, massima sorpresa.</div>
+      </div>
+    </div>
+
+    <!-- Visual comparison bar chart -->
+    <div class="costs-chart-wrap" id="costsChart">
+      <span class="ccw-label">Confronto costi vs ricettività del target (F2 = Fase 2 — massima ricettività)</span>
+      <canvas id="costCanvas" width="1200" height="200" style="width:100%;height:auto;display:block"></canvas>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS TIMELINE -->
+<section class="process-section">
+  <div class="wrap">
+    <span style="font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-30);margin-bottom:12px;display:block">L'iter operativo</span>
+    <h2 style="font-family:var(--f-display);font-weight:300;font-size:clamp(36px,4.5vw,60px);line-height:1;margin-bottom:48px">Da idea ad aeroporto:<br><em>5 passi.</em></h2>
+    <div class="process-steps" id="processSteps">
+      <div class="ps-step active" id="ps1">
+        <div class="ps-circle">01</div>
+        <div class="ps-time">Settimana 1–2</div>
+        <div class="ps-title">Brief e scelta aeroporto</div>
+        <p class="ps-desc">Identificare 2–3 aeroporti target in base a volumi, stagionalità e relazioni esistenti. Napoli (GESAC) e Venezia (SAVE) sono i più accessibili per RimborsoalVolo.</p>
+      </div>
+      <div class="ps-step" id="ps2">
+        <div class="ps-circle">02</div>
+        <div class="ps-time">Settimana 2–3</div>
+        <div class="ps-title">Contatto gestore</div>
+        <p class="ps-desc">Email a advertising@adr.it, adv@gesac.it o contatto diretto IGPDecaux. Richiedere il media kit e i formati disponibili. Verificare disponibilità periodo estivo.</p>
+      </div>
+      <div class="ps-step" id="ps3">
+        <div class="ps-circle">03</div>
+        <div class="ps-time">Settimana 3–5</div>
+        <div class="ps-title">Proposta e brief creativo</div>
+        <p class="ps-desc">Ribrain presenta il concept al gestore. Per formati standard (schermi, cartelli) nessuna approvazione creativa richiesta. Per formati speciali (adesivi, installazioni) presentare render e specifiche tecniche.</p>
+      </div>
+      <div class="ps-step" id="ps4">
+        <div class="ps-circle">04</div>
+        <div class="ps-time">Settimana 5–7</div>
+        <div class="ps-title">Produzione e approvazione</div>
+        <p class="ps-desc">Produzione materiali (adesivi, grafica schermi, installazioni). Approvazione finale dal gestore. Per aeroporti medi i tempi di approvazione sono 1–2 settimane; per i grandi (MXP) 3–4 settimane.</p>
+      </div>
+      <div class="ps-step" id="ps5">
+        <div class="ps-circle">05</div>
+        <div class="ps-time">Settimana 7–10</div>
+        <div class="ps-title">Installazione e go-live</div>
+        <p class="ps-desc">Montaggio (1–2 giorni per formati standard). Per campagna estiva: avvio ideale entro fine maggio. Con questo calendario: brief ora, go-live prima del picco giugno–agosto.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RECO -->
+<section class="reco-section">
+  <div class="wrap">
+    <span class="reco-lbl">La raccomandazione operativa</span>
+    <h2 class="reco-h2">Dove mettere<br><em>il primo euro.</em></h2>
+    <div class="reco-grid">
+      <div class="reco-card reco-card--primary" id="rc1">
+        <div class="rc-num">01</div>
+        <div class="rc-title">Nastro bagagli — Napoli e Venezia</div>
+        <p class="rc-body">Il benchmark del Casinò di Venezia è il precedente più diretto disponibile. <strong>Costo: €3–8K. Permesso: standard d'ambiente. Impatto: massimo.</strong> Napoli è il punto di partenza naturale — sede di Ribrain, relazione esistente con GESAC, aeroporto flessibile. Venezia ha già aperto la strada con il precedente del Casinò.</p>
+      </div>
+      <div class="reco-card" id="rc2">
+        <div class="rc-num">02</div>
+        <div class="rc-title">Parcheggio — il touchpoint di Fase 2</div>
+        <p class="rc-body">Il parcheggio è dove il passeggero si trova nella finestra di massima ricettività. Ha il volo in ritardo alle spalle, l'auto davanti, il telefono in mano. <strong>Barrera d'entrata + QR code + copy contestuale («volo AZ1234 in ritardo — hai diritto a €250»)</strong> è l'attivazione più economica, più scalabile e più difficile da ignorare.</p>
+      </div>
+      <div class="reco-card" id="rc3">
+        <div class="rc-num">03</div>
+        <div class="rc-title">Adesivi rimovibili — costo quasi zero</div>
+        <p class="rc-body">Per formati non standard (pavimento, nastro bagagli), il costo vero non è lo spazio ma la produzione. <strong>Adesivi removibili professionali da pavimento: €500–1.500 per installazione.</strong> Il permesso è già incluso nell'accordo per pubblicità d'ambiente. Questo abbatte la barriera a un livello quasi zero per un test pilota.</p>
+      </div>
+      <div class="reco-card" id="rc4">
+        <div class="rc-num">04</div>
+        <div class="rc-title">Il pilot prima dell'estate</div>
+        <p class="rc-body">Con il calendario operativo: brief a maggio, contatto gestore, approvazione, produzione. <strong>Go-live entro fine maggio — prima del picco di giugno–agosto.</strong> Un pilot su un aeroporto (Napoli o Venezia) permette di validare il concept con budget contenuto prima di scalare. Il rischio è basso, il potenziale di apprendimento è alto.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="next-section">
+  <div class="wrap">
+    <div class="next-inner">
+      <span class="next-label">Cruscotto completato — tutti i 7 moduli</span>
+      <a href="index.html" class="next-link">
+        <span class="next-link-text">← Torna all'indice</span>
+        <span class="next-arrow">🏠</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-inner">
+      <div class="fl">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXUnktDf1BkU4tZMz6l8TUpkmiDo4iILkjmg&s" alt="" style="height:20px;filter:none;opacity:.6;mix-blend-mode:multiply" onerror="this.style.display='none'">
+        <span class="fl-sep">×</span>
+        <img src="https://www.ribrainstudio.com/wp-content/uploads/2025/01/Logo_ribrain_Nero.svg" alt="Ribrain" style="height:16px;opacity:.6;filter:none">
+      </div>
+      <span class="fr-foot">M7 · Regolamentazione Aeroporti · Aprile 2026 · Modulo finale</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px'});
+(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop)})();
+const prog=document.getElementById('prog');
+window.addEventListener('scroll',()=>{prog.style.width=(window.scrollY/(document.documentElement.scrollHeight-window.innerHeight)*100)+'%'});
+
+// Cost bar chart
+function drawCostChart(){
+  const canvas=document.getElementById('costCanvas');
+  if(!canvas) return;
+  const dpr=window.devicePixelRatio||1;
+  const W=canvas.offsetWidth, H=180;
+  canvas.width=W*dpr; canvas.height=H*dpr;
+  const ctx=canvas.getContext('2d');
+  ctx.scale(dpr,dpr);
+  ctx.clearRect(0,0,W,H);
+
+  const bars=[
+    {label:'LCD Malpensa 97 schermi',cost:82000,receptivity:35,color:'#FB8500'},
+    {label:'LCD piccolo circuito',cost:25000,receptivity:38,color:'#E67E22'},
+    {label:'Cartellonistica terminal',cost:15000,receptivity:32,color:'#3A86FF'},
+    {label:'Parcheggio (barriere+QR)',cost:12000,receptivity:85,color:'#2D9E5F'},
+    {label:'Moving walkway adesivi',cost:5000,receptivity:72,color:'#2D9E5F'},
+    {label:'Nastro bagagli adesivi',cost:5500,receptivity:90,color:'#1B4F9B'},
+  ];
+
+  const maxCost=82000, pad={l:220,r:40,t:24,b:32}, bH=20, gap=6;
+  const totalH=(bH+gap)*bars.length;
+  const gW=W-pad.l-pad.r;
+
+  // labels
+  bars.forEach((b,i)=>{
+    const y=pad.t+(bH+gap)*i+bH/2;
+    ctx.fillStyle='rgba(255,255,255,.5)';
+    ctx.font='10px DM Mono,monospace';
+    ctx.textAlign='right';
+    ctx.textBaseline='middle';
+    ctx.fillText(b.label,pad.l-10,y);
+  });
+
+  // cost bars (grey)
+  bars.forEach((b,i)=>{
+    const y=pad.t+(bH+gap)*i;
+    const bW=gW*(b.cost/maxCost);
+    ctx.fillStyle='rgba(255,255,255,.08)';
+    ctx.fillRect(pad.l,y,gW,bH);
+    ctx.fillStyle=b.color+'88';
+    ctx.fillRect(pad.l,y,bW,bH);
+
+    // Receptivity dot overlay
+    const rx2=pad.l+gW*(b.receptivity/100);
+    ctx.beginPath();
+    ctx.arc(rx2,y+bH/2,5,0,Math.PI*2);
+    ctx.fillStyle=b.receptivity>=70?'#2D9E5F':'#E67E22';
+    ctx.fill();
+    ctx.strokeStyle='rgba(12,12,12,.8)'; ctx.lineWidth=1; ctx.stroke();
+
+    // Cost label
+    ctx.fillStyle='rgba(255,255,255,.6)';
+    ctx.font='10px DM Mono,monospace';
+    ctx.textAlign='left';
+    ctx.fillText('€'+b.cost.toLocaleString('it-IT'),pad.l+gW*(b.cost/maxCost)+6,y+bH/2);
+  });
+
+  // legend
+  ctx.fillStyle='rgba(255,255,255,.3)';
+  ctx.font='9px DM Mono,monospace';
+  ctx.textAlign='left';
+  ctx.fillText('── costo campagna 2 settimane   ● ricettività target (F2)',pad.l,H-8);
+}
+
+window.addEventListener('load',()=>{
+  // Hero
+  const tl=gsap.timeline({delay:.15});
+  tl.to('#hl',{opacity:1,y:0,duration:.7,ease:'power3.out'})
+    .to('#hh',{opacity:1,y:0,duration:1,ease:'power3.out'},'-=.3')
+    .to('#hn',{opacity:1,duration:.8,ease:'power3.out'},'-=.3');
+
+  // Semaphore items
+  ScrollTrigger.create({trigger:'#semGrid',start:'top 75%',once:true,
+    onEnter(){
+      document.querySelectorAll('.sem-item').forEach((el,i)=>{
+        gsap.to(el,{opacity:1,y:0,duration:.6,ease:'power3.out',delay:i*.04});
+      });
+    }
+  });
+
+  // Why blocks
+  ['#wb1','#wb2'].forEach((sel,i)=>{
+    gsap.to(sel,{opacity:1,y:0,duration:.8,ease:'power3.out',delay:i*.15,
+      scrollTrigger:{trigger:sel,start:'top 80%',once:true}});
+  });
+
+  // Airport cards
+  ['#ac1','#ac2','#ac3','#ac4','#ac5'].forEach((sel,i)=>{
+    gsap.to(sel,{opacity:1,y:0,duration:.7,ease:'power3.out',delay:i*.1,
+      scrollTrigger:{trigger:sel,start:'top 85%',once:true}});
+  });
+
+  // Zones
+  ['#zc1','#zc2','#zc3','#zc4'].forEach((sel,i)=>{
+    gsap.to(sel,{opacity:1,x:0,duration:.7,ease:'power3.out',delay:i*.1,
+      scrollTrigger:{trigger:sel,start:'top 85%',once:true}});
+  });
+
+  // Cost cards
+  ['#cc1','#cc2','#cc3'].forEach((sel,i)=>{
+    gsap.to(sel,{opacity:1,y:0,duration:.7,ease:'power3.out',delay:i*.1,
+      scrollTrigger:{trigger:sel,start:'top 85%',once:true}});
+  });
+
+  // Chart
+  ScrollTrigger.create({trigger:'#costsChart',start:'top 80%',once:true,
+    onEnter(){setTimeout(()=>{drawCostChart();},100);}
+  });
+  window.addEventListener('resize',drawCostChart);
+
+  // Process steps
+  document.querySelectorAll('.ps-step').forEach((step,i)=>{
+    gsap.to(step,{opacity:1,y:0,duration:.7,ease:'power3.out',delay:i*.1,
+      scrollTrigger:{trigger:step,start:'top 85%',once:true,
+        onEnter(){if(i>0) step.classList.add('active');}
+      }
+    });
+  });
+
+  // Reco cards
+  ['#rc1','#rc2','#rc3','#rc4'].forEach((sel,i)=>{
+    gsap.to(sel,{opacity:1,y:0,duration:.8,ease:'power3.out',delay:i*.1,
+      scrollTrigger:{trigger:sel,start:'top 85%',once:true}});
+  });
+
+  // Parallax
+  window.addEventListener('scroll',()=>{
+    const y=window.scrollY;
+    document.querySelector('.hero-h1').style.transform=`translateY(${y*.04}px)`;
+    document.querySelector('.hero-giant-text').style.transform=`translateY(${y*.025}px)`;
+  });
+});
+</script>
+</body>
+</html>
