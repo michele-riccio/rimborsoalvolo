@@ -279,7 +279,28 @@ canvas#radarCanvas{display:block;max-width:300px;width:100%}
       <div class="js-step" id="js0" style="border-right-color:rgba(255,255,255,.05)"><style>#js0::before{background:var(--p1)}</style><div class="js-pname">Leisure Low-Cost</div><div class="js-inlabel">Inerzia: alta</div><div class="js-bar"><div class="js-bar-fill" data-pct="72" style="background:var(--p1)"></div></div><div class="js-insights"><div class="js-line">Importo basso = motivazione bassa</div><div class="js-line">Processo percepito come lungo</div><div class="js-line">Si sblocca con zero frizione visibile</div></div></div>
       <div class="js-step" id="js1"><style>#js1::before{background:var(--p2)}</style><div class="js-pname">Frequent Flyer</div><div class="js-inlabel">Inerzia: media</div><div class="js-bar"><div class="js-bar-fill" data-pct="55" style="background:var(--p2)"></div></div><div class="js-insights"><div class="js-line">Tempo vale più del rimborso</div><div class="js-line">Si sblocca con delega totale</div><div class="js-line">Lifetime value alto — ogni conversione conta</div></div></div>
       <div class="js-step" id="js2"><style>#js2::before{background:var(--p3)}</style><div class="js-pname">Viaggiatore di Legami</div><div class="js-inlabel">Inerzia: medio-alta</div><div class="js-bar"><div class="js-bar-fill" data-pct="65" style="background:var(--p3)"></div></div><div class="js-insights"><div class="js-line">«Chissà se funziona davvero»</div><div class="js-line">Racconto concreto di un simile sblocca</div><div class="js-line">Referral più forte di qualsiasi ADV</div></div></div>
-      <div class="js-step" id="js3"><style>#js3::before{background:var(--p4)}</style><div class="js-pname">Passeggero Prudente</div><div class="js-inlabel">Inerzia: molto alta</div><div class="js-bar"><div class="js-bar-fill" data-pct="80" style="background:var(--p4)"></div></div><div class="js-insights"><div class="js-line">Paura di firmare senza capire</div><div class="js-line">Fee esplicita = barriera abbattuta</div><div class="js-line">Una volta convinto, fedele e raccomanda</div></div></div>
+      <div class="js-step" id="js3"><style>#js3::before{background:var(--p4)}
+/* ── module recap ──────────────────────────────── */
+.module-recap{background:var(--ink);padding:96px 0 72px;position:relative;overflow:hidden}
+.module-recap::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--brand) 40%,transparent)}
+.recap-inner{max-width:1100px;margin:0 auto;padding:0 48px}
+.recap-eyebrow{font-family:var(--f-mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--brand);margin-bottom:18px;opacity:0}
+.recap-title{font-family:var(--f-disp);font-size:clamp(38px,5vw,66px);font-weight:300;color:var(--bg);line-height:1.05;margin-bottom:56px;opacity:0}
+.recap-title em{font-style:italic;color:var(--brand)}
+.recap-pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(240,237,232,.07);margin-bottom:56px}
+.recap-pillar{background:var(--ink);padding:40px 32px;opacity:0}
+.recap-pillar-num{font-family:var(--f-mono);font-size:clamp(36px,4vw,52px);font-weight:700;color:var(--brand);line-height:1;margin-bottom:14px;letter-spacing:-.02em}
+.recap-pillar-label{font-family:var(--f-body);font-size:13px;color:rgba(240,237,232,.55);line-height:1.65}
+.recap-insight{border-left:3px solid var(--brand);padding:22px 28px;margin-bottom:48px;background:rgba(217,79,43,.05);opacity:0}
+.recap-insight p{font-family:var(--f-disp);font-size:17px;font-weight:300;color:var(--bg);line-height:1.6;margin:0}
+.recap-insight strong{font-weight:500;color:var(--brand)}
+.recap-next{display:flex;justify-content:flex-end;opacity:0}
+.recap-next-link{font-family:var(--f-mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(240,237,232,.35);text-decoration:none;transition:color .3s;padding:10px 0;border-bottom:1px solid rgba(240,237,232,.08)}
+.recap-next-link:hover{color:var(--bg)}
+.recap-next-link strong{color:rgba(240,237,232,.6);font-weight:500}
+@media(max-width:760px){.recap-pillars{grid-template-columns:1fr}.recap-inner{padding:0 24px}}
+
+</style><div class="js-pname">Passeggero Prudente</div><div class="js-inlabel">Inerzia: molto alta</div><div class="js-bar"><div class="js-bar-fill" data-pct="80" style="background:var(--p4)"></div></div><div class="js-insights"><div class="js-line">Paura di firmare senza capire</div><div class="js-line">Fee esplicita = barriera abbattuta</div><div class="js-line">Una volta convinto, fedele e raccomanda</div></div></div>
     </div>
   </div>
 </section>
@@ -492,6 +513,29 @@ window.addEventListener('load',()=>{
     document.querySelector('.hero-h1').style.transform=`translateY(${y*.05}px)`;
     document.querySelector('.hero-bg').style.transform=`translate(-50%,-50%) translateY(${y*.03}px)`;
   });
+
+// ── recap section ─────────────────────────────────
+(function(){
+  var rs=document.getElementById('recap');
+  if(!rs) return;
+  gsap.fromTo('.recap-eyebrow,.recap-title',
+    {opacity:0,y:30},{opacity:1,y:0,duration:.9,stagger:.12,ease:'power3.out',
+     scrollTrigger:{trigger:'#recap',start:'top 78%',once:true}});
+  gsap.fromTo('.recap-pillar',
+    {opacity:0,y:22},{opacity:1,y:0,duration:.75,stagger:.09,ease:'power3.out',
+     scrollTrigger:{trigger:'#recap',start:'top 72%',once:true}});
+  gsap.fromTo('.recap-insight,.recap-next',
+    {opacity:0,y:18},{opacity:1,y:0,duration:.7,stagger:.12,ease:'power3.out',
+     scrollTrigger:{trigger:'#recap',start:'top 62%',once:true}});
+  setTimeout(function(){
+    ['.recap-eyebrow','.recap-title','.recap-pillar','.recap-insight','.recap-next'].forEach(function(sel){
+      document.querySelectorAll(sel).forEach(function(el){
+        if(parseFloat(getComputedStyle(el).opacity)<0.5){el.style.opacity='1';el.style.transform='none';}
+      });
+    });
+  },2500);
+})();
+
 });
 </script>
 <script>
@@ -942,5 +986,34 @@ document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && isO
 })();
 
 </script>
+
+<!-- ══ RECAP FINALE ══════════════════════════════════ -->
+<section class="module-recap" id="recap">
+  <div class="recap-inner">
+    <div class="recap-eyebrow">Quello che conta di questo modulo</div>
+    <h2 class="recap-title">Un solo nemico<br><em>reale.</em></h2>
+    <div class="recap-pillars">
+      <div class="recap-pillar">
+        <div class="recap-pillar-num">4</div>
+        <div class="recap-pillar-label">personas distinte per comportamento. 1 blocco comune a tutte: l'inerzia.</div>
+      </div>
+      <div class="recap-pillar">
+        <div class="recap-pillar-num">78%</div>
+        <div class="recap-pillar-label">sceglie la Fase 4 della rinuncia. Non perché non voglia: perché non sa.</div>
+      </div>
+      <div class="recap-pillar">
+        <div class="recap-pillar-num">F2</div>
+        <div class="recap-pillar-label">è la fase in cui tutte e 4 le personas sono intercettabili in modo unico.</div>
+      </div>
+    </div>
+    <div class="recap-insight">
+      <p>Il target non ha paura del servizio. Ha paura di scoprire che <strong>il rimborso non arriverà mai.</strong> Intercettalo prima che questa paura si consolidi.</p>
+    </div>
+    <div class="recap-next">
+      <a href="m5.html" class="recap-next-link">Modulo successivo: <strong>Mappa del Momento</strong> &nbsp;→</a>
+    </div>
+  </div>
+</section>
+
 </body>
 </html>
