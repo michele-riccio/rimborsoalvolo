@@ -901,30 +901,28 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&open){open=true;tog
 
 </script>
 
+
 <script>
 (function(){
 'use strict';
 
-var MODULES = [
-  {id:'m0',code:'00',label:'Executive Summary',sub:'Sintesi per il management',url:'m0.html',color:'#3A6FD4'},
-  {id:'m1',code:'01',label:'Mercato',sub:'Gap di consapevolezza · 220M passeggeri',url:'m1.html',color:'#3A86FF'},
-  {id:'m2',code:'02',label:'Competitor Map',sub:'White space identitario · AirHelp vs RAV',url:'m2.html',color:'#E94560'},
+var MODULES=[
+  {id:'m0',code:'00',label:'Executive Summary',sub:'Sintesi strategica per il management',url:'m0.html',color:'#3A6FD4'},
+  {id:'m1',code:'01',label:'Mercato',sub:'Gap di consapevolezza \u00b7 220M passeggeri IT',url:'m1.html',color:'#3A86FF'},
+  {id:'m2',code:'02',label:'Competitor Map',sub:'White space identitario \u00b7 AirHelp vs RAV',url:'m2.html',color:'#E94560'},
   {id:'m3',code:'03',label:'Voice of Customer',sub:'~12.000 recensioni Trustpilot',url:'m3.html',color:'#2D9E5F'},
-  {id:'m4',code:'04',label:'Personas',sub:'4 profili · inerzia come competitor',url:'m4.html',color:'#8338EC'},
-  {id:'m5',code:'05',label:'Mappa del Momento',sub:'5 fasi · Fase 2 = picco ricettività',url:'m5.html',color:'#FB8500'},
-  {id:'m6',code:'06',label:'Benchmark Creativi',sub:'WestJet · KLM · Casinò Venezia',url:'m6.html',color:'#D94F2B'},
-  {id:'m7',code:'07',label:'Regolamentazione',sub:'Verde · Giallo · Rosso · 5 aeroporti',url:'m7.html',color:'#E67E22'}
+  {id:'m4',code:'04',label:'Personas',sub:'4 profili \u00b7 inerzia come competitor',url:'m4.html',color:'#8338EC'},
+  {id:'m5',code:'05',label:'Mappa del Momento',sub:'5 fasi \u00b7 Fase 2 = picco ricettivit\u00e0',url:'m5.html',color:'#FB8500'},
+  {id:'m6',code:'06',label:'Benchmark Creativi',sub:'WestJet \u00b7 KLM \u00b7 Casin\u00f2 Venezia',url:'m6.html',color:'#D94F2B'},
+  {id:'m7',code:'07',label:'Regolamentazione',sub:'Verde \u00b7 Giallo \u00b7 Rosso \u00b7 5 aeroporti',url:'m7.html',color:'#E67E22'}
 ];
 
-var path = window.location.pathname.split('/').pop().replace('.html','') || 'm0';
-var currentMod = MODULES[0];
-for (var ci = 0; ci < MODULES.length; ci++) {
-  if (MODULES[ci].id === path) { currentMod = MODULES[ci]; break; }
-}
+var page=window.location.pathname.split('/').pop().replace('.html','')||'m0';
+var currentMod=MODULES[0];
+for(var ci=0;ci<MODULES.length;ci++){if(MODULES[ci].id===page){currentMod=MODULES[ci];break;}}
 
-// ── Styles ──
-var s = document.createElement('style');
-s.textContent = [
+var s=document.createElement('style');
+s.textContent=[
   '.rbmenu-btn{position:fixed;top:16px;right:20px;z-index:9001;width:44px;height:44px;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:5px;padding:8px}',
   '.rbmenu-btn span{display:block;height:1.5px;background:#F0EDE8;border-radius:1px;transition:all .45s cubic-bezier(0.16,1,0.3,1);transform-origin:right center}',
   '.rbmenu-btn.light span{background:#0C0C0C}',
@@ -940,7 +938,7 @@ s.textContent = [
   '.rbmenu-brand-label{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(240,237,232,.35)}',
   '.rbmenu-body{flex:1;display:flex;flex-direction:column;justify-content:center;padding:32px 56px 40px;overflow-y:auto}',
   '.rbmenu-items{list-style:none}',
-  '.rbmenu-item{border-top:1px solid rgba(240,237,232,.05);opacity:0;transform:translateY(20px);position:relative}',
+  '.rbmenu-item{border-top:1px solid rgba(240,237,232,.05);position:relative;opacity:0;transform:translateY(20px)}',
   '.rbmenu-item:last-child{border-bottom:1px solid rgba(240,237,232,.05)}',
   '.rbmenu-item a{display:grid;grid-template-columns:48px 1fr auto;gap:0 24px;align-items:center;padding:18px 0;text-decoration:none;color:inherit;position:relative;overflow:hidden}',
   '.rbmenu-item a::after{content:"";position:absolute;bottom:0;left:0;width:0;height:1px;background:currentColor;transition:width .5s cubic-bezier(0.16,1,0.3,1);opacity:.25}',
@@ -948,163 +946,98 @@ s.textContent = [
   '.rmi-code{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.12em;color:rgba(240,237,232,.25);line-height:1;transition:color .3s}',
   '.rbmenu-item a:hover .rmi-code{color:rgba(240,237,232,.5)}',
   '.rmi-left{display:flex;flex-direction:column;gap:4px}',
-  '.rmi-label{font-family:"Cormorant Garamond",Georgia,serif;font-weight:300;font-size:clamp(28px,3.5vw,48px);line-height:1;color:rgba(240,237,232,.75);transition:color .3s;letter-spacing:-.01em}',
-  '.rbmenu-item a:hover .rmi-label{color:#F0EDE8}',
-  '.rbmenu-item.active .rmi-label{color:#F0EDE8;font-style:italic}',
+  '.rmi-label{font-family:"Cormorant Garamond",Georgia,serif;font-weight:300;font-size:clamp(26px,3.2vw,46px);line-height:1;color:rgba(240,237,232,.75);transition:color .3s;letter-spacing:-.01em}',
+  '.rbmenu-item a:hover .rmi-label,.rbmenu-item.active .rmi-label{color:#F0EDE8}',
+  '.rbmenu-item.active .rmi-label{font-style:italic}',
   '.rmi-sub{font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(240,237,232,.25);transition:color .3s}',
   '.rbmenu-item a:hover .rmi-sub{color:rgba(240,237,232,.4)}',
   '.rmi-arr{font-size:20px;color:rgba(240,237,232,.2);transition:transform .4s cubic-bezier(0.16,1,0.3,1),color .3s}',
   '.rbmenu-item a:hover .rmi-arr{transform:translateX(6px);color:rgba(240,237,232,.5)}',
-  '.rbmenu-item-active-bar{position:absolute;left:0;top:2px;bottom:2px;width:3px;border-radius:0 2px 2px 0;opacity:.7}',
+  '.rmi-active-bar{position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:0 2px 2px 0;opacity:.7}',
   '.rbmenu-footer{padding:20px 56px;border-top:1px solid rgba(240,237,232,.06);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}',
   '.rbmf-left{font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(240,237,232,.2)}',
   '.rbmf-right{display:flex;align-items:center;gap:16px}',
   '.rbmf-link{font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(240,237,232,.25);text-decoration:none;transition:color .3s}',
-  '.rbmf-link:hover{color:rgba(240,237,232,.6)}',
+  '.rbmf-link:hover{color:rgba(240,237,232,.7)}',
   '.rbmenu-glow{position:absolute;top:50%;right:-10%;transform:translateY(-50%);width:50vw;height:50vw;border-radius:50%;pointer-events:none;opacity:.06;transition:background 1s;filter:blur(80px)}',
-  '.rbnavbar{position:fixed;bottom:0;left:0;right:0;z-index:8000;background:rgba(12,12,12,.95);backdrop-filter:blur(24px);border-top:1px solid rgba(240,237,232,.06);height:48px;display:flex;align-items:stretch}',
-  '.rbnavbar-inner{max-width:1440px;margin:0 auto;padding:0 20px;display:flex;align-items:stretch;width:100%}',
-  '.rbnavbar-brand{display:flex;align-items:center;gap:10px;padding-right:16px;border-right:1px solid rgba(240,237,232,.06);margin-right:2px;flex-shrink:0}',
-  '.rbnavbar-brand-txt{font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(240,237,232,.25);white-space:nowrap}',
+  '.rbnavbar{position:fixed;bottom:0;left:0;right:0;z-index:8000;background:rgba(12,12,12,.96);backdrop-filter:blur(24px);border-top:1px solid rgba(240,237,232,.06);height:48px;display:flex;align-items:stretch}',
+  '.rbnavbar-inner{max-width:1440px;margin:0 auto;padding:0 16px;display:flex;align-items:stretch;width:100%}',
+  '.rbnavbar-brand{display:flex;align-items:center;gap:8px;padding-right:14px;border-right:1px solid rgba(240,237,232,.06);margin-right:2px;flex-shrink:0}',
+  '.rbnavbar-brand-txt{font-family:"DM Mono",monospace;font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:rgba(240,237,232,.25);white-space:nowrap}',
   '.rbnavbar-items{display:flex;align-items:stretch;flex:1;overflow-x:auto;scrollbar-width:none}',
   '.rbnavbar-items::-webkit-scrollbar{display:none}',
-  '.rbnav-item{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 12px;text-decoration:none;color:inherit;border-right:1px solid rgba(240,237,232,.04);min-width:60px;position:relative;gap:2px;transition:background .2s}',
+  '.rbnav-item{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 10px;text-decoration:none;color:inherit;border-right:1px solid rgba(240,237,232,.04);min-width:56px;position:relative;gap:2px;transition:background .2s}',
   '.rbnav-item:hover{background:rgba(240,237,232,.05)}',
   '.rbnav-item.active{background:rgba(240,237,232,.07)}',
-  '.rbnav-item-bar{position:absolute;top:0;left:0;right:0;height:2px}',
+  '.rbnav-item-top{position:absolute;top:0;left:0;right:0;height:2px}',
   '.rbnav-code{font-family:"DM Mono",monospace;font-size:7px;letter-spacing:.1em;text-transform:uppercase;color:rgba(240,237,232,.3);line-height:1}',
   '.rbnav-item.active .rbnav-code{color:rgba(240,237,232,.55)}',
   '.rbnav-title{font-family:"DM Sans",sans-serif;font-size:9px;font-weight:400;color:rgba(240,237,232,.45);line-height:1;white-space:nowrap}',
   '.rbnav-item.active .rbnav-title{color:rgba(240,237,232,.85);font-weight:500}',
   'body{padding-bottom:48px !important}',
-  '@media(max-width:600px){.rbmenu-top,.rbmenu-body,.rbmenu-footer{padding-left:24px;padding-right:24px}.rmi-label{font-size:clamp(22px,6vw,36px)}}'
+  '@media(max-width:600px){.rbmenu-top,.rbmenu-body,.rbmenu-footer{padding-left:24px;padding-right:24px}.rmi-label{font-size:clamp(20px,5.5vw,34px)}.rbnav-item{min-width:44px;padding:0 6px}}'
 ].join('\n');
 document.head.appendChild(s);
 
-// ── Hamburger button ──
-var btn = document.createElement('button');
-btn.className = 'rbmenu-btn';
-var bgCol = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
-var isLight = bgCol && bgCol !== '#0C0C0C' && bgCol !== '#0D0D0D' && bgCol !== '#111' && bgCol.indexOf('#F') === 0;
-if (isLight) btn.classList.add('light');
-btn.setAttribute('aria-label', 'Apri menu');
-btn.innerHTML = '<span class="l1"></span><span class="l2"></span><span class="l3"></span>';
+var btn=document.createElement('button');
+btn.className='rbmenu-btn';
+var bgCol=getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
+var isLight=bgCol&&bgCol.indexOf('#F')===0;
+if(isLight)btn.classList.add('light');
+btn.setAttribute('aria-label','Apri menu');
+btn.innerHTML='<span class="l1"></span><span class="l2"></span><span class="l3"></span>';
 document.body.appendChild(btn);
 
-// ── Build overlay ──
-var ov = document.createElement('div');
-ov.className = 'rbmenu-overlay';
-
-// Build items HTML using string concat (no nested template literals)
-var itemsHtml = '';
-for (var i = 0; i < MODULES.length; i++) {
-  var m = MODULES[i];
-  var isActive = m.id === path;
-  var activeBar = isActive ? '<span class="rbmenu-item-active-bar" style="background:' + m.color + '"></span>' : '';
-  itemsHtml += '<li class="rbmenu-item' + (isActive ? ' active' : '') + '">' +
-    activeBar +
-    '<a href="' + m.url + '">' +
-    '<span class="rmi-code">' + m.code + '</span>' +
-    '<span class="rmi-left">' +
-    '<span class="rmi-label">' + m.label + '</span>' +
-    '<span class="rmi-sub">' + m.sub + '</span>' +
-    '</span>' +
-    '<span class="rmi-arr">\u2192</span>' +
-    '</a></li>';
+var ov=document.createElement('div');
+ov.className='rbmenu-overlay';
+var itemsHtml='';
+for(var i=0;i<MODULES.length;i++){
+  var m=MODULES[i];
+  var isAct=m.id===page;
+  itemsHtml+='<li class="rbmenu-item'+(isAct?' active':'')+'">'+(isAct?'<span class="rmi-active-bar" style="background:'+m.color+'"></span>':'')+'<a href="'+m.url+'"><span class="rmi-code">'+m.code+'</span><span class="rmi-left"><span class="rmi-label">'+m.label+'</span><span class="rmi-sub">'+m.sub+'</span></span><span class="rmi-arr">\u2192</span></a></li>';
 }
-
-ov.innerHTML = '<div class="rbmenu-glow" id="rbglow" style="background:' + currentMod.color + '"></div>' +
-  '<div class="rbmenu-top">' +
-  '<div class="rbmenu-brand">' +
-  '<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXUnktDf1BkU4tZMz6l8TUpkmiDo4iILkjmg&s" style="height:24px;filter:invert(1);opacity:.5;mix-blend-mode:screen;object-fit:contain" onerror="this.style.display=\'none\'">' +
-  '<div class="rbmenu-brand-sep"></div>' +
-  '<img src="https://www.ribrainstudio.com/wp-content/uploads/2025/01/Logo_ribrain_Nero.svg" style="height:14px;filter:invert(1);opacity:.4" onerror="this.style.display=\'none\'">' +
-  '<div class="rbmenu-brand-sep"></div>' +
-  '<span class="rbmenu-brand-label">Cruscotto Strategico \u00b7 RimborsoalVolo</span>' +
-  '</div></div>' +
-  '<div class="rbmenu-body"><ul class="rbmenu-items" id="rbItems">' + itemsHtml + '</ul></div>' +
-  '<div class="rbmenu-footer">' +
-  '<span class="rbmf-left">Aprile 2026 \u00b7 Ribrain Studio \u00b7 Confidenziale</span>' +
-  '<div class="rbmf-right">' +
-  '<a href="m0.html" class="rbmf-link">Executive Summary</a>' +
-  '<a href="m7.html" class="rbmf-link">Regolamentazione \u2192</a>' +
-  '</div></div>';
+ov.innerHTML='<div class="rbmenu-glow" id="rbglow" style="background:'+currentMod.color+'"></div>'+'<div class="rbmenu-top"><div class="rbmenu-brand"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXUnktDf1BkU4tZMz6l8TUpkmiDo4iILkjmg&s" style="height:22px;filter:invert(1);opacity:.5;mix-blend-mode:screen;object-fit:contain" onerror="this.style.display=\'none\'"><div class="rbmenu-brand-sep"></div><img src="https://www.ribrainstudio.com/wp-content/uploads/2025/01/Logo_ribrain_Nero.svg" style="height:13px;filter:invert(1);opacity:.4" onerror="this.style.display=\'none\'"><div class="rbmenu-brand-sep"></div><span class="rbmenu-brand-label">Cruscotto Strategico \u00b7 RimborsoalVolo</span></div></div><div class="rbmenu-body"><ul class="rbmenu-items" id="rbItems">'+itemsHtml+'</ul></div><div class="rbmenu-footer"><span class="rbmf-left">Aprile 2026 \u00b7 Ribrain Studio \u00b7 Confidenziale</span><div class="rbmf-right"><a href="m0.html" class="rbmf-link">Executive Summary</a><a href="m7.html" class="rbmf-link">Regolamentazione \u2192</a></div></div>';
 document.body.appendChild(ov);
 
-// ── Bottom navbar ──
-var nb = document.createElement('nav');
-nb.className = 'rbnavbar';
-var navItemsHtml = '';
-for (var ni = 0; ni < MODULES.length; ni++) {
-  var nm = MODULES[ni];
-  var isNavActive = nm.id === path;
-  var activeTopBar = isNavActive ? '<span class="rbnav-item-bar" style="background:' + nm.color + '"></span>' : '';
-  navItemsHtml += '<a href="' + nm.url + '" class="rbnav-item' + (isNavActive ? ' active' : '') + '" title="' + nm.label + '">' +
-    activeTopBar +
-    '<span class="rbnav-code">' + nm.code + '</span>' +
-    '<span class="rbnav-title">' + nm.label + '</span>' +
-    '</a>';
+var nb=document.createElement('nav');
+nb.className='rbnavbar';
+var navHtml='';
+for(var ni=0;ni<MODULES.length;ni++){
+  var nm=MODULES[ni];
+  var isNavAct=nm.id===page;
+  navHtml+='<a href="'+nm.url+'" class="rbnav-item'+(isNavAct?' active':'')+'" title="'+nm.label+'">'+(isNavAct?'<span class="rbnav-item-top" style="background:'+nm.color+'"></span>':'')+'<span class="rbnav-code">'+nm.code+'</span><span class="rbnav-title">'+nm.label+'</span></a>';
 }
-nb.innerHTML = '<div class="rbnavbar-inner">' +
-  '<div class="rbnavbar-brand">' +
-  '<img src="https://www.ribrainstudio.com/wp-content/uploads/2025/01/Logo_ribrain_Nero.svg" style="height:12px;filter:invert(1);opacity:.35" onerror="this.style.display=\'none\'">' +
-  '<span class="rbnavbar-brand-txt">\u00d7 RAV</span>' +
-  '</div>' +
-  '<div class="rbnavbar-items">' + navItemsHtml + '</div>' +
-  '</div>';
+nb.innerHTML='<div class="rbnavbar-inner"><div class="rbnavbar-brand"><img src="https://www.ribrainstudio.com/wp-content/uploads/2025/01/Logo_ribrain_Nero.svg" style="height:11px;filter:invert(1);opacity:.35" onerror="this.style.display=\'none\'"><span class="rbnavbar-brand-txt">\u00d7RAV</span></div><div class="rbnavbar-items">'+navHtml+'</div></div>';
 document.body.appendChild(nb);
 
-// ── Toggle logic ──
-var isOpen = false;
-
-function openMenu() {
-  isOpen = true;
-  btn.classList.add('open');
-  ov.classList.add('open');
-  btn.setAttribute('aria-label', 'Chiudi menu');
-  document.body.style.overflow = 'hidden';
-  var items = ov.querySelectorAll('.rbmenu-item');
-  for (var ii = 0; ii < items.length; ii++) {
-    (function(el, idx) {
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(20px)';
-      el.style.transition = 'opacity .5s ' + (.08 + idx * .06) + 's cubic-bezier(0.16,1,0.3,1), transform .5s ' + (.08 + idx * .06) + 's cubic-bezier(0.16,1,0.3,1)';
-      setTimeout(function() {
-        el.style.opacity = '1';
-        el.style.transform = 'translateY(0)';
-      }, 10);
-    })(items[ii], ii);
+var isOpen=false;
+function openMenu(){
+  isOpen=true;btn.classList.add('open');ov.classList.add('open');
+  btn.setAttribute('aria-label','Chiudi menu');document.body.style.overflow='hidden';
+  var items=ov.querySelectorAll('.rbmenu-item');
+  for(var ii=0;ii<items.length;ii++){
+    (function(el,idx){
+      el.style.opacity='0';el.style.transform='translateY(20px)';
+      el.style.transition='opacity .5s '+((.08+idx*.055))+'s cubic-bezier(0.16,1,0.3,1),transform .5s '+((.08+idx*.055))+'s cubic-bezier(0.16,1,0.3,1)';
+      setTimeout(function(){el.style.opacity='1';el.style.transform='translateY(0)';},10);
+    })(items[ii],ii);
   }
 }
-
-function closeMenu() {
-  isOpen = false;
-  btn.classList.remove('open');
-  ov.classList.remove('open');
-  btn.setAttribute('aria-label', 'Apri menu');
-  document.body.style.overflow = '';
+function closeMenu(){
+  isOpen=false;btn.classList.remove('open');ov.classList.remove('open');
+  btn.setAttribute('aria-label','Apri menu');document.body.style.overflow='';
 }
+btn.addEventListener('click',function(){if(isOpen)closeMenu();else openMenu();});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&isOpen)closeMenu();});
 
-btn.addEventListener('click', function() { if (isOpen) closeMenu(); else openMenu(); });
-document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && isOpen) closeMenu(); });
-
-// ── Color glow on hover ──
-var lis = ov.querySelectorAll('.rbmenu-item');
-for (var gi = 0; gi < lis.length; gi++) {
-  (function(li, mod) {
-    li.addEventListener('mouseenter', function() {
-      var glow = document.getElementById('rbglow');
-      if (glow) glow.style.background = mod.color;
-    });
-    li.addEventListener('mouseleave', function() {
-      var glow = document.getElementById('rbglow');
-      if (glow) glow.style.background = currentMod.color;
-    });
-  })(lis[gi], MODULES[gi]);
+var lis=ov.querySelectorAll('.rbmenu-item');
+for(var gi=0;gi<lis.length;gi++){
+  (function(li,mod){
+    li.addEventListener('mouseenter',function(){var g=document.getElementById('rbglow');if(g)g.style.background=mod.color;});
+    li.addEventListener('mouseleave',function(){var g=document.getElementById('rbglow');if(g)g.style.background=currentMod.color;});
+  })(lis[gi],MODULES[gi]);
 }
-
 })();
-
 </script>
 <script>
 (function(){
@@ -1116,7 +1049,7 @@ var PAGE_SOURCES = {
     {label:'EUR-Lex — Regolamento CE n. 261/2004', url:'https://eur-lex.europa.eu/legal-content/IT/TXT/?uri=CELEX%3A32004R0261'},
     {label:'AirHelp Score — Airline Ranking Report 2024', url:'https://www.airhelp.com/it/airhelp-score/airline-ranking/'},
     {label:'Eurocontrol — Performance Review Report 2023', url:'https://www.eurocontrol.int/publication/performance-review-report-2023'},
-    {label:'Trustpilot — RimborsoalVolo.it · ~12.000 recensioni', url:'https://it.trustpilot.com/review/rimborsoalvolo.it'}
+    {label:'Trustpilot — RimborsoalVolo.it · 12.154 recensioni', url:'https://it.trustpilot.com/review/rimborsoalvolo.it'}
   ],
   m1: [
     {label:'ENAC — Dati Statistici Trasporto Aereo Italia 2024', url:'https://www.enac.gov.it/la-nostra-attivita/studi-e-analisi/dati-statistici'},
@@ -1133,7 +1066,7 @@ var PAGE_SOURCES = {
     {label:'Google Trends IT — "rimborso volo" 2023–2024', url:'https://trends.google.it/trends/explore?q=rimborso+volo&geo=IT'}
   ],
   m3: [
-    {label:'Trustpilot — RimborsoalVolo.it · ~12.000 recensioni verificate', url:'https://it.trustpilot.com/review/rimborsoalvolo.it'},
+    {label:'Trustpilot — RimborsoalVolo.it · 12.154 recensioni verificate', url:'https://it.trustpilot.com/review/rimborsoalvolo.it'},
     {label:'Trustpilot — Come funziona la verifica recensioni', url:'https://it.trustpilot.com/trust'},
     {label:'Trustpilot — Profilo trasparenza RimborsoalVolo.it', url:'https://it.trustpilot.com/review/rimborsoalvolo.it'}
   ],
