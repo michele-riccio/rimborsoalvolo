@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>M1b — Disservizi per Aeroporto · RimborsoalVolo × Ribrain</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<style>
+/* ── VARS ─────────────────────────────────────────────────── */
+:root{
+  --ink:#0C0C0C;
+  --brand:#D94F2B;
+  --bg:#F0EDE8;
+  --ink-60:rgba(12,12,12,.6);
+  --ink-30:rgba(12,12,12,.3);
+  --ink-10:rgba(12,12,12,.08);
+  --brand-light:rgba(217,79,43,.08);
+  --brand-mid:rgba(217,79,43,.25);
+  --white:#ffffff;
+  --rule:rgba(12,12,12,.07);
+  --f-disp:'Cormorant Garamond',serif;
+  --f-mono:'DM Mono',monospace;
+  --f-body:'DM Sans',sans-serif;
+  --ease:cubic-bezier(0.16,1,0.3,1);
+  --c-verde:#2D9E5F;
+  --c-giallo:#F59E0B;
+  --c-rosso:#E94560;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);overflow-x:hidden}
+
+/* ── PROGRESS ─────────────────────────────────────────────── */
+#prog{position:fixed;top:0;left:0;height:2px;background:var(--brand);z-index:9999;width:0%;transition:width .1s linear}
+
+/* ── CURSOR ───────────────────────────────────────────────── */
+#cursor{position:fixed;width:6px;height:6px;background:var(--brand);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%)}
+#cursorRing{position:fixed;width:32px;height:32px;border:1px solid rgba(217,79,43,.35);border-radius:50%;pointer-events:none;z-index:9997;transform:translate(-50%,-50%);transition:opacity .3s}
+
+/* ── HERO ─────────────────────────────────────────────────── */
+.hero{min-height:80vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 6vw 72px;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:var(--ink)}
+.hero-grain{position:absolute;inset:0;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.hero-label{font-family:var(--f-mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(240,237,232,.35);margin-bottom:20px;opacity:0}
+.hero-eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--brand);margin-bottom:16px;opacity:0}
+.hero-h1{font-family:var(--f-disp);font-size:clamp(52px,7vw,96px);font-weight:300;color:var(--bg);line-height:1.0;opacity:0}
+.hero-h1 em{font-style:italic;color:var(--brand)}
+.hero-sub{font-family:var(--f-body);font-size:15px;color:rgba(240,237,232,.5);margin-top:24px;max-width:560px;line-height:1.7;opacity:0}
+.hero-strip{display:flex;gap:48px;margin-top:56px;opacity:0}
+.hs-item{display:flex;flex-direction:column;gap:4px}
+.hs-num{font-family:var(--f-disp);font-size:40px;font-weight:300;color:var(--bg);line-height:1}
+.hs-num em{font-style:normal;color:var(--brand)}
+.hs-lbl{font-family:var(--f-mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(240,237,232,.35)}
+
+/* ── WRAP ─────────────────────────────────────────────────── */
+.wrap{max-width:1200px;margin:0 auto;padding:0 6vw}
+section{padding:96px 0}
+
+/* ── SECTION HEADER ───────────────────────────────────────── */
+.sh{margin-bottom:56px}
+.sh-eye{font-family:var(--f-mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--brand);margin-bottom:14px}
+.sh-h2{font-family:var(--f-disp);font-size:clamp(36px,4.5vw,58px);font-weight:300;line-height:1.08}
+.sh-h2 em{font-style:italic;color:var(--brand)}
+.sh-note{font-size:13px;color:var(--ink-60);margin-top:12px;line-height:1.65;max-width:600px}
+
+/* ── AIRPORT TABLE ────────────────────────────────────────── */
+.apt-section{background:var(--bg)}
+.apt-table{width:100%;border-collapse:collapse}
+.apt-table thead tr{border-bottom:2px solid var(--ink)}
+.apt-table th{font-family:var(--f-mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-30);padding:12px 16px 12px 0;text-align:left;font-weight:400}
+.apt-table th:last-child,.apt-table td:last-child{text-align:right;padding-right:0}
+.apt-table tbody tr{border-bottom:1px solid var(--rule);transition:background .2s}
+.apt-table tbody tr:hover{background:var(--brand-light)}
+.apt-table td{padding:18px 16px 18px 0;vertical-align:middle}
+.apt-code{font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;color:var(--ink-30);min-width:40px;display:inline-block}
+.apt-name{font-size:14px;color:var(--ink);font-weight:500}
+.apt-fascia-tag{font-family:var(--f-mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:2px;margin-left:8px;font-weight:400}
+.apt-fascia-tag.grande{background:rgba(229,57,70,.1);color:#E53946}
+.apt-fascia-tag.medio{background:rgba(245,158,11,.1);color:#C47D00}
+.apt-fascia-tag.piccolo{background:rgba(45,158,95,.1);color:#2D9E5F}
+.apt-pax{font-family:var(--f-mono);font-size:12px;color:var(--ink-60)}
+
+/* bar ritardo */
+.bar-cell{min-width:160px}
+.bar-wrap{display:flex;align-items:center;gap:10px}
+.bar-track{flex:1;height:5px;background:var(--ink-10);border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px;width:0%;transition:width 1.2s var(--ease)}
+.bar-val{font-family:var(--f-mono);font-size:11px;color:var(--ink-60);min-width:36px;text-align:right}
+
+/* ── FASCE ────────────────────────────────────────────────── */
+.fasce-section{background:var(--ink)}
+.fasce-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.fascia-card{padding:56px 40px;position:relative;overflow:hidden;opacity:0}
+.fascia-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.fascia-card.grande::before{background:var(--c-rosso)}
+.fascia-card.medio::before{background:var(--c-giallo)}
+.fascia-card.piccolo::before{background:var(--c-verde)}
+.fascia-card.grande{background:#1a0a08}
+.fascia-card.medio{background:#1a1408}
+.fascia-card.piccolo{background:#081a10}
+.fc-label{font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:24px;display:block}
+.fascia-card.grande .fc-label{color:var(--c-rosso)}
+.fascia-card.medio .fc-label{color:var(--c-giallo)}
+.fascia-card.piccolo .fc-label{color:var(--c-verde)}
+.fc-threshold{font-family:var(--f-mono);font-size:10px;color:rgba(240,237,232,.3);margin-bottom:32px}
+.fc-disservizio{font-family:var(--f-disp);font-size:72px;font-weight:300;color:var(--bg);line-height:1;margin-bottom:8px}
+.fc-dis-label{font-family:var(--f-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(240,237,232,.3);margin-bottom:40px}
+.fc-stats{display:flex;flex-direction:column;gap:12px}
+.fc-stat{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(240,237,232,.06);padding-bottom:12px}
+.fc-stat-label{font-size:12px;color:rgba(240,237,232,.45)}
+.fc-stat-val{font-family:var(--f-mono);font-size:12px;color:rgba(240,237,232,.8)}
+.fc-insight{margin-top:40px;padding-top:24px;border-top:1px solid rgba(240,237,232,.08);font-size:13px;color:rgba(240,237,232,.4);line-height:1.6}
+
+/* ── RADAR / SCATTER CANVAS ───────────────────────────────── */
+.bubble-section{background:var(--bg)}
+.bubble-container{position:relative;height:500px;overflow:hidden;border:1px solid var(--rule)}
+#bubbleCanvas{width:100%;height:100%}
+.bubble-legend{display:flex;gap:32px;margin-top:20px;justify-content:flex-end}
+.bl-item{display:flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:10px;color:var(--ink-60)}
+.bl-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+
+/* ── NAZIONALE ────────────────────────────────────────────── */
+.naz-section{background:var(--bg)}
+.naz-funnel{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:2px;margin:56px 0}
+.nf-step{padding:40px 28px;position:relative;opacity:0}
+.nf-step:nth-child(odd){background:var(--ink)}
+.nf-step:nth-child(even){background:#1a1a1a}
+.nf-n{font-family:var(--f-disp);font-size:clamp(28px,3vw,44px);font-weight:300;color:var(--bg);line-height:1;margin-bottom:8px}
+.nf-n em{font-style:normal;color:var(--brand)}
+.nf-label{font-family:var(--f-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(240,237,232,.35);margin-bottom:16px}
+.nf-desc{font-size:12px;color:rgba(240,237,232,.45);line-height:1.6}
+.nf-arrow{position:absolute;right:-12px;top:50%;transform:translateY(-50%);z-index:2;font-size:18px;color:var(--brand);display:flex;align-items:center}
+
+.valore-box{background:var(--ink);padding:64px 56px;margin-top:2px;opacity:0;position:relative;overflow:hidden}
+.valore-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--brand)}
+.vb-label{font-family:var(--f-mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--brand);margin-bottom:20px}
+.vb-num{font-family:var(--f-disp);font-size:clamp(48px,6vw,88px);font-weight:300;color:var(--bg);line-height:1}
+.vb-sub{font-size:15px;color:rgba(240,237,232,.5);margin-top:16px;line-height:1.6;max-width:640px}
+.vb-note{font-family:var(--f-mono);font-size:10px;color:rgba(240,237,232,.2);margin-top:32px;line-height:1.7}
+
+/* ── METODOLOGIA ──────────────────────────────────────────── */
+.metodo-section{background:var(--bg)}
+.metodo-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:48px}
+.meto-card{padding:40px 36px;background:var(--brand-light);border-left:2px solid var(--brand);opacity:0}
+.meto-title{font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--brand);margin-bottom:12px}
+.meto-text{font-size:13px;color:var(--ink-60);line-height:1.75}
+
+/* ── RECAP ────────────────────────────────────────────────── */
+.module-recap{background:var(--ink);padding:96px 0 72px;position:relative;overflow:hidden}
+.module-recap::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--brand) 40%,transparent)}
+.recap-inner{max-width:1100px;margin:0 auto;padding:0 6vw}
+.recap-eyebrow{font-family:var(--f-mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--brand);margin-bottom:18px;opacity:0}
+.recap-title{font-family:var(--f-disp);font-size:clamp(38px,5vw,66px);font-weight:300;color:var(--bg);line-height:1.05;margin-bottom:56px;opacity:0}
+.recap-title em{font-style:italic;color:var(--brand)}
+.recap-pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(240,237,232,.07);margin-bottom:56px}
+.recap-pillar{background:var(--ink);padding:40px 32px;opacity:0}
+.recap-pillar-num{font-family:var(--f-mono);font-size:clamp(32px,3.5vw,48px);font-weight:700;color:var(--brand);line-height:1;margin-bottom:14px}
+.recap-pillar-label{font-family:var(--f-body);font-size:13px;color:rgba(240,237,232,.55);line-height:1.65}
+.recap-insight{border-left:3px solid var(--brand);padding:22px 28px;margin-bottom:48px;background:rgba(217,79,43,.05);opacity:0}
+.recap-insight p{font-family:var(--f-disp);font-size:17px;font-weight:300;color:var(--bg);line-height:1.6;margin:0}
+.recap-insight strong{font-weight:500;color:var(--brand)}
+.recap-next{display:flex;justify-content:flex-end;opacity:0}
+.recap-next-link{font-family:var(--f-mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(240,237,232,.35);text-decoration:none;transition:color .3s;padding:10px 0;border-bottom:1px solid rgba(240,237,232,.08)}
+.recap-next-link:hover{color:var(--bg)}
+.recap-next-link strong{color:rgba(240,237,232,.6);font-weight:500}
+
+/* ── RESPONSIVE ───────────────────────────────────────────── */
+@media(max-width:900px){
+  .fasce-grid{grid-template-columns:1fr}
+  .naz-funnel{grid-template-columns:1fr 1fr}
+  .metodo-grid{grid-template-columns:1fr}
+  .recap-pillars{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .wrap{padding:0 24px}
+  .naz-funnel{grid-template-columns:1fr}
+  .apt-table .bar-cell{min-width:100px}
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+<div id="cursor"></div>
+<div id="cursorRing"></div>
+
+<!-- ══ HERO ══════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grain"></div>
+  <div style="position:relative;z-index:2">
+    <div class="hero-label">RimborsoalVolo.it · Ribrain Studio · Aprile 2026</div>
+    <div class="hero-eyebrow">M1b — Disservizi per aeroporto</div>
+    <h1 class="hero-h1">15 scali.<br><em>Un mercato invisibile.</em></h1>
+    <p class="hero-sub">Analisi granulare dei disservizi aerei nel sistema aeroportuale italiano 2023-2024. Ritardi, cancellazioni e valore economico non attivato per fascia e singolo scalo.</p>
+    <div class="hero-strip">
+      <div class="hs-item">
+        <div class="hs-num"><em>€656M</em></div>
+        <div class="hs-lbl">valore rimborsi non richiesti/anno</div>
+      </div>
+      <div class="hs-item">
+        <div class="hs-num"><em>78%</em></div>
+        <div class="hs-lbl">passeggeri che non richiedono mai</div>
+      </div>
+      <div class="hs-item">
+        <div class="hs-num">15</div>
+        <div class="hs-lbl">aeroporti analizzati</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TABELLA AEROPORTI ══════════════════════════════════════ -->
+<section class="apt-section">
+  <div class="wrap">
+    <div class="sh">
+      <div class="sh-eye">Livello 1 — Granulare</div>
+      <h2 class="sh-h2">Singolo aeroporto:<br><em>chi ritarda di più.</em></h2>
+      <p class="sh-note">Dati 2023. Tasso di ritardo: percentuale di voli con ritardo superiore a 3 ore (soglia CE 261/2004). Fonte: media pesata AirHelp, ItaliaRimborso, Eurocontrol su volumi Assaeroporti.</p>
+    </div>
+
+    <table class="apt-table" id="aptTable">
+      <thead>
+        <tr>
+          <th style="width:280px">Aeroporto</th>
+          <th style="width:90px">Pax 2023</th>
+          <th>Ritardo >3h</th>
+          <th style="width:90px">Cancellazioni</th>
+          <th style="width:80px">Fascia</th>
+        </tr>
+      </thead>
+      <tbody id="aptBody"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══ BUBBLE CHART ══════════════════════════════════════════ -->
+<section class="bubble-section">
+  <div class="wrap">
+    <div class="sh">
+      <div class="sh-eye">Vista comparativa</div>
+      <h2 class="sh-h2">Volume vs.<br><em>disservizio.</em></h2>
+      <p class="sh-note">Ogni cerchio = un aeroporto. Dimensione proporzionale al volume di passeggeri. Posizione orizzontale = tasso di ritardo >3h. La dimensione del problema non è proporzionale alla dimensione dello scalo.</p>
+    </div>
+    <div class="bubble-container">
+      <canvas id="bubbleCanvas"></canvas>
+    </div>
+    <div class="bubble-legend">
+      <div class="bl-item"><div class="bl-dot" style="background:rgba(229,57,70,.7)"></div>Grandi >10M</div>
+      <div class="bl-item"><div class="bl-dot" style="background:rgba(245,158,11,.7)"></div>Medi 3-10M</div>
+      <div class="bl-item"><div class="bl-dot" style="background:rgba(45,158,95,.7)"></div>Piccoli &lt;3M</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FASCE ══════════════════════════════════════════════════ -->
+<section class="fasce-section" id="fasce">
+  <div class="wrap">
+    <div class="sh">
+      <div class="sh-eye">Livello 2 — Aggregato</div>
+      <h2 class="sh-h2" style="color:var(--bg)">Le tre fasce:<br><em>chi è più esposto.</em></h2>
+      <p class="sh-note" style="color:rgba(240,237,232,.45)">Più grande lo scalo, più alto il rischio disservizio. Non per incapacità gestionale: per saturazione strutturale e dipendenza da vettori low-cost con tempi di rotazione ridotti.</p>
+    </div>
+  </div>
+  <div class="fasce-grid" id="fasceGrid">
+
+    <div class="fascia-card grande" id="fc1">
+      <span class="fc-label">Grandi</span>
+      <div class="fc-threshold">Oltre 10 milioni di passeggeri/anno</div>
+      <div class="fc-disservizio" id="fc1num">3.8%</div>
+      <div class="fc-dis-label">tasso medio disservizio</div>
+      <div class="fc-stats">
+        <div class="fc-stat">
+          <span class="fc-stat-label">Passeggeri totali</span>
+          <span class="fc-stat-val">126,3M</span>
+        </div>
+        <div class="fc-stat">
+          <span class="fc-stat-label">Quota traffico italiano</span>
+          <span class="fc-stat-val">64,1%</span>
+        </div>
+        <div class="fc-stat">
+          <span class="fc-stat-label">Aeroporti</span>
+          <span class="fc-stat-val">FCO · MXP · BGY · NAP · VCE · CTA · BLQ</span>
+        </div>
+        <div class="fc-stat">
+          <span class="fc-stat-label">Causa principale</span>
+          <span class="fc-stat-val">Saturazione infrastrutturale</span>
+        </div>
+      </div>
+      <div class="fc-insight">Il tasso di disservizio più alto si registra negli scali a dominanza low-cost (BGY 6,9%) dove i tempi di rotazione ridotti amplificano ogni ritardo in cascata.</div>
+    </div>
+
+    <div class="fascia-card medio" id="fc2">
+      <span class="fc-label">Medi</span>
+      <div class="fc-threshold">Tra 3 e 10 milioni di passeggeri/anno</div>
+      <div class="fc-disservizio" id="fc2num">2.6%</div>
+      <div class="fc-dis-label">tasso medio disservizio</div>
+      <div class="fc-stats">
+        <div class="fc-stat">
+          <span class="fc-stat-label">Passeggeri totali</span>
+          <span class="fc-stat-val">55,4M</span>
+        </div>
+        <div class="fc-stat">
+          <span class="fc-stat-label">Quota traffico italiano</span>
+          <span class="fc-stat-val">28,1%</span>
+        </div>
+        <div class="fc-stat">
+          <span class="fc-stat-label">Aeroporti</span>
+          <span class="fc-stat-val">LIN · PMO · BRI · PSA · CAG · TRN · CIA · BDS</span>
+        </div>
+        <div class="fc-stat">
+          <span class="fc-stat-label">Variabilità interna</span>
+          <span class="fc-stat-val">Alta (LIN cancellazioni 3,5%)</span>
+        </div>
+      </div>
+      <div class="fc-insight">Fascia eterogenea: Linate soffre di rigidità sugli slot, mentre Palermo e Brindisi godono di una gestione più fluida grazie a pressioni operative inferiori.</div>
+    </div>
+
+    <div class="fascia-card piccolo" id="fc3">
+      <span class="fc-label">Piccoli</span>
+      <div class="fc-threshold">Sotto i 3 milioni di passeggeri/anno</div>
+      <div class="fc-disservizio" id="fc3num">1.9%</div>
+      <div class="fc-dis-label">tasso medio disservizio</div>
+      <div class="fc-stats">
+        <div class="fc-stat">
+          <span class="fc-stat-label">Passeggeri totali</span>
+          <span class="fc-stat-val">15,5M</span>
+        </div>
+        <div class="fc-stat">
+          <span class="fc-stat-label">Quota traffico italiano</span>
+          <span class="fc-stat-val">7,8%</span>
+        </div>
+        <div class="fc-stat">
+          <span class="fc-stat-label">Esempi</span>
+          <span class="fc-stat-val">Rimini · Forlì · Ancona · Pescara · Trieste</span>
+        </div>
+        <div class="fc-stat">
+          <span class="fc-stat-label">Rischio principale</span>
+          <span class="fc-stat-val">Fragilità programmazione</span>
+        </div>
+      </div>
+      <div class="fc-insight">Il disservizio è raro ma devastante: la cancellazione di un singolo volo può compromettere l'intera connettività regionale per mancanza di alternative.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ FUNEL NAZIONALE ════════════════════════════════════════ -->
+<section class="naz-section" id="nazionale">
+  <div class="wrap">
+    <div class="sh">
+      <div class="sh-eye">Livello 3 — Nazionale</div>
+      <h2 class="sh-h2">Il mercato<br><em>invisibile.</em></h2>
+      <p class="sh-note">Dal totale passeggeri 2024 al valore economico non attivato. Quattro passaggi che mostrano la dimensione reale dell'opportunità non ancora intercettata.</p>
+    </div>
+
+    <div class="naz-funnel">
+      <div class="nf-step" id="nf1">
+        <div class="nf-label">Passeggeri totali 2024</div>
+        <div class="nf-n"><em>219M</em></div>
+        <div class="nf-desc">Proiezione consolidata su base crescita +11,1% rispetto al 2023. Record storico del sistema aeroportuale italiano.</div>
+        <div class="nf-arrow">→</div>
+      </div>
+      <div class="nf-step" id="nf2">
+        <div class="nf-label">Passeggeri con disservizio risarcibile</div>
+        <div class="nf-n"><em>2,6M</em></div>
+        <div class="nf-desc">Stima 1,2% di pax coinvolti in ritardi >3h o cancellazioni senza preavviso (escluse circostanze eccezionali).</div>
+        <div class="nf-arrow">→</div>
+      </div>
+      <div class="nf-step" id="nf3">
+        <div class="nf-label">Valore potenziale totale</div>
+        <div class="nf-n"><em>€841M</em></div>
+        <div class="nf-desc">2.628.000 passeggeri × €320 compensazione media ponderata (250€ intra-EU / 400€ medio raggio / 600€ lungo raggio).</div>
+        <div class="nf-arrow">→</div>
+      </div>
+      <div class="nf-step" id="nf4">
+        <div class="nf-label">Non richiesto (78%)</div>
+        <div class="nf-n"><em>€656M</em></div>
+        <div class="nf-desc">Il 78% dei passeggeri aventi diritto non presenta mai una richiesta. Asimmetria informativa, burocrazia, basso valore percepito.</div>
+      </div>
+    </div>
+
+    <div class="valore-box" id="valoreBox">
+      <div class="vb-label">Il valore certo del mercato non attivato</div>
+      <div class="vb-num">€199M+</div>
+      <div class="vb-sub">Anche usando la stima più conservativa — filtrata per circostanze eccezionali e casi non lavorabili — il valore dei disservizi gestibili in Italia non scende mai sotto i 199 milioni di euro annui. Una passività finanziaria latente che le compagnie aeree non devono onorare perché il passeggero non agisce.</div>
+      <div class="vb-note">
+        Fonte: AirHelp Annual Report · Eurocontrol All-Causes Delays 2023 · ENAC Report dati traffico 2024 · Assaeroporti consuntivo 2024 · ART relazione MIT 2023<br>
+        Nota: il 52% delle richieste presentate direttamente dai passeggeri viene inizialmente respinto illegittimamente dalle compagnie aeree (fonte: rimborsoalvolo.it).
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ METODOLOGIA ════════════════════════════════════════════ -->
+<section class="metodo-section" id="metodo">
+  <div class="wrap">
+    <div class="sh">
+      <div class="sh-eye">Note metodologiche</div>
+      <h2 class="sh-h2">Gap informativi<br><em>dichiarati.</em></h2>
+      <p class="sh-note">Dove il dato preciso non è disponibile pubblicamente, è stata effettuata un'interpolazione con metodologia dichiarata. Nessun dato inventato.</p>
+    </div>
+    <div class="metodo-grid">
+      <div class="meto-card" id="mt1">
+        <div class="meto-title">Tassi di ritardo per aeroporto</div>
+        <div class="meto-text">Derivati mediando i report di performance di AirHelp, ItaliaRimborso ed Eurocontrol, pesati sui volumi di traffico Assaeroporti. Dove il dato ENAC non era disponibile per singolo scalo, è stata effettuata un'interpolazione basata sulla quota di vettori low-cost operanti e sui minuti medi ATFM.</div>
+      </div>
+      <div class="meto-card" id="mt2">
+        <div class="meto-title">Dati overbooking</div>
+        <div class="meto-text">Non esiste un registro pubblico centralizzato per singolo aeroporto. Il dato nazionale dello 0,8% dei voli è derivato da indagini AGCM e report ART. Per i singoli scali è stato distribuito proporzionalmente ai movimenti di vettori low-cost.</div>
+      </div>
+      <div class="meto-card" id="mt3">
+        <div class="meto-title">Classificazione cause ritardo</div>
+        <div class="meto-text">ENAC pubblica dati aggregati di puntualità ma non distingue cause "eccezionali" (non risarcibili) da "operative" (risarcibili). Le stime usano un coefficiente di risarcibilità del 45% sui ritardi totali, derivato dall'analisi dei database storici delle agenzie di claim.</div>
+      </div>
+      <div class="meto-card" id="mt4">
+        <div class="meto-title">Proiezioni 2024</div>
+        <div class="meto-text">I dati Assaeroporti 2024 al momento della ricerca erano parziali. Le proiezioni annue sono state calcolate applicando il trend di crescita del +11,1% registrato nei primi tre trimestri, in linea con la nota dati traffico 2024 di Assaeroporti (pubblicata gennaio 2025).</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ RECAP ══════════════════════════════════════════════════ -->
+<section class="module-recap" id="recap">
+  <div class="recap-inner">
+    <div class="recap-eyebrow">Quello che conta di questo modulo</div>
+    <h2 class="recap-title">Il problema non è<br><em>il ritardo.</em></h2>
+    <div class="recap-pillars">
+      <div class="recap-pillar">
+        <div class="recap-pillar-num">6,9%</div>
+        <div class="recap-pillar-label">tasso di ritardo a Bergamo BGY — il più alto d'Italia. Quasi 4 volte Venezia.</div>
+      </div>
+      <div class="recap-pillar">
+        <div class="recap-pillar-num">78%</div>
+        <div class="recap-pillar-label">dei passeggeri aventi diritto non richiede mai il rimborso. Il mercato è già lì.</div>
+      </div>
+      <div class="recap-pillar">
+        <div class="recap-pillar-num">€656M</div>
+        <div class="recap-pillar-label">valore non attivato ogni anno. Non perché i diritti non esistano: perché nessuno li attiva.</div>
+      </div>
+    </div>
+    <div class="recap-insight">
+      <p>Il problema non è che i voli ritardano. Il problema è che <strong>il 78% dei passeggeri che avrebbe diritto non sa di averlo, non sa come farlo valere, o si arrende alla burocrazia.</strong> Quello è il mercato di RimborsoalVolo.</p>
+    </div>
+    <div class="recap-next">
+      <a href="m2.html" class="recap-next-link">Modulo successivo: <strong>Competitor Map</strong> &nbsp;→</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SCRIPTS ═════════════════════════════════════════════════ -->
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+// ── cursor ─────────────────────────────────────────────────────
+var cursor=document.getElementById('cursor');
+var ring=document.getElementById('cursorRing');
+var mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop);})();
+
+// ── progress ───────────────────────────────────────────────────
+var prog=document.getElementById('prog');
+window.addEventListener('scroll',function(){
+  prog.style.width=(window.scrollY/(document.documentElement.scrollHeight-window.innerHeight)*100)+'%';
+});
+
+// ── DATA ───────────────────────────────────────────────────────
+var AEROPORTI = [
+  {code:'BGY',name:'Bergamo Orio al Serio',  pax:16.0, rit:6.90, can:1.5, fascia:'grande'},
+  {code:'MXP',name:'Milano Malpensa',         pax:26.1, rit:5.07, can:2.1, fascia:'grande'},
+  {code:'CTA',name:'Catania Fontanarossa',    pax:10.7, rit:3.20, can:2.8, fascia:'grande'},
+  {code:'BLQ',name:'Bologna Marconi',         pax:10.0, rit:2.80, can:1.9, fascia:'grande'},
+  {code:'NAP',name:'Napoli Capodichino',      pax:12.4, rit:2.50, can:1.8, fascia:'grande'},
+  {code:'CIA',name:'Roma Ciampino',           pax: 3.9, rit:2.20, can:1.6, fascia:'medio'},
+  {code:'BRI',name:'Bari Karol Wojtyla',      pax: 6.5, rit:2.10, can:1.4, fascia:'medio'},
+  {code:'PSA',name:'Pisa Galileo Galilei',    pax: 5.1, rit:2.00, can:1.3, fascia:'medio'},
+  {code:'FCO',name:'Roma Fiumicino',          pax:40.5, rit:1.80, can:1.2, fascia:'grande'},
+  {code:'BDS',name:'Brindisi Papola Casale',  pax: 3.1, rit:1.80, can:1.1, fascia:'medio'},
+  {code:'CAG',name:'Cagliari Elmas',          pax: 4.8, rit:1.90, can:1.2, fascia:'medio'},
+  {code:'TRN',name:'Torino Caselle',          pax: 4.5, rit:1.70, can:1.1, fascia:'medio'},
+  {code:'PMO',name:'Palermo Falcone Borsellino',pax:8.1,rit:1.50,can:1.7, fascia:'medio'},
+  {code:'VCE',name:'Venezia Marco Polo',      pax:11.3, rit:1.60, can:1.1, fascia:'grande'},
+  {code:'LIN',name:'Milano Linate',           pax: 9.4, rit:1.40, can:3.5, fascia:'medio'},
+];
+
+var MAX_RIT = 7.5; // scala max per le barre
+
+// colori fascia
+function fasciaColor(f){
+  if(f==='grande') return {bar:'#E94560',bg:'rgba(229,69,96,.15)',tag:'grande'};
+  if(f==='medio')  return {bar:'#F59E0B',bg:'rgba(245,158,11,.12)',tag:'medio'};
+  return {bar:'#2D9E5F',bg:'rgba(45,158,95,.12)',tag:'piccolo'};
+}
+
+// ── TABELLA ────────────────────────────────────────────────────
+var tbody = document.getElementById('aptBody');
+AEROPORTI.forEach(function(a,i){
+  var c = fasciaColor(a.fascia);
+  var pct = (a.rit / MAX_RIT * 100).toFixed(1);
+  var tr = document.createElement('tr');
+  tr.style.opacity = '0';
+  tr.style.transform = 'translateY(12px)';
+  tr.innerHTML =
+    '<td><span class="apt-code">'+a.code+'</span> <span class="apt-name">'+a.name+'</span></td>'+
+    '<td><span class="apt-pax">'+a.pax.toFixed(1)+'M</span></td>'+
+    '<td class="bar-cell">'+
+      '<div class="bar-wrap">'+
+        '<div class="bar-track"><div class="bar-fill" data-pct="'+pct+'" style="background:'+c.bar+'"></div></div>'+
+        '<span class="bar-val">'+a.rit.toFixed(1)+'%</span>'+
+      '</div>'+
+    '</td>'+
+    '<td style="font-family:var(--f-mono);font-size:11px;color:var(--ink-60)">'+a.can.toFixed(1)+'%</td>'+
+    '<td><span class="apt-fascia-tag '+c.tag+'">'+a.fascia+'</span></td>';
+  tbody.appendChild(tr);
+});
+
+// ── HERO ANIMATIONS ────────────────────────────────────────────
+window.addEventListener('load',function(){
+  var tl = gsap.timeline({delay:.1});
+  tl.fromTo('.hero-label',{opacity:0,y:16},{opacity:1,y:0,duration:.6,ease:'power3.out'})
+    .fromTo('.hero-eyebrow',{opacity:0,y:16},{opacity:1,y:0,duration:.6,ease:'power3.out'},'-=.3')
+    .fromTo('.hero-h1',{opacity:0,y:24},{opacity:1,y:0,duration:.8,ease:'power3.out'},'-=.3')
+    .fromTo('.hero-sub',{opacity:0,y:16},{opacity:1,y:0,duration:.7,ease:'power3.out'},'-=.3')
+    .fromTo('.hero-strip',{opacity:0,y:16},{opacity:1,y:0,duration:.7,ease:'power3.out'},'-=.2');
+
+  // Tabella rows
+  var rows = tbody.querySelectorAll('tr');
+  gsap.fromTo(rows,
+    {opacity:0,y:12},
+    {opacity:1,y:0,duration:.5,stagger:.04,ease:'power2.out',
+     scrollTrigger:{trigger:'#aptTable',start:'top 80%',once:true}});
+
+  // Barre fill
+  ScrollTrigger.create({
+    trigger:'#aptTable', start:'top 75%', once:true,
+    onEnter: function(){
+      document.querySelectorAll('.bar-fill').forEach(function(el){
+        el.style.width = el.dataset.pct+'%';
+      });
+    }
+  });
+
+  // Fallback barre
+  setTimeout(function(){
+    document.querySelectorAll('.bar-fill').forEach(function(el){
+      if(!el.style.width || el.style.width==='0%') el.style.width=el.dataset.pct+'%';
+    });
+    document.querySelectorAll('#aptBody tr').forEach(function(el){
+      el.style.opacity='1'; el.style.transform='none';
+    });
+  }, 2500);
+
+  // Fasce cards
+  gsap.fromTo('.fascia-card',
+    {opacity:0,y:24},
+    {opacity:1,y:0,duration:.7,stagger:.12,ease:'power3.out',
+     scrollTrigger:{trigger:'#fasceGrid',start:'top 78%',once:true}});
+  setTimeout(function(){
+    document.querySelectorAll('.fascia-card').forEach(function(el){
+      if(parseFloat(getComputedStyle(el).opacity)<0.5){el.style.opacity='1';el.style.transform='none';}
+    });
+  },2500);
+
+  // Funnel nazionale
+  gsap.fromTo('[id^="nf"]',
+    {opacity:0,y:20},
+    {opacity:1,y:0,duration:.65,stagger:.1,ease:'power3.out',
+     scrollTrigger:{trigger:'#nazionale',start:'top 78%',once:true}});
+  gsap.fromTo('#valoreBox',
+    {opacity:0,y:24},
+    {opacity:1,y:0,duration:.8,ease:'power3.out',
+     scrollTrigger:{trigger:'#valoreBox',start:'top 82%',once:true}});
+  setTimeout(function(){
+    ['nf1','nf2','nf3','nf4','valoreBox'].forEach(function(id){
+      var el=document.getElementById(id);
+      if(el&&parseFloat(getComputedStyle(el).opacity)<0.5){el.style.opacity='1';el.style.transform='none';}
+    });
+  },2500);
+
+  // Metodologia
+  gsap.fromTo('[id^="mt"]',
+    {opacity:0,y:16},
+    {opacity:1,y:0,duration:.6,stagger:.08,ease:'power3.out',
+     scrollTrigger:{trigger:'#metodo',start:'top 80%',once:true}});
+  setTimeout(function(){
+    document.querySelectorAll('[id^="mt"]').forEach(function(el){
+      if(parseFloat(getComputedStyle(el).opacity)<0.5){el.style.opacity='1';el.style.transform='none';}
+    });
+  },2500);
+
+  // Recap
+  gsap.fromTo('.recap-eyebrow,.recap-title',
+    {opacity:0,y:30},{opacity:1,y:0,duration:.9,stagger:.12,ease:'power3.out',
+     scrollTrigger:{trigger:'#recap',start:'top 78%',once:true}});
+  gsap.fromTo('.recap-pillar',
+    {opacity:0,y:22},{opacity:1,y:0,duration:.75,stagger:.09,ease:'power3.out',
+     scrollTrigger:{trigger:'#recap',start:'top 72%',once:true}});
+  gsap.fromTo('.recap-insight,.recap-next',
+    {opacity:0,y:18},{opacity:1,y:0,duration:.7,stagger:.12,ease:'power3.out',
+     scrollTrigger:{trigger:'#recap',start:'top 62%',once:true}});
+  setTimeout(function(){
+    ['.recap-eyebrow','.recap-title','.recap-pillar','.recap-insight','.recap-next'].forEach(function(sel){
+      document.querySelectorAll(sel).forEach(function(el){
+        if(parseFloat(getComputedStyle(el).opacity)<0.5){el.style.opacity='1';el.style.transform='none';}
+      });
+    });
+  },3000);
+});
+
+// ── BUBBLE CHART ───────────────────────────────────────────────
+(function(){
+  var canvas = document.getElementById('bubbleCanvas');
+  if(!canvas) return;
+  var ctx = canvas.getContext('2d');
+
+  function resize(){
+    canvas.width = canvas.offsetWidth * window.devicePixelRatio;
+    canvas.height = canvas.offsetHeight * window.devicePixelRatio;
+    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+  }
+  resize();
+  window.addEventListener('resize', function(){ resize(); draw(); });
+
+  var tooltip = {visible:false, x:0, y:0, data:null};
+  var animProg = 0; // 0→1 for entrance animation
+
+  var PAD_L = 60, PAD_R = 30, PAD_T = 30, PAD_B = 40;
+
+  function colorFor(fascia){
+    if(fascia==='grande') return 'rgba(229,69,96,.72)';
+    if(fascia==='medio')  return 'rgba(245,158,11,.72)';
+    return 'rgba(45,158,95,.72)';
+  }
+
+  function draw(){
+    var W = canvas.offsetWidth, H = canvas.offsetHeight;
+    ctx.clearRect(0,0,W,H);
+
+    var maxPax = 45; // scala bubble
+    var maxRit = 7.5;
+
+    // grid lines
+    ctx.strokeStyle = 'rgba(12,12,12,.06)';
+    ctx.lineWidth = 1;
+    [1,2,3,4,5,6,7].forEach(function(v){
+      var x = PAD_L + (v/maxRit)*(W-PAD_L-PAD_R);
+      ctx.beginPath(); ctx.moveTo(x,PAD_T); ctx.lineTo(x,H-PAD_B); ctx.stroke();
+      ctx.fillStyle='rgba(12,12,12,.25)';
+      ctx.font='10px DM Mono, monospace';
+      ctx.textAlign='center';
+      ctx.fillText(v+'%', x, H-PAD_B+14);
+    });
+
+    // x axis label
+    ctx.fillStyle='rgba(12,12,12,.35)';
+    ctx.font='9px DM Mono, monospace';
+    ctx.textAlign='center';
+    ctx.fillText('RITARDO >3H (%)', W/2, H-4);
+
+    AEROPORTI.forEach(function(a){
+      var x = PAD_L + (a.rit/maxRit)*(W-PAD_L-PAD_R);
+      var y = PAD_T + (1 - a.pax/maxPax)*(H-PAD_T-PAD_B);
+      var r = Math.max(10, Math.sqrt(a.pax/maxPax)*52) * animProg;
+
+      ctx.beginPath();
+      ctx.arc(x,y,r,0,Math.PI*2);
+      ctx.fillStyle = colorFor(a.fascia);
+      ctx.fill();
+
+      if(r > 14){
+        ctx.fillStyle = 'rgba(12,12,12,.75)';
+        ctx.font='bold 9px DM Mono, monospace';
+        ctx.textAlign='center';
+        ctx.fillText(a.code, x, y+3);
+      }
+    });
+
+    // tooltip
+    if(tooltip.visible && tooltip.data){
+      var d = tooltip.data;
+      var tx = tooltip.x+14, ty = tooltip.y-14;
+      var tw = 170, th = 64;
+      if(tx+tw > W) tx = tooltip.x-tw-8;
+      ctx.fillStyle='rgba(12,12,12,.9)';
+      ctx.beginPath();
+      ctx.roundRect(tx,ty,tw,th,4);
+      ctx.fill();
+      ctx.fillStyle='#F0EDE8';
+      ctx.font='bold 11px DM Sans, sans-serif';
+      ctx.textAlign='left';
+      ctx.fillText(d.code+' — '+d.name.substring(0,16), tx+10, ty+18);
+      ctx.fillStyle='rgba(240,237,232,.6)';
+      ctx.font='10px DM Mono, monospace';
+      ctx.fillText('Ritardo: '+d.rit+'%  Pax: '+d.pax+'M', tx+10, ty+36);
+      ctx.fillText('Cancellazioni: '+d.can+'%', tx+10, ty+52);
+    }
+  }
+
+  // hover
+  canvas.addEventListener('mousemove', function(e){
+    var rect = canvas.getBoundingClientRect();
+    var mx = e.clientX - rect.left;
+    var my = e.clientY - rect.top;
+    var W = canvas.offsetWidth, H = canvas.offsetHeight;
+    var maxPax = 45, maxRit = 7.5;
+    tooltip.visible = false;
+    AEROPORTI.forEach(function(a){
+      var x = PAD_L+(a.rit/maxRit)*(W-PAD_L-PAD_R);
+      var y = PAD_T+(1-a.pax/maxPax)*(H-PAD_T-PAD_B);
+      var r = Math.max(10, Math.sqrt(a.pax/maxPax)*52);
+      var dist = Math.sqrt((mx-x)*(mx-x)+(my-y)*(my-y));
+      if(dist < r+4){ tooltip.visible=true; tooltip.x=mx; tooltip.y=my; tooltip.data=a; }
+    });
+    canvas.style.cursor = tooltip.visible ? 'pointer':'default';
+    draw();
+  });
+
+  canvas.addEventListener('mouseleave',function(){ tooltip.visible=false; draw(); });
+
+  // entrance animation
+  ScrollTrigger.create({
+    trigger:'#bubbleCanvas', start:'top 80%', once:true,
+    onEnter: function(){
+      gsap.to({v:0},{v:1,duration:1.1,ease:'power3.out',
+        onUpdate:function(){ animProg=this.targets()[0].v; draw(); },
+        onComplete:function(){ animProg=1; draw(); }
+      });
+    }
+  });
+  setTimeout(function(){ if(animProg<0.1){animProg=1;draw();} },2500);
+})();
+</script>
+
+<!-- menu.js — iniettato dal sistema -->
+<script>
+var page='m1b';
+var MODULES=[
+  {id:'m0',code:'00',label:'Executive Summary',sub:'Sintesi strategica per il management',url:'m0.html',color:'#3A6FD4'},
+  {id:'m1',code:'01',label:'Mercato',sub:'Gap di consapevolezza · 220M passeggeri IT',url:'m1.html',color:'#3A86FF'},
+  {id:'m1b',code:'01b',label:'Disservizi per aeroporto',sub:'15 scali · €656M non attivati',url:'m1b.html',color:'#3A86FF'},
+  {id:'m2',code:'02',label:'Competitor Map',sub:'White space identitario · AirHelp vs RAV',url:'m2.html',color:'#E94560'},
+  {id:'m3',code:'03',label:'Voice of Customer',sub:'~12.000 recensioni Trustpilot',url:'m3.html',color:'#2D9E5F'},
+  {id:'m4',code:'04',label:'Personas',sub:'4 profili · inerzia come competitor',url:'m4.html',color:'#8338EC'},
+  {id:'m5',code:'05',label:'Mappa del Momento',sub:'5 fasi · Fase 2 = picco ricettività',url:'m5.html',color:'#FB8500'},
+  {id:'m6',code:'06',label:'Benchmark Creativi',sub:'6 casi · timing come leva',url:'m6.html',color:'#E67E22'},
+  {id:'m7',code:'07',label:'Regolamentazione',sub:'Spazi aeroportuali · GESAC',url:'m7.html',color:'#2D9E5F'},
+];
+var currentMod=MODULES.find(function(m){return m.id===page;})||MODULES[0];
+
+// ── burger button ──
+var btn=document.createElement('button');
+btn.id='rbbtn';
+btn.setAttribute('aria-label','Menu');
+var bstyle=[
+  '#rbbtn{position:fixed;top:20px;right:20px;z-index:9100;width:44px;height:44px;border:none;background:var(--ink);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:0}',
+  '#rbbtn .l1,#rbbtn .l2,#rbbtn .l3{display:block;width:20px;height:1.5px;background:var(--bg);transition:all .4s var(--ease)}',
+  '#rbbtn.open .l1{transform:translateY(6.5px) rotate(45deg)}',
+  '#rbbtn.open .l2{opacity:0;transform:scaleX(0)}',
+  '#rbbtn.open .l3{transform:translateY(-6.5px) rotate(-45deg)}'
+].join('');
+var bst=document.createElement('style');
+bst.textContent=bstyle;
+document.head.appendChild(bst);
+btn.innerHTML='<span class="l1"></span><span class="l2"></span><span class="l3"></span>';
+document.body.appendChild(btn);
+
+// ── overlay ──
+var ov=document.createElement('div');
+ov.className='rbmenu-overlay';
+var itemsHtml='';
+for(var i=0;i<MODULES.length;i++){
+  var m=MODULES[i];
+  var isAct=m.id===page;
+  itemsHtml+='<li class="rbmenu-item'+(isAct?' active':'')+'">'+
+    (isAct?'<span class="rmi-active-bar" style="background:'+m.color+'"></span>':'')+
+    '<a href="'+m.url+'"><span class="rmi-code">'+m.code+'</span>'+
+    '<span class="rmi-left"><span class="rmi-label">'+m.label+'</span><span class="rmi-sub">'+m.sub+'</span></span>'+
+    '<span class="rmi-arr">\u2192</span></a></li>';
+}
+
+var ovStyles=[
+  '.rbmenu-overlay{position:fixed;inset:0;z-index:9000;background:#0C0C0C;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .5s cubic-bezier(0.16,1,0.3,1);overflow:hidden}',
+  '.rbmenu-overlay.open{opacity:1;pointer-events:auto}',
+  '.rbmenu-glow{position:absolute;width:600px;height:600px;border-radius:50%;opacity:.06;pointer-events:none;filter:blur(120px);transition:background 1s,top .6s,left .6s}',
+  '.rbmenu-top{display:flex;align-items:center;padding:20px 28px;border-bottom:1px solid rgba(240,237,232,.06);flex-shrink:0}',
+  '.rbmenu-brand{display:flex;align-items:center;gap:10px}',
+  '.rbmenu-brand-sep{width:1px;height:20px;background:rgba(240,237,232,.12)}',
+  '.rbmenu-badge{font-family:var(--f-mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:rgba(240,237,232,.25);border:1px solid rgba(240,237,232,.12);padding:3px 8px}',
+  '.rbmenu-items{flex:1;overflow-y:auto;padding:40px 28px;display:flex;align-items:flex-start}',
+  '.rbmenu-items ul{list-style:none;width:100%;display:flex;flex-direction:column;gap:2px}',
+  '.rbmenu-item{position:relative}',
+  '.rmi-active-bar{position:absolute;left:0;top:0;bottom:0;width:2px}',
+  '.rbmenu-item a{display:flex;align-items:center;gap:20px;padding:16px 20px;text-decoration:none;color:rgba(240,237,232,.4);transition:color .3s,background .3s}',
+  '.rbmenu-item.active a{color:var(--bg);background:rgba(240,237,232,.04)}',
+  '.rbmenu-item a:hover{color:var(--bg);background:rgba(240,237,232,.03)}',
+  '.rmi-code{font-family:var(--f-mono);font-size:10px;color:rgba(240,237,232,.2);min-width:28px}',
+  '.rmi-left{display:flex;flex-direction:column;gap:2px;flex:1}',
+  '.rmi-label{font-family:var(--f-body);font-size:16px;font-weight:400}',
+  '.rmi-sub{font-family:var(--f-mono);font-size:9px;letter-spacing:.08em;color:rgba(240,237,232,.25)}',
+  '.rmi-arr{font-size:14px;opacity:.3}',
+  '.rbmenu-footer{padding:20px 28px;border-top:1px solid rgba(240,237,232,.06);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}',
+  '.rbmf-left{font-family:var(--f-mono);font-size:9px;letter-spacing:.1em;color:rgba(240,237,232,.2)}',
+  '.rbmf-right{display:flex;gap:16px}',
+  '.rbmf-link{font-family:var(--f-mono);font-size:9px;letter-spacing:.1em;color:rgba(240,237,232,.3);text-decoration:none;transition:color .2s}',
+  '.rbmf-link:hover{color:var(--bg)}',
+].join('');
+var ovst=document.createElement('style');
+ovst.textContent=ovStyles;
+document.head.appendChild(ovst);
+
+ov.innerHTML='<div class="rbmenu-glow" id="rbglow" style="background:'+currentMod.color+';top:-100px;left:-100px"></div>'+
+  '<div class="rbmenu-top">'+
+  '<div class="rbmenu-brand">'+
+  '<img src="https://www.ribrainstudio.com/wp-content/uploads/2025/01/Logo_ribrain_Nero.svg" style="height:13px;filter:invert(1);opacity:.5;object-fit:contain" onerror="this.style.display=\'none\'">'+
+  '<div class="rbmenu-brand-sep"></div>'+
+  '<span class="rbmenu-badge">CONFIDENZIALE</span>'+
+  '</div></div>'+
+  '<div class="rbmenu-items"><ul>'+itemsHtml+'</ul></div>'+
+  '<div class="rbmenu-footer">'+
+  '<span class="rbmf-left">Aprile 2026 \u00b7 Ribrain Studio \u00b7 Confidenziale</span>'+
+  '<div class="rbmf-right"><a href="m0.html" class="rbmf-link">Executive Summary</a><a href="m7.html" class="rbmf-link">Regolamentazione \u2192</a></div>'+
+  '</div>';
+document.body.appendChild(ov);
+
+btn.addEventListener('click',function(){
+  var open=btn.classList.toggle('open');
+  ov.classList.toggle('open',open);
+  document.body.style.overflow=open?'hidden':'';
+});
+
+// ── navbar bottom ──
+var nbStyles=[
+  '.rbnavbar{position:fixed;bottom:0;left:0;right:0;z-index:8000;background:rgba(12,12,12,.96);backdrop-filter:blur(24px);border-top:1px solid rgba(240,237,232,.06);height:48px;display:flex;align-items:stretch}',
+  '.rbnavbar-inner{max-width:1440px;margin:0 auto;padding:0 16px;display:flex;align-items:stretch;width:100%}',
+  '.rbnavbar-brand{display:flex;align-items:center;gap:8px;padding-right:14px;border-right:1px solid rgba(240,237,232,.06);margin-right:2px;flex-shrink:0}',
+  '.rbnavbar-items{display:flex;align-items:stretch;flex:1;overflow-x:auto;scrollbar-width:none}',
+  '.rbnavbar-items::-webkit-scrollbar{display:none}',
+  '.rbnav-item{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 10px;text-decoration:none;color:inherit;border-right:1px solid rgba(240,237,232,.04);min-width:52px;position:relative;gap:2px}',
+  '.rbnav-item.active{background:rgba(240,237,232,.07)}',
+  '.rbnav-item-top{position:absolute;top:0;left:0;right:0;height:2px}',
+  '.rbnav-code{font-family:var(--f-mono);font-size:7px;letter-spacing:.1em;text-transform:uppercase;color:rgba(240,237,232,.3)}',
+  '.rbnav-title{font-family:var(--f-body);font-size:9px;color:rgba(240,237,232,.45);white-space:nowrap}',
+  'body{padding-bottom:48px}',
+].join('');
+var nbst=document.createElement('style');
+nbst.textContent=nbStyles;
+document.head.appendChild(nbst);
+
+var nb=document.createElement('nav');
+nb.className='rbnavbar';
+var navHtml='';
+for(var ni=0;ni<MODULES.length;ni++){
+  var nm=MODULES[ni];
+  var isNavAct=nm.id===page;
+  navHtml+='<a href="'+nm.url+'" class="rbnav-item'+(isNavAct?' active':'')+'" title="'+nm.label+'">'+
+    (isNavAct?'<span class="rbnav-item-top" style="background:'+nm.color+'"></span>':'')+
+    '<span class="rbnav-code">'+nm.code+'</span>'+
+    '<span class="rbnav-title">'+nm.label+'</span></a>';
+}
+nb.innerHTML='<div class="rbnavbar-inner"><div class="rbnavbar-brand"><img src="https://www.ribrainstudio.com/wp-content/uploads/2025/01/Logo_ribrain_Nero.svg" style="height:11px;filter:invert(1);opacity:.35" onerror="this.style.display=\'none\'"></div><div class="rbnavbar-items">'+navHtml+'</div></div>';
+document.body.appendChild(nb);
+</script>
+</body>
+</html>
