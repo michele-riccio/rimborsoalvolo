@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Le Idee Creative · RimborsoalVolo × Ribrain</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<style>
+/* ── VARS — palette totalmente diversa: navy profondo + lime elettrico ── */
+:root{
+  --navy:    #060E1C;
+  --navy2:   #0B1628;
+  --navy3:   #0F1F3A;
+  --navy4:   #162847;
+  --lime:    #C8FF47;
+  --lime2:   rgba(200,255,71,.12);
+  --lime3:   rgba(200,255,71,.06);
+  --coral:   #FF4F3B;
+  --gold:    #FFB84D;
+  --white:   #F8F4EF;
+  --white60: rgba(248,244,239,.6);
+  --white30: rgba(248,244,239,.3);
+  --white10: rgba(248,244,239,.1);
+  --white06: rgba(248,244,239,.06);
+  --rule:    rgba(248,244,239,.08);
+  --f-disp:  'Cormorant Garamond',serif;
+  --f-mono:  'DM Mono',monospace;
+  --f-body:  'DM Sans',sans-serif;
+  --ease:    cubic-bezier(0.16,1,0.3,1);
+  --c1: var(--coral);
+  --c2: var(--gold);
+  --c3: var(--lime);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--white);font-family:var(--f-body);overflow-x:hidden}
+
+/* ── NOISE GRAIN ── */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity:.025;pointer-events:none;z-index:9990;
+}
+
+/* ── PROGRESS ── */
+#prog{position:fixed;top:0;left:0;height:2px;background:var(--lime);z-index:9999;width:0%}
+
+/* ── CURSOR ── */
+#cur{position:fixed;width:5px;height:5px;background:var(--lime);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%)}
+#curR{position:fixed;width:28px;height:28px;border:1px solid rgba(200,255,71,.3);border-radius:50%;pointer-events:none;z-index:9997;transform:translate(-50%,-50%);transition:opacity .3s}
+
+/* ── TOPBAR ── */
+.topbar{
+  position:fixed;top:0;left:0;right:0;z-index:9100;
+  height:52px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 40px;
+  border-bottom:1px solid var(--rule);
+  background:rgba(6,14,28,.9);
+  backdrop-filter:blur(20px);
+}
+.tb-left{display:flex;align-items:center;gap:14px}
+.tb-logo{height:11px;filter:invert(1);opacity:.4;object-fit:contain}
+.tb-sep{width:1px;height:18px;background:var(--rule)}
+.tb-label{font-family:var(--f-mono);font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--white30)}
+.tb-badge{
+  font-family:var(--f-mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--navy);background:var(--lime);padding:3px 10px;font-weight:500;
+}
+.tb-right{display:flex;align-items:center;gap:8px}
+.tb-back{
+  font-family:var(--f-mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--white30);text-decoration:none;transition:color .3s;
+  padding:6px 14px;border:1px solid var(--rule);
+}
+.tb-back:hover{color:var(--white);border-color:var(--white30)}
+
+/* ── DOT NAV ── */
+.dot-nav{
+  position:fixed;right:28px;top:50%;transform:translateY(-50%);
+  z-index:9100;display:flex;flex-direction:column;gap:12px;
+}
+.dot{
+  width:5px;height:5px;border-radius:50%;background:var(--white10);
+  cursor:pointer;transition:all .3s;
+}
+.dot.active{background:var(--lime);transform:scale(1.4)}
+.dot:hover{background:var(--white30)}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;
+  padding:80px 8vw 80px;position:relative;overflow:hidden;
+}
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(248,244,239,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(248,244,239,.03) 1px,transparent 1px);
+  background-size:80px 80px;
+}
+.hero-glow{
+  position:absolute;top:-30%;left:-20%;
+  width:80vw;height:80vh;
+  background:radial-gradient(ellipse,rgba(200,255,71,.07) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-eyebrow{
+  font-family:var(--f-mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--lime);margin-bottom:20px;opacity:0;position:relative;z-index:2;
+}
+.hero-title{
+  font-family:var(--f-disp);font-size:clamp(60px,9vw,130px);font-weight:300;
+  line-height:.95;position:relative;z-index:2;
+}
+.hero-title .line{overflow:hidden;display:block}
+.hero-title .word{display:inline-block;opacity:0;transform:translateY(100%)}
+.hero-title em{font-style:italic;color:var(--lime)}
+.hero-sub{
+  font-size:15px;color:var(--white60);max-width:540px;line-height:1.7;
+  margin-top:32px;opacity:0;position:relative;z-index:2;
+}
+.hero-meta{
+  display:flex;gap:40px;margin-top:48px;opacity:0;position:relative;z-index:2;
+  border-top:1px solid var(--rule);padding-top:32px;
+}
+.hm-item{display:flex;flex-direction:column;gap:4px}
+.hm-val{font-family:var(--f-disp);font-size:28px;font-weight:300;color:var(--white)}
+.hm-val em{font-style:normal;color:var(--lime)}
+.hm-label{font-family:var(--f-mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--white30)}
+
+/* CTA hero */
+.hero-cta{
+  display:flex;align-items:center;gap:16px;margin-top:40px;opacity:0;position:relative;z-index:2;
+}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:14px 32px;background:var(--lime);color:var(--navy);
+  font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;
+  text-decoration:none;cursor:pointer;border:none;transition:all .3s var(--ease);
+}
+.btn-primary:hover{background:var(--white);transform:translateY(-2px)}
+.btn-outline{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:14px 32px;background:transparent;color:var(--white60);
+  font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:400;
+  text-decoration:none;cursor:pointer;border:1px solid var(--rule);transition:all .3s;
+}
+.btn-outline:hover{color:var(--white);border-color:var(--white30)}
+
+/* ── SECTION LABELS ── */
+.wrap{max-width:1200px;margin:0 auto;padding:0 8vw}
+.sec-pad{padding:100px 0}
+
+/* ── INTRO STRIP ── */
+.intro-strip{
+  background:var(--navy2);
+  border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  padding:48px 0;overflow:hidden;
+}
+.strip-inner{
+  display:flex;align-items:center;gap:0;
+  animation:stripScroll 20s linear infinite;
+  white-space:nowrap;width:max-content;
+}
+.strip-item{
+  font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--white30);padding:0 40px;
+}
+.strip-item.accent{color:var(--lime)}
+@keyframes stripScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ── SECTION HEADER ── */
+.sh{margin-bottom:64px;opacity:0}
+.sh-eye{font-family:var(--f-mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--lime);margin-bottom:14px}
+.sh-h2{font-family:var(--f-disp);font-size:clamp(40px,5vw,68px);font-weight:300;line-height:1.05}
+.sh-h2 em{font-style:italic;color:var(--lime)}
+.sh-note{font-size:14px;color:var(--white60);margin-top:16px;line-height:1.7;max-width:600px}
+
+/* ── CONCEPT CARDS ── */
+.concepts-section{background:var(--navy)}
+.concept-block{
+  margin-bottom:4px;opacity:0;
+}
+.concept-header{
+  display:grid;grid-template-columns:64px 1fr auto;gap:24px;align-items:center;
+  padding:36px 40px;background:var(--navy2);cursor:pointer;
+  border-top:1px solid var(--rule);transition:background .3s;
+}
+.concept-header:hover{background:var(--navy3)}
+.concept-header.open{background:var(--navy3)}
+.ch-num{
+  font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--white30);
+}
+.ch-title{font-family:var(--f-body);font-size:22px;font-weight:500;color:var(--white)}
+.ch-tag{
+  font-family:var(--f-mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;
+  padding:4px 12px;color:var(--navy);
+}
+.ch-tag.c1{background:var(--coral)}
+.ch-tag.c2{background:var(--gold)}
+.ch-tag.c3{background:var(--lime)}
+.ch-arrow{
+  font-size:18px;color:var(--white30);transition:transform .4s var(--ease);margin-left:16px;
+}
+.concept-header.open .ch-arrow{transform:rotate(45deg)}
+
+.concept-body{
+  overflow:hidden;max-height:0;
+  transition:max-height .7s var(--ease);
+  background:var(--navy3);
+}
+.concept-body.open{max-height:2000px}
+.cb-inner{padding:0 40px 56px;display:grid;grid-template-columns:1fr 1fr;gap:48px}
+.cb-inner.full{grid-template-columns:1fr}
+
+/* claim section */
+.cb-claim{margin-top:48px}
+.cb-claim-label{font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--white30);margin-bottom:16px}
+.claim-main{
+  font-family:var(--f-disp);font-size:clamp(36px,4.5vw,58px);font-weight:300;
+  line-height:1.05;margin-bottom:32px;
+}
+.claim-main em{font-style:italic}
+.multisoggetto{display:flex;flex-direction:column;gap:8px;margin-bottom:32px}
+.ms-item{
+  display:flex;align-items:baseline;gap:14px;
+  padding:14px 20px;border-left:2px solid var(--rule);
+  font-size:15px;color:var(--white60);transition:all .3s;
+}
+.ms-item:hover{border-left-color:currentColor;color:var(--white);background:var(--white06)}
+
+/* sezioni del body */
+.cb-section{margin-top:40px}
+.cb-sec-title{
+  font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--white30);margin-bottom:16px;
+}
+.cb-text{font-size:14px;color:var(--white60);line-height:1.75}
+.cb-text strong{color:var(--white);font-weight:500}
+
+/* pills forza/debolezza */
+.pill-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.pill{
+  font-family:var(--f-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  padding:5px 12px;
+}
+.pill.ok{background:rgba(200,255,71,.12);color:var(--lime)}
+.pill.ko{background:rgba(255,79,59,.1);color:var(--coral)}
+.pill.neutral{background:var(--white06);color:var(--white60)}
+
+/* meccanica fisica */
+.meccanica-box{
+  background:var(--navy4);padding:32px;border-left:3px solid;
+  margin-top:0;
+}
+.meccanica-box.c1{border-color:var(--coral)}
+.meccanica-box.c2{border-color:var(--gold)}
+.meccanica-box.c3{border-color:var(--lime)}
+.mb-label{font-family:var(--f-mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--white30);margin-bottom:12px}
+.mb-text{font-size:14px;color:var(--white60);line-height:1.7}
+
+/* lo-fi box */
+.lofi-box{
+  background:rgba(200,255,71,.05);
+  border:1px solid rgba(200,255,71,.15);
+  padding:28px 32px;margin-top:24px;
+}
+.lofi-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.lofi-dot{width:8px;height:8px;border-radius:50%;background:var(--lime);flex-shrink:0}
+.lofi-label{font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--lime)}
+.lofi-text{font-size:13px;color:var(--white60);line-height:1.7}
+.lofi-text strong{color:var(--lime);font-weight:500}
+
+/* score bar */
+.score-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.score-name{font-size:12px;color:var(--white60);min-width:140px;flex-shrink:0}
+.score-track{flex:1;height:4px;background:var(--white06);border-radius:2px;overflow:hidden}
+.score-fill{height:100%;border-radius:2px;width:0%;transition:width 1.2s var(--ease)}
+.score-val{font-family:var(--f-mono);font-size:10px;color:var(--white30);min-width:32px;text-align:right}
+
+/* ── SYNTHESIS ── */
+.synthesis-section{
+  background:var(--lime);padding:100px 0;
+  position:relative;overflow:hidden;
+}
+.syn-bg{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(6,14,28,.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(6,14,28,.06) 1px,transparent 1px);
+  background-size:60px 60px;
+}
+.syn-eyebrow{
+  font-family:var(--f-mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(6,14,28,.5);margin-bottom:16px;
+}
+.syn-title{
+  font-family:var(--f-disp);font-size:clamp(44px,6vw,80px);font-weight:600;
+  color:var(--navy);line-height:1.0;margin-bottom:48px;
+}
+.syn-title em{font-style:italic;font-weight:300}
+.syn-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:48px}
+.syn-card{
+  background:rgba(6,14,28,.08);padding:40px 36px;
+  opacity:0;
+}
+.syn-card-num{
+  font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(6,14,28,.4);margin-bottom:20px;
+}
+.syn-card-title{font-size:20px;font-weight:600;color:var(--navy);margin-bottom:12px}
+.syn-card-text{font-size:13px;color:rgba(6,14,28,.65);line-height:1.7}
+.syn-claim{
+  background:var(--navy);padding:48px 56px;
+  display:flex;flex-direction:column;gap:20px;
+  opacity:0;
+}
+.syn-claim-eye{font-family:var(--f-mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--lime)}
+.syn-claim-text{
+  font-family:var(--f-disp);font-size:clamp(28px,3.5vw,48px);font-weight:300;
+  color:var(--white);line-height:1.2;
+}
+.syn-claim-text em{font-style:italic;color:var(--lime)}
+.syn-example{
+  display:flex;flex-direction:column;gap:6px;margin-top:8px;
+  padding-top:20px;border-top:1px solid var(--rule);
+}
+.syn-ex-item{
+  font-size:13px;color:var(--white60);padding:8px 0;
+  border-bottom:1px solid var(--white06);
+}
+.syn-ex-item strong{color:var(--lime);font-weight:500}
+
+/* ── LOFI LAYER ── */
+.lofi-section{background:var(--navy2);padding:100px 0}
+.lofi-title-wrap{opacity:0}
+.lofi-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:56px}
+.lofi-card{
+  background:var(--navy3);padding:36px 28px;
+  border-top:2px solid var(--rule);opacity:0;
+  transition:background .3s;cursor:default;
+}
+.lofi-card:hover{background:var(--navy4)}
+.lfc-icon{font-size:28px;margin-bottom:20px}
+.lfc-num{
+  font-family:var(--f-disp);font-size:48px;font-weight:300;color:var(--lime);
+  line-height:1;margin-bottom:16px;
+}
+.lfc-title{font-size:15px;font-weight:500;color:var(--white);margin-bottom:10px}
+.lfc-text{font-size:13px;color:var(--white60);line-height:1.65}
+.lfc-text strong{color:var(--lime);font-weight:500}
+.lfc-ref{
+  margin-top:16px;padding-top:12px;border-top:1px solid var(--rule);
+  font-family:var(--f-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--white30);
+}
+
+/* ── MVP CTA ── */
+.mvp-section{background:var(--navy);padding:100px 0}
+.mvp-wrap{opacity:0}
+.mvp-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:56px}
+.mvp-card{
+  background:var(--navy2);padding:44px 40px;
+  position:relative;overflow:hidden;
+  border-top:2px solid var(--rule);
+}
+.mvp-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+}
+.mvp-card:nth-child(1)::before{background:var(--coral)}
+.mvp-card:nth-child(2)::before{background:var(--gold)}
+.mvp-card:nth-child(3)::before{background:var(--lime)}
+.mvp-card:nth-child(4)::before{background:rgba(248,244,239,.2)}
+.mvp-timeline{
+  font-family:var(--f-mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--white30);margin-bottom:16px;
+}
+.mvp-title{font-size:20px;font-weight:500;color:var(--white);margin-bottom:12px}
+.mvp-text{font-size:13px;color:var(--white60);line-height:1.7}
+.mvp-cost{
+  display:inline-block;margin-top:16px;
+  font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--lime);padding:4px 10px;border:1px solid rgba(200,255,71,.3);
+}
+
+/* ── FINAL CTA ── */
+.final-cta{
+  background:var(--lime);padding:80px 0;text-align:center;
+  position:relative;overflow:hidden;
+}
+.fct-bg{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 100%,rgba(6,14,28,.1) 0%,transparent 70%);
+}
+.fct-inner{position:relative;z-index:2;opacity:0}
+.fct-label{
+  font-family:var(--f-mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(6,14,28,.5);margin-bottom:20px;
+}
+.fct-title{
+  font-family:var(--f-disp);font-size:clamp(40px,5vw,72px);font-weight:300;
+  color:var(--navy);line-height:1.05;margin-bottom:40px;
+}
+.fct-title em{font-style:italic}
+.fct-btns{display:flex;align-items:center;justify-content:center;gap:16px}
+.fct-btn-main{
+  display:inline-flex;align-items:center;gap:12px;
+  padding:18px 48px;background:var(--navy);color:var(--lime);
+  font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;
+  text-decoration:none;cursor:pointer;border:none;transition:all .3s var(--ease);
+}
+.fct-btn-main:hover{background:var(--navy2);transform:translateY(-2px)}
+.fct-btn-sec{
+  display:inline-flex;align-items:center;gap:12px;
+  padding:18px 40px;background:transparent;color:rgba(6,14,28,.6);
+  font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  text-decoration:none;cursor:pointer;border:2px solid rgba(6,14,28,.2);transition:all .3s;
+}
+.fct-btn-sec:hover{color:var(--navy);border-color:rgba(6,14,28,.5)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .cb-inner{grid-template-columns:1fr}
+  .syn-grid{grid-template-columns:1fr}
+  .lofi-cards{grid-template-columns:1fr 1fr}
+  .mvp-grid{grid-template-columns:1fr}
+  .concept-header{grid-template-columns:40px 1fr auto}
+}
+@media(max-width:600px){
+  .wrap{padding:0 24px}
+  .lofi-cards{grid-template-columns:1fr}
+  .hero{padding:80px 24px 60px}
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+<div id="cur"></div>
+<div id="curR"></div>
+
+<!-- ══ TOPBAR ══════════════════════════════════════════════════ -->
+<header class="topbar">
+  <div class="tb-left">
+    <img src="https://www.ribrainstudio.com/wp-content/uploads/2025/01/Logo_ribrain_Nero.svg" class="tb-logo" onerror="this.style.display='none'">
+    <div class="tb-sep"></div>
+    <span class="tb-label">RimborsoalVolo × Ribrain</span>
+  </div>
+  <div class="tb-right">
+    <span class="tb-badge">IDEE CREATIVE · APRILE 2026</span>
+    <a href="m0.html" class="tb-back">← Cruscotto</a>
+  </div>
+</header>
+
+<!-- ══ DOT NAV ══════════════════════════════════════════════════ -->
+<nav class="dot-nav" id="dotNav">
+  <div class="dot active" data-section="0" title="Intro"></div>
+  <div class="dot" data-section="1" title="Concept 1"></div>
+  <div class="dot" data-section="2" title="Concept 2"></div>
+  <div class="dot" data-section="3" title="Concept 3A"></div>
+  <div class="dot" data-section="4" title="La Sintesi"></div>
+  <div class="dot" data-section="5" title="Lo-fi Strategy"></div>
+  <div class="dot" data-section="6" title="MVP"></div>
+</nav>
+
+<!-- ══ HERO ═════════════════════════════════════════════════════ -->
+<section class="hero" id="s0">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-eyebrow" id="he">Ribrain Studio · RimborsoalVolo · Aprile 2026</div>
+  <h1 class="hero-title" id="ht">
+    <span class="line"><span class="word">Le idee</span></span>
+    <span class="line"><span class="word"><em>creative.</em></span></span>
+  </h1>
+  <p class="hero-sub" id="hs">Tre concept, un territorio, una fusione vincente. Campagna brand awareness offline + layer digitale lo-fi per il mercato dei rimborsi aerei italiani.</p>
+  <div class="hero-meta" id="hm">
+    <div class="hm-item">
+      <div class="hm-val"><em>3</em></div>
+      <div class="hm-label">concept creativi</div>
+    </div>
+    <div class="hm-item">
+      <div class="hm-val"><em>1</em></div>
+      <div class="hm-label">sintesi raccomandata</div>
+    </div>
+    <div class="hm-item">
+      <div class="hm-val"><em>€50K</em></div>
+      <div class="hm-label">budget pilot</div>
+    </div>
+    <div class="hm-item">
+      <div class="hm-val"><em>Giu</em></div>
+      <div class="hm-label">go-live target</div>
+    </div>
+  </div>
+  <div class="hero-cta" id="hcta">
+    <a href="#s4" class="btn-primary">↓ Vai alla sintesi</a>
+    <a href="#s1" class="btn-outline">Esplora i concept</a>
+  </div>
+</section>
+
+<!-- ══ STRIP ══════════════════════════════════════════════════════ -->
+<div class="intro-strip">
+  <div class="strip-inner">
+    <span class="strip-item accent">FAGLIELA PAGARE</span>
+    <span class="strip-item">·</span>
+    <span class="strip-item">IL TUO EXTRA</span>
+    <span class="strip-item">·</span>
+    <span class="strip-item accent">SENZA MUOVERE UN DITO</span>
+    <span class="strip-item">·</span>
+    <span class="strip-item">LO-FI STRATEGY</span>
+    <span class="strip-item">·</span>
+    <span class="strip-item accent">MVP PILOT NAPOLI</span>
+    <span class="strip-item">·</span>
+    <span class="strip-item">NASTRO BAGAGLI</span>
+    <span class="strip-item">·</span>
+    <span class="strip-item accent">SEDIE GALLERIA</span>
+    <span class="strip-item">·</span>
+    <!-- repeat -->
+    <span class="strip-item accent">FAGLIELA PAGARE</span>
+    <span class="strip-item">·</span>
+    <span class="strip-item">IL TUO EXTRA</span>
+    <span class="strip-item">·</span>
+    <span class="strip-item accent">SENZA MUOVERE UN DITO</span>
+    <span class="strip-item">·</span>
+    <span class="strip-item">LO-FI STRATEGY</span>
+    <span class="strip-item">·</span>
+    <span class="strip-item accent">MVP PILOT NAPOLI</span>
+    <span class="strip-item">·</span>
+    <span class="strip-item">NASTRO BAGAGLI</span>
+    <span class="strip-item">·</span>
+    <span class="strip-item accent">SEDIE GALLERIA</span>
+    <span class="strip-item">·</span>
+  </div>
+</div>
+
+<!-- ══ I TRE CONCEPT ═══════════════════════════════════════════ -->
+<section class="concepts-section sec-pad" id="s1">
+  <div class="wrap">
+    <div class="sh" id="sh1">
+      <div class="sh-eye">I tre concept</div>
+      <h2 class="sh-h2">Le strade possibili.<br><em>Analizzate.</em></h2>
+      <p class="sh-note">Ogni concept è valutato per claim, meccanica fisica, forza, debolezza e layer digitale lo-fi. Clicca per espandere.</p>
+    </div>
+
+    <!-- CONCEPT 1 -->
+    <div class="concept-block" id="cb1" data-section="1">
+      <div class="concept-header" onclick="toggleConcept('c1')">
+        <span class="ch-num">01</span>
+        <div>
+          <div class="ch-title">Fagliela Pagare</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <span class="ch-tag c1">RACCOMANDATO</span>
+          <span class="ch-arrow" id="arr-c1">+</span>
+        </div>
+      </div>
+      <div class="concept-body" id="body-c1">
+        <div class="cb-inner">
+          <div>
+            <div class="cb-claim">
+              <div class="cb-claim-label">Claim principale</div>
+              <div class="claim-main" style="color:var(--coral)">
+                "Fagliela<br><em>pagare."</em>
+              </div>
+              <div class="cb-sec-title">Multisoggetto</div>
+              <div class="multisoggetto" style="--ms-color:var(--coral)">
+                <div class="ms-item" style="border-left-color:var(--coral)">
+                  <span style="color:var(--coral);font-weight:500">Valigia persa?</span>
+                  <span>Fagliela pagare!</span>
+                </div>
+                <div class="ms-item" style="border-left-color:var(--coral)">
+                  <span style="color:var(--coral);font-weight:500">Partenza slittata?</span>
+                  <span>Fagliela pagare!</span>
+                </div>
+                <div class="ms-item" style="border-left-color:var(--coral)">
+                  <span style="color:var(--coral);font-weight:500">Attesa infinita?</span>
+                  <span>Fagliela pagare!</span>
+                </div>
+              </div>
+              <p style="font-size:13px;color:var(--white60);line-height:1.7;margin-top:12px">
+                <strong>Con RimborsoalVolo hai diritto fino a €600 di rimborso!</strong>
+              </p>
+            </div>
+
+            <div class="cb-section" style="margin-top:32px">
+              <div class="cb-sec-title">Analisi del claim</div>
+              <p class="cb-text">Il doppio senso funziona perché è <strong>immediato e non forzato</strong>. Il passeggero in Fase 2 è arrabbiato con la compagnia: "Fagliela pagare" capitalizza esattamente quell'emozione, trasformandola in azione. Non consola: attiva. È il territorio creativo corretto.</p>
+            </div>
+
+            <div class="cb-section" style="margin-top:24px">
+              <div class="cb-sec-title">Forza / Debolezza</div>
+              <div class="pill-row">
+                <span class="pill ok">Emozione giusta</span>
+                <span class="pill ok">Doppio senso autentico</span>
+                <span class="pill ok">Azione immediata</span>
+                <span class="pill ko">Punchball: permessi complessi</span>
+                <span class="pill ko">Rischio gimmick senza conversione</span>
+                <span class="pill ok">Sticker nastro: perfetti</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="meccanica-box c1" style="margin-top:48px">
+              <div class="mb-label">Meccanica fisica — cosa tenere</div>
+              <p class="mb-text" style="margin-bottom:16px"><strong>✓ Sticker sul nastro bagagli</strong> — Basso costo, permesso standard d'ambiente (€3-8K), intercettano esattamente l'arrivo (Fase 2). Messaggi multisoggetto che confermano il diritto al rimborso nell'esatto momento in cui si attende la valigia.</p>
+              <p class="mb-text" style="color:rgba(248,244,239,.4)"><strong>✗ Punchball machine</strong> — Permessi complessi, presidio umano necessario, rischio che la gente la colpisca senza scansionare nulla. Da sostituire con le sedie-galleria del Concept 3A.</p>
+            </div>
+
+            <div class="cb-section" style="margin-top:24px">
+              <div class="cb-sec-title">Score di efficacia prevista</div>
+              <div class="score-row"><span class="score-name">Riconoscibilità claim</span><div class="score-track"><div class="score-fill" style="background:var(--coral)" data-pct="95"></div></div><span class="score-val">95</span></div>
+              <div class="score-row"><span class="score-name">Emozione corretta</span><div class="score-track"><div class="score-fill" style="background:var(--coral)" data-pct="98"></div></div><span class="score-val">98</span></div>
+              <div class="score-row"><span class="score-name">Attivazione Fase 2</span><div class="score-track"><div class="score-fill" style="background:var(--coral)" data-pct="88"></div></div><span class="score-val">88</span></div>
+              <div class="score-row"><span class="score-name">Potenziale virale</span><div class="score-track"><div class="score-fill" style="background:var(--coral)" data-pct="82"></div></div><span class="score-val">82</span></div>
+            </div>
+
+            <div class="lofi-box" style="margin-top:24px">
+              <div class="lofi-header"><div class="lofi-dot"></div><span class="lofi-label">Layer digitale — Lo-fi Strategy</span></div>
+              <p class="lofi-text"><strong>Video 1:</strong> Ripresa mosso da smartphone del nastro bagagli con gli sticker. Voce fuori campo tipo voice memo: <em>"ragazzi ho il volo cancellato da 3 ore e ho trovato sta roba sul nastro bagagli, non ci credo"</em>. Nessun logo in evidenza. Zero post-produzione. Pubblicato come UGC organico su TikTok e Reels.</p>
+              <p class="lofi-text" style="margin-top:10px"><strong>Video 2:</strong> Brand che risponde ai tweet/post di lamentela con "Fagliela pagare 👉 [link]". Ryanair-style. Costo: zero.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONCEPT 2 -->
+    <div class="concept-block" id="cb2" data-section="2">
+      <div class="concept-header" onclick="toggleConcept('c2')">
+        <span class="ch-num">02</span>
+        <div>
+          <div class="ch-title">Il Tuo Extra</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <span class="ch-tag c2">ESPLORATIVO</span>
+          <span class="ch-arrow" id="arr-c2">+</span>
+        </div>
+      </div>
+      <div class="concept-body" id="body-c2">
+        <div class="cb-inner">
+          <div>
+            <div class="cb-claim">
+              <div class="cb-claim-label">Il gioco tipografico</div>
+              <div class="claim-main" style="font-size:clamp(28px,3.5vw,48px)">
+                <span style="color:rgba(248,244,239,.3);text-decoration:line-through">Dis</span><em style="color:var(--gold)">agio</em><br>
+                <span style="color:rgba(248,244,239,.3);font-size:.6em">→</span>
+                <span style="color:var(--gold)"> Viaggio Extra</span>
+              </div>
+              <div class="multisoggetto" style="margin-top:20px">
+                <div class="ms-item" style="border-left-color:var(--gold)">
+                  <span style="color:rgba(248,244,239,.35);text-decoration:line-through">Dis-agio</span>
+                  <span style="color:var(--gold)">→ Viaggio Extra</span>
+                </div>
+                <div class="ms-item" style="border-left-color:var(--gold)">
+                  <span style="color:rgba(248,244,239,.35);text-decoration:line-through">Avver-sità</span>
+                  <span style="color:var(--gold)">→ Opportunità Extra</span>
+                </div>
+                <div class="ms-item" style="border-left-color:var(--gold)">
+                  <span style="color:rgba(248,244,239,.35);text-decoration:line-through">Soc-corso</span>
+                  <span style="color:var(--gold)">→ Rimborso Extra</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="cb-section" style="margin-top:24px">
+              <div class="cb-sec-title">Analisi del concept</div>
+              <p class="cb-text">Il gioco tipografico è <strong>originale e visivamente interessante</strong>, ma richiede che il passeggero stressato si fermi a decodificare un messaggio in due passaggi cognitivi. Non lo farà. La comunicazione in Fase 2 deve essere fulminea: questo concept funziona meglio in un contesto dove l'utente ha attenzione disponibile — quindi digitale, non fisico.</p>
+            </div>
+
+            <div class="cb-section" style="margin-top:24px">
+              <div class="cb-sec-title">Forza / Debolezza</div>
+              <div class="pill-row">
+                <span class="pill ok">Originalità visiva</span>
+                <span class="pill ok">Funziona bene nel digitale</span>
+                <span class="pill ko">Troppi step cognitivi per fisica</span>
+                <span class="pill ko">Biglietto finto non convince</span>
+                <span class="pill neutral">Riorientare verso social</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="meccanica-box c2" style="margin-top:48px">
+              <div class="mb-label">Meccanica fisica — valutazione</div>
+              <p class="mb-text" style="margin-bottom:16px"><strong style="color:rgba(248,244,239,.4)">✗ Macchine distributrici con bottone</strong> — Il "finto biglietto" non convince un passeggero diffidente. Rischia di confermare i pregiudizi sul servizio ("è una truffa"). Il concetto di premere un bottone è interessante ma la mechanic non chiude.</p>
+              <p class="mb-text" style="color:var(--gold)"><strong>→ Riorientare:</strong> Il gioco tipografico Disagio/Extra funziona come creative per campagne social ads e OOH classico, non come attivazione aeroportuale fisica interattiva.</p>
+            </div>
+
+            <div class="cb-section" style="margin-top:24px">
+              <div class="cb-sec-title">Score di efficacia prevista</div>
+              <div class="score-row"><span class="score-name">Riconoscibilità claim</span><div class="score-track"><div class="score-fill" style="background:var(--gold)" data-pct="72"></div></div><span class="score-val">72</span></div>
+              <div class="score-row"><span class="score-name">Emozione corretta</span><div class="score-track"><div class="score-fill" style="background:var(--gold)" data-pct="65"></div></div><span class="score-val">65</span></div>
+              <div class="score-row"><span class="score-name">Attivazione Fase 2</span><div class="score-track"><div class="score-fill" style="background:var(--gold)" data-pct="55"></div></div><span class="score-val">55</span></div>
+              <div class="score-row"><span class="score-name">Potenziale digitale</span><div class="score-track"><div class="score-fill" style="background:var(--gold)" data-pct="88"></div></div><span class="score-val">88</span></div>
+            </div>
+
+            <div class="lofi-box" style="margin-top:24px">
+              <div class="lofi-header"><div class="lofi-dot"></div><span class="lofi-label">Layer digitale — dove funziona davvero</span></div>
+              <p class="lofi-text">Il gioco tipografico Disagio→Extra è <strong>perfetto per Reels e TikTok ads</strong>: il testo che si trasforma è un formato nativo dei social. Testo bianco che cambia in testo dorato, con il suono di una notifica. Costo produzione: una mattina di Francesca al computer.</p>
+              <p class="lofi-text" style="margin-top:10px">Usarlo come layer digitale della campagna fisica, non come main concept aeroportuale.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONCEPT 3A -->
+    <div class="concept-block" id="cb3" data-section="3">
+      <div class="concept-header" onclick="toggleConcept('c3')">
+        <span class="ch-num">03</span>
+        <div>
+          <div class="ch-title">Senza Muovere un Dito — La Galleria</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <span class="ch-tag c3">MECCANICA VINCENTE</span>
+          <span class="ch-arrow" id="arr-c3">+</span>
+        </div>
+      </div>
+      <div class="concept-body" id="body-c3">
+        <div class="cb-inner">
+          <div>
+            <div class="cb-claim">
+              <div class="cb-claim-label">Il concetto: prova sociale immediata</div>
+              <div class="claim-main" style="color:var(--lime);font-size:clamp(28px,3.5vw,48px)">
+                "Le sedie raccontano<br><em>le storie."</em>
+              </div>
+              <div class="multisoggetto" style="margin-top:20px">
+                <div class="ms-item" style="border-left-color:var(--lime)">
+                  <div>
+                    <strong style="color:var(--lime)">Anna</strong>
+                    <span style="color:var(--white60)"> · 5h di ritardo e non sentirle · </span>
+                    <strong style="color:var(--white)">€400 recuperati</strong>
+                  </div>
+                </div>
+                <div class="ms-item" style="border-left-color:var(--lime)">
+                  <div>
+                    <strong style="color:var(--lime)">Paolo</strong>
+                    <span style="color:var(--white60)"> · Valigie smarrite, che torneranno con qualcos'altro · </span>
+                    <strong style="color:var(--white)">€300 recuperati</strong>
+                  </div>
+                </div>
+                <div class="ms-item" style="border-left-color:var(--lime)">
+                  <div>
+                    <strong style="color:var(--lime)">Massimo</strong>
+                    <span style="color:var(--white60)"> · Volo slittato? Che grande occasione · </span>
+                    <strong style="color:var(--white)">€600 recuperati</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="cb-section" style="margin-top:24px">
+              <div class="cb-sec-title">Perché la meccanica funziona</div>
+              <p class="cb-text">Il passeggero in Fase 2 è seduto nell'area di attesa. Legge tutto quello che lo circonda. La sedia accanto a lui è Anna. La sedia davanti è Paolo. <strong>La prova sociale è immediata, fisica, impossibile da ignorare.</strong> Non devi convincere: mostri che altri ce l'hanno fatta. È il trigger di conversione più potente per un servizio diffidente.</p>
+            </div>
+
+            <div class="cb-section" style="margin-top:24px">
+              <div class="cb-sec-title">Forza / Debolezza</div>
+              <div class="pill-row">
+                <span class="pill ok">Meccanica fisica eccellente</span>
+                <span class="pill ok">Prova sociale immediata</span>
+                <span class="pill ok">Nessun permesso speciale</span>
+                <span class="pill ok">Costo produzione bassissimo</span>
+                <span class="pill ko">Claim "senza muovere un dito" troppo generico</span>
+                <span class="pill neutral">Risolvibile con Concept 1</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="meccanica-box c3" style="margin-top:48px">
+              <div class="mb-label">Meccanica fisica — la più forte di tutte e tre</div>
+              <p class="mb-text" style="margin-bottom:16px"><strong>Adesivi sul poggiaschiena di ogni sedia</strong>: foto stock di persona sorridente + nome + dato del disservizio + importo recuperato. L'area d'attesa diventa una galleria di storie di rivincita. Produzione: stampa adesivi. Permesso: non necessario (spazio commerciale concessionale). Timeline: <strong>2 settimane</strong>.</p>
+              <p class="mb-text" style="color:var(--lime)"><strong>Il punto chiave:</strong> il passeggero che aspetta il volo cancellato si guarda intorno ed è circondato da persone che hanno già vinto contro la compagnia aerea. La narrativa fa tutto il lavoro.</p>
+            </div>
+
+            <div class="cb-section" style="margin-top:24px">
+              <div class="cb-sec-title">Score di efficacia prevista</div>
+              <div class="score-row"><span class="score-name">Prova sociale</span><div class="score-track"><div class="score-fill" style="background:var(--lime)" data-pct="98"></div></div><span class="score-val">98</span></div>
+              <div class="score-row"><span class="score-name">Costo-efficacia</span><div class="score-track"><div class="score-fill" style="background:var(--lime)" data-pct="96"></div></div><span class="score-val">96</span></div>
+              <div class="score-row"><span class="score-name">Attivazione Fase 2</span><div class="score-track"><div class="score-fill" style="background:var(--lime)" data-pct="92"></div></div><span class="score-val">92</span></div>
+              <div class="score-row"><span class="score-name">Forza claim</span><div class="score-track"><div class="score-fill" style="background:var(--lime)" data-pct="62"></div></div><span class="score-val">62</span></div>
+            </div>
+
+            <div class="lofi-box" style="margin-top:24px">
+              <div class="lofi-header"><div class="lofi-dot"></div><span class="lofi-label">Layer digitale — il più potente</span></div>
+              <p class="lofi-text">Video mosso da smartphone: un passeggero "trova" le sedie, si siede accanto ad Anna, legge ad alta voce la storia, poi dice <em>"aspetta ma posso farlo anche io?"</em>. Nessun logo. Nessun attore. Un passeggero vero, o qualcuno che sembra tale. <strong>Questo è il video che viene salvato e condiviso.</strong></p>
+              <p class="lofi-text" style="margin-top:10px">Aggiunge il dubbio CeraVe-style: è vero o è una campagna? Quel dubbio è il motore della viralità.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SYNTHESIS ═════════════════════════════════════════════════ -->
+<section class="synthesis-section" id="s4">
+  <div class="syn-bg"></div>
+  <div class="wrap" style="position:relative;z-index:2">
+    <div class="syn-eyebrow">La raccomandazione — Ribrain</div>
+    <h2 class="syn-title">La fusione<br><em>vincente.</em></h2>
+
+    <div class="syn-grid">
+      <div class="syn-card" id="sc1">
+        <div class="syn-card-num">Claim — da concept 01</div>
+        <div class="syn-card-title">"Fagliela Pagare"</div>
+        <p class="syn-card-text">Il claim forte, doppio senso autentico, emozione corretta. Lavora sulla rabbia del passeggero e la trasforma in azione. Nessun competitor lo usa. Il territorio è libero.</p>
+      </div>
+      <div class="syn-card" id="sc2">
+        <div class="syn-card-num">Meccanica fisica — da concept 03A</div>
+        <div class="syn-card-title">Le sedie-galleria di storie reali</div>
+        <p class="syn-card-text">La meccanica fisica più efficace: prova sociale immediata, costo bassissimo, nessun permesso speciale. Il passeggero è circondato da persone che hanno già vinto.</p>
+      </div>
+      <div class="syn-card" id="sc3">
+        <div class="syn-card-num">Supporto — nastro bagagli</div>
+        <div class="syn-card-title">Sticker multisoggetto</div>
+        <p class="syn-card-text">Il nastro bagagli è il momento esatto dell'arrivo (Fase 2 pura). Gli sticker "Fagliela pagare" intercettano il passeggero nel picco di ricettività, rinforzando il messaggio delle sedie.</p>
+      </div>
+      <div class="syn-card" id="sc4">
+        <div class="syn-card-num">Layer digitale</div>
+        <div class="syn-card-title">Video lo-fi UGC</div>
+        <p class="syn-card-text">Tre video girati con smartphone il giorno dell'installazione. Nessuna produzione professionale. Pubblicati come scoperta casuale. Amplificazione zero-budget.</p>
+      </div>
+    </div>
+
+    <div class="syn-claim" id="synClaim">
+      <div class="syn-claim-eye">Come si legge insieme</div>
+      <div class="syn-claim-text">
+        Le sedie non dicono "senza muovere un dito".<br>
+        Le sedie dicono <em>"Fagliela pagare —<br>Anna l'ha fatto. Ha preso €400."</em>
+      </div>
+      <div class="syn-example">
+        <div class="syn-ex-item">Sedia 1: <strong>Anna · 5h di ritardo e non sentirle · €400 recuperati con RimborsoalVolo</strong></div>
+        <div class="syn-ex-item">Sedia 2: <strong>Paolo · Valigie smarrite. Tornate con qualcosa in più · €300 recuperati</strong></div>
+        <div class="syn-ex-item">Sedia 3: <strong>Massimo · Volo cancellato? Quella volta che gli ho fatto pagare · €600 recuperati</strong></div>
+        <div class="syn-ex-item">Nastro bagagli: <strong>Valigia persa? Fagliela pagare. → rimborsoalvolo.it</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ LO-FI STRATEGY ════════════════════════════════════════════ -->
+<section class="lofi-section" id="s5">
+  <div class="wrap">
+    <div class="lofi-title-wrap" id="lofiTitle">
+      <div class="sh-eye">Layer digitale — integrato in tutti i concept</div>
+      <h2 class="sh-h2" style="color:var(--white)">Lo-fi Marketing.<br><em>Zero budget, massima viralità.</em></h2>
+      <p class="sh-note">La strategia che trasforma le installazioni fisiche in contenuto organico. Quattro mosse da attivare in sequenza.</p>
+    </div>
+
+    <div class="lofi-cards">
+      <div class="lofi-card" id="lfc1" style="border-top-color:var(--coral)">
+        <div class="lfc-icon">📱</div>
+        <div class="lfc-num" style="color:var(--coral)">01</div>
+        <div class="lfc-title">Il video della scoperta</div>
+        <p class="lfc-text">Il giorno dell'installazione, qualcuno con uno smartphone gira un video mosso come se stesse <strong>trovando casualmente</strong> le sedie o gli sticker. Voice memo, qualità da Stories. Nessun logo prominente. La domanda è: è vero o è una campagna?</p>
+        <div class="lfc-ref">Benchmark: CeraVe Michael Cera</div>
+      </div>
+      <div class="lofi-card" id="lfc2" style="border-top-color:var(--gold)">
+        <div class="lfc-icon">✈️</div>
+        <div class="lfc-num" style="color:var(--gold)">02</div>
+        <div class="lfc-title">Brand reply in-thread</div>
+        <p class="lfc-text">Ogni volta che qualcuno su X, TikTok o Instagram si lamenta di un volo cancellato o ritardato, RimborsoalVolo risponde con "Fagliela pagare 👉 [link]". Tono sfacciato, diretto, quasi sfrontato. <strong>Il brand entra nel momento esatto del disagio.</strong></p>
+        <div class="lfc-ref">Benchmark: Ryanair social strategy</div>
+      </div>
+      <div class="lofi-card" id="lfc3" style="border-top-color:var(--lime)">
+        <div class="lfc-icon">🎭</div>
+        <div class="lfc-num" style="color:var(--lime)">03</div>
+        <div class="lfc-title">Il formato Disagio→Extra</div>
+        <p class="lfc-text">Il gioco tipografico del Concept 2 diventa un Reel nativo: testo che si trasforma, con suono di notifica. <strong>Perfetto per ads su Meta e TikTok</strong> con targeting su chi ha cercato voli nelle ultime 48h. Produzione: mezza giornata.</p>
+        <div class="lfc-ref">Benchmark: Duolingo Duo mascot</div>
+      </div>
+      <div class="lofi-card" id="lfc4" style="border-top-color:rgba(248,244,239,.2)">
+        <div class="lfc-icon">🔥</div>
+        <div class="lfc-num" style="color:var(--white60)">04</div>
+        <div class="lfc-title">Il twist inaspettato</div>
+        <p class="lfc-text">Un passeggero si lamenta publicamente del disservizio. RimborsoalVolo non risponde al profilo: <strong>invia fisicamente al suo aeroporto una "Fagliela Pagare" card</strong> tramite staff. Il passeggero la riprende sorpreso. North Face style. Viralità garantita.</p>
+        <div class="lfc-ref">Benchmark: The North Face elicottero</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MVP ════════════════════════════════════════════════════════ -->
+<section class="mvp-section" id="s6">
+  <div class="wrap">
+    <div class="mvp-wrap" id="mvpWrap">
+      <div class="sh-eye">MVP — pilot Napoli · giugno 2026</div>
+      <h2 class="sh-h2">Cosa si fa<br><em>subito.</em></h2>
+      <p class="sh-note">Quattro azioni concrete, sequenziali, tutte nei €50K di budget. Nessuna richiede produzione complessa.</p>
+
+      <div class="mvp-grid" style="margin-top:56px">
+        <div class="mvp-card">
+          <div class="mvp-timeline">Settimana 1-2 · Costo: €3-8K</div>
+          <div class="mvp-title">Sticker nastro bagagli · Napoli NAP</div>
+          <p class="mvp-text">Tre soggetti "Fagliela pagare" + multisoggetto disservizi. Permesso standard d'ambiente con GESAC (adv@gesac.it). Produzione: stampa industriale adesivi. Timeline: 2 settimane dall'accordo.</p>
+          <span class="mvp-cost">€3.000 – €8.000</span>
+        </div>
+        <div class="mvp-card">
+          <div class="mvp-timeline">Settimana 2-3 · Costo: €2-5K</div>
+          <div class="mvp-title">Sedie-galleria area arrivi · Napoli NAP</div>
+          <p class="mvp-text">16-24 sedie con adesivi personalizzati. Anna, Paolo, Massimo + altri. Foto stock sorridente + nome + disservizio + importo recuperato. Nessun permesso speciale: spazio commerciale. Timeline: 2 settimane.</p>
+          <span class="mvp-cost">€2.000 – €5.000</span>
+        </div>
+        <div class="mvp-card">
+          <div class="mvp-timeline">Giorno dell'installazione · Costo: €0</div>
+          <div class="mvp-title">3 video lo-fi da smartphone</div>
+          <p class="mvp-text">Girati da una persona con iPhone il giorno dell'installazione. Qualità da Stories: mosso, spontaneo, autentico. Pubblicati come UGC su TikTok e Reels di RimborsoalVolo. Zero post-produzione. Zero budget oltre il tempo.</p>
+          <span class="mvp-cost">€0 — solo tempo</span>
+        </div>
+        <div class="mvp-card">
+          <div class="mvp-timeline">Da subito · Costo: €0</div>
+          <div class="mvp-title">Attivazione brand reply social</div>
+          <p class="mvp-text">Social media manager risponde ai post di lamentela voli con "Fagliela pagare" + link. Comincia oggi, ancora prima dell'installazione fisica. Misurabile dal giorno 1. Può generare traffico organico in attesa del go-live fisico.</p>
+          <span class="mvp-cost">€0 — inizia oggi</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FINAL CTA ══════════════════════════════════════════════════ -->
+<section class="final-cta">
+  <div class="fct-bg"></div>
+  <div class="fct-inner" id="fctInner">
+    <div class="fct-label">Ribrain Studio · RimborsoalVolo · Aprile 2026</div>
+    <h2 class="fct-title">Pronti a<br><em>fargliela pagare?</em></h2>
+    <div class="fct-btns">
+      <a href="m0.html" class="fct-btn-main">← Torna al cruscotto strategico</a>
+      <a href="brief-rimborsoalovolo-v2.docx" class="fct-btn-sec">📄 Scarica brief v2</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SCRIPTS ══════════════════════════════════════════════════ -->
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+// ── cursor ─────────────────────────────────────────────────────
+var cur=document.getElementById('cur');
+var curR=document.getElementById('curR');
+var mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;curR.style.left=rx+'px';curR.style.top=ry+'px';requestAnimationFrame(loop);})();
+
+// ── progress ───────────────────────────────────────────────────
+var prog=document.getElementById('prog');
+window.addEventListener('scroll',function(){
+  prog.style.width=(window.scrollY/(document.documentElement.scrollHeight-window.innerHeight)*100)+'%';
+});
+
+// ── accordion ─────────────────────────────────────────────────
+function toggleConcept(id){
+  var body=document.getElementById('body-'+id);
+  var header=body.previousElementSibling;
+  var arrow=document.getElementById('arr-'+id);
+  var isOpen=body.classList.contains('open');
+  ['c1','c2','c3'].forEach(function(cid){
+    if(cid!==id){
+      var b=document.getElementById('body-'+cid);
+      var h=b.previousElementSibling;
+      var a=document.getElementById('arr-'+cid);
+      b.classList.remove('open');
+      h.classList.remove('open');
+      if(a) a.textContent='+';
+    }
+  });
+  body.classList.toggle('open',!isOpen);
+  header.classList.toggle('open',!isOpen);
+  arrow.textContent=isOpen?'+':'×';
+  if(!isOpen){
+    setTimeout(function(){
+      document.querySelectorAll('.score-fill').forEach(function(el){
+        if(parseFloat(getComputedStyle(el).width)<5){
+          el.style.width=el.dataset.pct+'%';
+        }
+      });
+    },100);
+  }
+}
+
+// Apri il primo concept di default
+window.addEventListener('load',function(){
+  toggleConcept('c1');
+});
+
+// ── hero animations ────────────────────────────────────────────
+window.addEventListener('load',function(){
+  var tl=gsap.timeline({delay:.1});
+  tl.fromTo('#he',{opacity:0,y:16},{opacity:1,y:0,duration:.6,ease:'power3.out'})
+    .fromTo('.word',{opacity:0,y:'100%'},{opacity:1,y:'0%',duration:.9,stagger:.12,ease:'power3.out'},'-=.2')
+    .fromTo('#hs',{opacity:0,y:16},{opacity:1,y:0,duration:.7,ease:'power3.out'},'-=.3')
+    .fromTo('#hm',{opacity:0,y:16},{opacity:1,y:0,duration:.7,ease:'power3.out'},'-=.2')
+    .fromTo('#hcta',{opacity:0,y:12},{opacity:1,y:0,duration:.6,ease:'power3.out'},'-=.2');
+
+  // score bars al click
+  setTimeout(function(){
+    document.querySelectorAll('.score-fill').forEach(function(el){
+      if(parseFloat(getComputedStyle(el).width)<5){
+        el.style.width=el.dataset.pct+'%';
+      }
+    });
+  },1500);
+
+  // Sezione headers
+  gsap.fromTo('#sh1',{opacity:0,y:24},{opacity:1,y:0,duration:.8,ease:'power3.out',
+    scrollTrigger:{trigger:'#sh1',start:'top 80%',once:true}});
+
+  // Concept blocks
+  gsap.fromTo('.concept-block',{opacity:0,y:20},{opacity:1,y:0,duration:.6,stagger:.08,ease:'power3.out',
+    scrollTrigger:{trigger:'#s1',start:'top 75%',once:true}});
+
+  // Synthesis cards
+  gsap.fromTo('[id^="sc"]',{opacity:0,y:20},{opacity:1,y:0,duration:.65,stagger:.1,ease:'power3.out',
+    scrollTrigger:{trigger:'#s4',start:'top 78%',once:true}});
+  gsap.fromTo('#synClaim',{opacity:0,y:24},{opacity:1,y:0,duration:.8,ease:'power3.out',
+    scrollTrigger:{trigger:'#synClaim',start:'top 82%',once:true}});
+
+  // Lo-fi section
+  gsap.fromTo('#lofiTitle',{opacity:0,y:24},{opacity:1,y:0,duration:.8,ease:'power3.out',
+    scrollTrigger:{trigger:'#s5',start:'top 78%',once:true}});
+  gsap.fromTo('[id^="lfc"]',{opacity:0,y:20},{opacity:1,y:0,duration:.6,stagger:.08,ease:'power3.out',
+    scrollTrigger:{trigger:'#s5',start:'top 72%',once:true}});
+
+  // MVP
+  gsap.fromTo('#mvpWrap',{opacity:0,y:24},{opacity:1,y:0,duration:.8,ease:'power3.out',
+    scrollTrigger:{trigger:'#s6',start:'top 78%',once:true}});
+
+  // Final CTA
+  gsap.fromTo('#fctInner',{opacity:0,y:20},{opacity:1,y:0,duration:.8,ease:'power3.out',
+    scrollTrigger:{trigger:'.final-cta',start:'top 80%',once:true}});
+
+  // Fallbacks
+  setTimeout(function(){
+    ['#sh1','#lofiTitle','#mvpWrap','#synClaim','#fctInner'].forEach(function(sel){
+      var el=document.querySelector(sel);
+      if(el&&parseFloat(getComputedStyle(el).opacity)<0.5){el.style.opacity='1';el.style.transform='none';}
+    });
+    document.querySelectorAll('.concept-block,.syn-card,[id^="lfc"]').forEach(function(el){
+      if(parseFloat(getComputedStyle(el).opacity)<0.5){el.style.opacity='1';el.style.transform='none';}
+    });
+  },3000);
+});
+
+// ── dot nav ────────────────────────────────────────────────────
+var sections=['s0','s1','s4','s5','s6'];
+var dots=document.querySelectorAll('.dot');
+var dotMap={'s0':0,'s1':1,'s4':2,'s5':3,'s6':4};
+
+function updateDots(){
+  var scrollY=window.scrollY+window.innerHeight/2;
+  var active=0;
+  sections.forEach(function(id,i){
+    var el=document.getElementById(id);
+    if(el&&el.getBoundingClientRect().top+window.scrollY<=scrollY){active=i;}
+  });
+  dots.forEach(function(d,i){d.classList.toggle('active',i===active);});
+}
+
+window.addEventListener('scroll',updateDots);
+
+dots.forEach(function(d,i){
+  d.addEventListener('click',function(){
+    var sec=document.getElementById(sections[i]);
+    if(sec) sec.scrollIntoView({behavior:'smooth'});
+  });
+});
+
+// smooth scroll per ancore
+document.querySelectorAll('a[href^="#"]').forEach(function(a){
+  a.addEventListener('click',function(e){
+    e.preventDefault();
+    var target=document.querySelector(this.getAttribute('href'));
+    if(target) target.scrollIntoView({behavior:'smooth'});
+  });
+});
+</script>
+</body>
+</html>
