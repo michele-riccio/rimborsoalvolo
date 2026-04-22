@@ -12,21 +12,21 @@
 <style>
 /* ── VARS — palette totalmente diversa: navy profondo + lime elettrico ── */
 :root{
-  --navy:    #060E1C;
-  --navy2:   #0B1628;
-  --navy3:   #0F1F3A;
-  --navy4:   #162847;
-  --lime:    #C8FF47;
-  --lime2:   rgba(200,255,71,.12);
-  --lime3:   rgba(200,255,71,.06);
-  --coral:   #FF4F3B;
-  --gold:    #FFB84D;
-  --white:   #F8F4EF;
-  --white60: rgba(248,244,239,.6);
-  --white30: rgba(248,244,239,.3);
-  --white10: rgba(248,244,239,.1);
-  --white06: rgba(248,244,239,.06);
-  --rule:    rgba(248,244,239,.08);
+  --navy:    #050505;
+  --navy2:   #0D0D0D;
+  --navy3:   #141414;
+  --navy4:   #1C1C1C;
+  --lime:    #46FFDD;
+  --lime2:   rgba(70,255,221,.12);
+  --lime3:   rgba(70,255,221,.06);
+  --coral:   #F76143;
+  --gold:    #DE2BD9;
+  --white:   #FFFFFF;
+  --white60: rgba(255,255,255,.6);
+  --white30: rgba(255,255,255,.3);
+  --white10: rgba(255,255,255,.1);
+  --white06: rgba(255,255,255,.06);
+  --rule:    rgba(255,255,255,.08);
   --f-disp:  'Cormorant Garamond',serif;
   --f-mono:  'DM Mono',monospace;
   --f-body:  'DM Sans',sans-serif;
@@ -48,11 +48,11 @@ body::before{
 }
 
 /* ── PROGRESS ── */
-#prog{position:fixed;top:0;left:0;height:2px;background:var(--lime);z-index:9999;width:0%}
+#prog{position:fixed;top:0;left:0;height:2px;background:#46FFDD;z-index:9999;width:0%}
 
 /* ── CURSOR ── */
-#cur{position:fixed;width:5px;height:5px;background:var(--lime);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%)}
-#curR{position:fixed;width:28px;height:28px;border:1px solid rgba(200,255,71,.3);border-radius:50%;pointer-events:none;z-index:9997;transform:translate(-50%,-50%);transition:opacity .3s}
+#cur{position:fixed;width:5px;height:5px;background:#46FFDD;border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%)}
+#curR{position:fixed;width:28px;height:28px;border:1px solid rgba(70,255,221,.3);border-radius:50%;pointer-events:none;z-index:9997;transform:translate(-50%,-50%);transition:opacity .3s}
 
 /* ── TOPBAR ── */
 .topbar{
@@ -69,7 +69,7 @@ body::before{
 .tb-label{font-family:var(--f-mono);font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--white30)}
 .tb-badge{
   font-family:var(--f-mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--navy);background:var(--lime);padding:3px 10px;font-weight:500;
+  color:var(--navy);background:#46FFDD;padding:3px 10px;font-weight:500;
 }
 .tb-right{display:flex;align-items:center;gap:8px}
 .tb-back{
@@ -88,7 +88,7 @@ body::before{
   width:5px;height:5px;border-radius:50%;background:var(--white10);
   cursor:pointer;transition:all .3s;
 }
-.dot.active{background:var(--lime);transform:scale(1.4)}
+.dot.active{background:#46FFDD;transform:scale(1.4)}
 .dot:hover{background:var(--white30)}
 
 /* ── HERO ── */
@@ -99,14 +99,14 @@ body::before{
 .hero-grid{
   position:absolute;inset:0;
   background-image:
-    linear-gradient(rgba(248,244,239,.03) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(248,244,239,.03) 1px,transparent 1px);
+    linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
   background-size:80px 80px;
 }
 .hero-glow{
   position:absolute;top:-30%;left:-20%;
   width:80vw;height:80vh;
-  background:radial-gradient(ellipse,rgba(200,255,71,.07) 0%,transparent 70%);
+  background:radial-gradient(ellipse,rgba(70,255,221,.07) 0%,transparent 70%);
   pointer-events:none;
 }
 .hero-eyebrow{
@@ -139,7 +139,7 @@ body::before{
 }
 .btn-primary{
   display:inline-flex;align-items:center;gap:10px;
-  padding:14px 32px;background:var(--lime);color:var(--navy);
+  padding:14px 32px;background:#46FFDD;color:var(--navy);
   font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;
   text-decoration:none;cursor:pointer;border:none;transition:all .3s var(--ease);
 }
@@ -204,7 +204,7 @@ body::before{
 }
 .ch-tag.c1{background:var(--coral)}
 .ch-tag.c2{background:var(--gold)}
-.ch-tag.c3{background:var(--lime)}
+.ch-tag.c3{background:#46FFDD}
 .ch-arrow{
   font-size:18px;color:var(--white30);transition:transform .4s var(--ease);margin-left:16px;
 }
@@ -250,7 +250,7 @@ body::before{
   font-family:var(--f-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
   padding:5px 12px;
 }
-.pill.ok{background:rgba(200,255,71,.12);color:var(--lime)}
+.pill.ok{background:rgba(70,255,221,.12);color:var(--lime)}
 .pill.ko{background:rgba(255,79,59,.1);color:var(--coral)}
 .pill.neutral{background:var(--white06);color:var(--white60)}
 
@@ -267,12 +267,12 @@ body::before{
 
 /* lo-fi box */
 .lofi-box{
-  background:rgba(200,255,71,.05);
-  border:1px solid rgba(200,255,71,.15);
+  background:rgba(70,255,221,.05);
+  border:1px solid rgba(70,255,221,.15);
   padding:28px 32px;margin-top:24px;
 }
 .lofi-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
-.lofi-dot{width:8px;height:8px;border-radius:50%;background:var(--lime);flex-shrink:0}
+.lofi-dot{width:8px;height:8px;border-radius:50%;background:#46FFDD;flex-shrink:0}
 .lofi-label{font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--lime)}
 .lofi-text{font-size:13px;color:var(--white60);line-height:1.7}
 .lofi-text strong{color:var(--lime);font-weight:500}
@@ -286,7 +286,7 @@ body::before{
 
 /* ── SYNTHESIS ── */
 .synthesis-section{
-  background:var(--lime);padding:100px 0;
+  background:#006BFF;padding:100px 0;
   position:relative;overflow:hidden;
 }
 .syn-bg{
@@ -296,7 +296,7 @@ body::before{
     linear-gradient(90deg,rgba(6,14,28,.06) 1px,transparent 1px);
   background-size:60px 60px;
 }
-.syn-eyebrow{
+.syn-eyebrow{color:rgba(255,255,255,.55);
   font-family:var(--f-mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;
   color:rgba(6,14,28,.5);margin-bottom:16px;
 }
@@ -314,8 +314,8 @@ body::before{
   font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
   color:rgba(6,14,28,.4);margin-bottom:20px;
 }
-.syn-card-title{font-size:20px;font-weight:600;color:var(--navy);margin-bottom:12px}
-.syn-card-text{font-size:13px;color:rgba(6,14,28,.65);line-height:1.7}
+.syn-card-title{font-size:20px;font-weight:600;color:#fff;margin-bottom:12px}
+.syn-card-text{font-size:13px;color:rgba(255,255,255,.7);line-height:1.7}
 .syn-claim{
   background:var(--navy);padding:48px 56px;
   display:flex;flex-direction:column;gap:20px;
@@ -375,8 +375,8 @@ body::before{
 }
 .mvp-card:nth-child(1)::before{background:var(--coral)}
 .mvp-card:nth-child(2)::before{background:var(--gold)}
-.mvp-card:nth-child(3)::before{background:var(--lime)}
-.mvp-card:nth-child(4)::before{background:rgba(248,244,239,.2)}
+.mvp-card:nth-child(3)::before{background:#46FFDD}
+.mvp-card:nth-child(4)::before{background:rgba(255,255,255,.2)}
 .mvp-timeline{
   font-family:var(--f-mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
   color:var(--white30);margin-bottom:16px;
@@ -386,12 +386,12 @@ body::before{
 .mvp-cost{
   display:inline-block;margin-top:16px;
   font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--lime);padding:4px 10px;border:1px solid rgba(200,255,71,.3);
+  color:var(--lime);padding:4px 10px;border:1px solid rgba(70,255,221,.3);
 }
 
 /* ── FINAL CTA ── */
 .final-cta{
-  background:var(--lime);padding:80px 0;text-align:center;
+  background:#46FFDD;padding:80px 0;text-align:center;
   position:relative;overflow:hidden;
 }
 .fct-bg{
@@ -437,6 +437,101 @@ body::before{
   .lofi-cards{grid-template-columns:1fr}
   .hero{padding:80px 24px 60px}
 }
+
+/* ── CEO VISUAL SUMMARY ────────────────────────────── */
+.ceo-summary{
+  background:rgba(0,0,0,.25);
+  padding:72px 56px;
+  margin-top:4px;
+  opacity:0;
+}
+.cs-eyebrow{
+  font-family:var(--f-mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(255,255,255,.4);margin-bottom:12px;
+}
+.cs-title{
+  font-family:var(--f-disp);font-size:clamp(28px,3.5vw,44px);font-weight:300;
+  color:#fff;line-height:1.1;margin-bottom:48px;
+}
+.csf-flow,.cs-flow{
+  display:flex;align-items:flex-start;gap:0;
+  overflow-x:auto;padding-bottom:16px;
+  scrollbar-width:none;
+}
+.cs-flow::-webkit-scrollbar{display:none}
+.csf-step{
+  background:rgba(255,255,255,.06);
+  border-top:2px solid rgba(70,255,221,.4);
+  padding:28px 22px;min-width:160px;flex-shrink:0;
+  opacity:0;
+}
+.csf-icon{font-size:24px;margin-bottom:10px}
+.csf-num{
+  font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;
+  color:var(--lime);margin-bottom:6px;
+}
+.csf-label{
+  font-size:13px;font-weight:600;color:#fff;margin-bottom:8px;
+}
+.csf-text{font-size:11px;color:rgba(255,255,255,.55);line-height:1.6}
+.csf-text strong{color:var(--lime)}
+.csf-arrow{
+  font-size:20px;color:rgba(255,255,255,.2);
+  padding:40px 4px 0;flex-shrink:0;align-self:flex-start;
+}
+.cs-costs{
+  display:grid;grid-template-columns:repeat(6,1fr);
+  gap:2px;margin-top:32px;
+}
+.csc-item{
+  padding:18px 16px;background:rgba(255,255,255,.04);
+}
+.csc-item.highlight{background:rgba(70,255,221,.1);border-top:2px solid var(--lime)}
+.csc-label{font-family:var(--f-mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:6px}
+.csc-val{font-family:var(--f-mono);font-size:14px;font-weight:500;color:#fff}
+.csc-item.highlight .csc-val{color:var(--lime)}
+@media(max-width:900px){
+  .cs-costs{grid-template-columns:repeat(3,1fr)}
+  .ceo-summary{padding:48px 24px}
+}
+@media(max-width:600px){
+  .cs-costs{grid-template-columns:1fr 1fr}
+}
+
+
+/* ── BENCHMARK GRID ─────────────────────────────── */
+.bench-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:56px}
+.bench-card{
+  cursor:pointer;transition:transform .3s var(--ease);
+  background:var(--navy2);opacity:0;
+}
+.bench-card:hover{transform:translateY(-4px)}
+.bc-thumb{
+  position:relative;padding:40px 28px 28px;
+  min-height:200px;display:flex;flex-direction:column;
+  justify-content:flex-end;overflow:hidden;
+}
+.bc-play{
+  position:absolute;top:16px;right:16px;
+  width:36px;height:36px;background:rgba(255,255,255,.15);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:14px;color:#fff;
+}
+.bc-year{
+  position:absolute;top:16px;left:16px;
+  font-family:var(--f-mono);font-size:9px;letter-spacing:.12em;
+  text-transform:uppercase;color:rgba(255,255,255,.4);
+}
+.bc-brand{font-size:11px;font-weight:600;color:rgba(255,255,255,.5);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+.bc-campaign{font-family:var(--f-disp);font-size:22px;font-weight:300;color:#fff;line-height:1.1}
+.bc-info{padding:24px 28px 28px}
+.bc-tag{font-family:var(--f-mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--lime);margin-bottom:12px}
+.bc-desc{font-size:12px;color:rgba(255,255,255,.55);line-height:1.7;margin-bottom:16px}
+.bc-cta{font-family:var(--f-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);padding-top:12px;border-top:1px solid rgba(255,255,255,.06)}
+.bench-card:hover .bc-cta{color:var(--lime)}
+@media(max-width:1000px){.bench-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.bench-grid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -473,7 +568,7 @@ body::before{
 <section class="hero" id="s0">
   <div class="hero-grid"></div>
   <div class="hero-glow"></div>
-  <div class="hero-eyebrow" id="he">Ribrain Studio · RimborsoalVolo · Aprile 2026</div>
+  <div class="hero-eyebrow" id="he">Campagna Brand Awareness · RimborsoalVolo · Aprile 2026</div>
   <h1 class="hero-title" id="ht">
     <span class="line"><span class="word">Le idee</span></span>
     <span class="line"><span class="word"><em>creative.</em></span></span>
@@ -544,86 +639,66 @@ body::before{
     <div class="sh" id="sh1">
       <div class="sh-eye">I tre concept</div>
       <h2 class="sh-h2">Le strade possibili.<br><em>Analizzate.</em></h2>
-      <p class="sh-note">Ogni concept è valutato per claim, meccanica fisica, forza, debolezza e layer digitale lo-fi. Clicca per espandere.</p>
+      <p class="sh-note">Tre strade diverse. Tutte partono dalla stessa verità: il passeggero ha già il problema. Quello che manca è qualcuno che glielo dice nel momento giusto.</p>
     </div>
 
     <!-- CONCEPT 1 -->
-    <div class="concept-block" id="cb1" data-section="1">
+    
+    <!-- CONCEPT 1 -->
+    <div class="concept-block" id="cb1">
       <div class="concept-header" onclick="toggleConcept('c1')">
         <span class="ch-num">01</span>
         <div>
           <div class="ch-title">Fagliela Pagare</div>
+          <div style="font-size:12px;color:var(--white30);margin-top:4px;font-family:var(--f-mono)">La rabbia diventa rimborso</div>
         </div>
         <div style="display:flex;align-items:center;gap:12px">
-          <span class="ch-tag c1">RACCOMANDATO</span>
+          <span class="ch-tag c1">CLAIM FORTE</span>
           <span class="ch-arrow" id="arr-c1">+</span>
         </div>
       </div>
       <div class="concept-body" id="body-c1">
         <div class="cb-inner">
           <div>
-            <div class="cb-claim">
-              <div class="cb-claim-label">Claim principale</div>
+            <div class="cb-claim" style="margin-top:48px">
+              <div class="cb-claim-label">Il claim</div>
               <div class="claim-main" style="color:var(--coral)">
                 "Fagliela<br><em>pagare."</em>
               </div>
-              <div class="cb-sec-title">Multisoggetto</div>
-              <div class="multisoggetto" style="--ms-color:var(--coral)">
+              <div class="cb-sec-title" style="margin-top:28px">Come si declina</div>
+              <div class="multisoggetto">
                 <div class="ms-item" style="border-left-color:var(--coral)">
-                  <span style="color:var(--coral);font-weight:500">Valigia persa?</span>
-                  <span>Fagliela pagare!</span>
+                  <span style="color:var(--coral);font-weight:600">Valigia persa?</span>
+                  <span>Fagliela pagare.</span>
                 </div>
                 <div class="ms-item" style="border-left-color:var(--coral)">
-                  <span style="color:var(--coral);font-weight:500">Partenza slittata?</span>
-                  <span>Fagliela pagare!</span>
+                  <span style="color:var(--coral);font-weight:600">Partenza slittata?</span>
+                  <span>Fagliela pagare.</span>
                 </div>
                 <div class="ms-item" style="border-left-color:var(--coral)">
-                  <span style="color:var(--coral);font-weight:500">Attesa infinita?</span>
-                  <span>Fagliela pagare!</span>
+                  <span style="color:var(--coral);font-weight:600">Attesa infinita?</span>
+                  <span>Fagliela pagare.</span>
                 </div>
               </div>
-              <p style="font-size:13px;color:var(--white60);line-height:1.7;margin-top:12px">
-                <strong>Con RimborsoalVolo hai diritto fino a €600 di rimborso!</strong>
-              </p>
-            </div>
-
-            <div class="cb-section" style="margin-top:32px">
-              <div class="cb-sec-title">Analisi del claim</div>
-              <p class="cb-text">Il doppio senso funziona perché è <strong>immediato e non forzato</strong>. Il passeggero in Fase 2 è arrabbiato con la compagnia: "Fagliela pagare" capitalizza esattamente quell'emozione, trasformandola in azione. Non consola: attiva. È il territorio creativo corretto.</p>
-            </div>
-
-            <div class="cb-section" style="margin-top:24px">
-              <div class="cb-sec-title">Forza / Debolezza</div>
-              <div class="pill-row">
-                <span class="pill ok">Emozione giusta</span>
-                <span class="pill ok">Doppio senso autentico</span>
-                <span class="pill ok">Azione immediata</span>
-                <span class="pill ko">Punchball: permessi complessi</span>
-                <span class="pill ko">Rischio gimmick senza conversione</span>
-                <span class="pill ok">Sticker nastro: perfetti</span>
+              <div style="margin-top:20px;padding:16px 20px;border-left:2px solid rgba(247,97,67,.3);font-size:13px;color:var(--white60)">
+                Con RimborsoalVolo hai diritto fino a €600 di rimborso. <strong style="color:#fff">E non devi fare quasi nulla per ottenerlo.</strong>
               </div>
             </div>
           </div>
-
           <div>
             <div class="meccanica-box c1" style="margin-top:48px">
-              <div class="mb-label">Meccanica fisica — cosa tenere</div>
-              <p class="mb-text" style="margin-bottom:16px"><strong>✓ Sticker sul nastro bagagli</strong> — Basso costo, permesso standard d'ambiente (€3-8K), intercettano esattamente l'arrivo (Fase 2). Messaggi multisoggetto che confermano il diritto al rimborso nell'esatto momento in cui si attende la valigia.</p>
-              <p class="mb-text" style="color:rgba(248,244,239,.4)"><strong>✗ Punchball machine</strong> — Permessi complessi, presidio umano necessario, rischio che la gente la colpisca senza scansionare nulla. Da sostituire con le sedie-galleria del Concept 3A.</p>
+              <div class="mb-label">La meccanica fisica</div>
+              <p class="mb-text" style="margin-bottom:20px">
+                <strong>Sticker sul nastro bagagli.</strong> Il passeggero è appena atterrato dopo ore di ritardo. Sta aspettando la valigia. È arrabbiato. Ed è esattamente in quel momento che trova il messaggio: <em>"Fagliela pagare."</em> Messaggio multisoggetto — ritardo, cancellazione, bagaglio — adattato al tipo di disservizio più comune nello scalo.
+              </p>
+              <p class="mb-text">
+                <strong>Punchball machine nell'area d'attesa.</strong> La frustrazione del momento trova uno sfogo fisico, gamificato. Colpisce la macchina, si sfoga, e intanto il brand pianta il seme. L'installazione è un punto di richiamo naturale, fotografato e condiviso spontaneamente.
+              </p>
             </div>
-
-            <div class="cb-section" style="margin-top:24px">
-              <div class="cb-sec-title">Score di efficacia prevista</div>
-              <div class="score-row"><span class="score-name">Riconoscibilità claim</span><div class="score-track"><div class="score-fill" style="background:var(--coral)" data-pct="95"></div></div><span class="score-val">95</span></div>
-              <div class="score-row"><span class="score-name">Emozione corretta</span><div class="score-track"><div class="score-fill" style="background:var(--coral)" data-pct="98"></div></div><span class="score-val">98</span></div>
-              <div class="score-row"><span class="score-name">Attivazione Fase 2</span><div class="score-track"><div class="score-fill" style="background:var(--coral)" data-pct="88"></div></div><span class="score-val">88</span></div>
-              <div class="score-row"><span class="score-name">Potenziale virale</span><div class="score-track"><div class="score-fill" style="background:var(--coral)" data-pct="82"></div></div><span class="score-val">82</span></div>
-            </div>
-
             <div class="lofi-box" style="margin-top:24px">
-              <div class="lofi-header"><div class="lofi-dot"></div><span class="lofi-label">Layer digitale — Lo-fi Strategy</span></div>
-              <p class="lofi-text"><strong>Video 1:</strong> Ripresa mosso da smartphone del nastro bagagli con gli sticker. Voce fuori campo tipo voice memo: <em>"ragazzi ho il volo cancellato da 3 ore e ho trovato sta roba sul nastro bagagli, non ci credo"</em>. Nessun logo in evidenza. Zero post-produzione. Pubblicato come UGC organico su TikTok e Reels.</p>
-              <p class="lofi-text" style="margin-top:10px"><strong>Video 2:</strong> Brand che risponde ai tweet/post di lamentela con "Fagliela pagare 👉 [link]". Ryanair-style. Costo: zero.</p>
+              <div class="lofi-header"><div class="lofi-dot"></div><span class="lofi-label">Layer digitale lo-fi</span></div>
+              <p class="lofi-text"><strong>Video 1 — "La scoperta":</strong> Ripresa mosso da smartphone del nastro bagagli con lo sticker. Nessuna voce da spot. Solo qualcuno che filma come se stesse mandando una storia all'amico: <em>"ragazzi, guardate cosa c'è sul nastro."</em></p>
+              <p class="lofi-text" style="margin-top:10px"><strong>Video 2 — "Brand reply":</strong> Qualcuno si lamenta del volo su X o Instagram. RimborsoalVolo risponde: <strong style="color:var(--lime)">"Fagliela pagare 👉 rimborsoalvolo.it"</strong>. Ryanair-style. Zero budget.</p>
             </div>
           </div>
         </div>
@@ -631,79 +706,59 @@ body::before{
     </div>
 
     <!-- CONCEPT 2 -->
-    <div class="concept-block" id="cb2" data-section="2">
+    <div class="concept-block" id="cb2">
       <div class="concept-header" onclick="toggleConcept('c2')">
         <span class="ch-num">02</span>
         <div>
           <div class="ch-title">Il Tuo Extra</div>
+          <div style="font-size:12px;color:var(--white30);margin-top:4px;font-family:var(--f-mono)">Dal disservizio nasce il vantaggio</div>
         </div>
         <div style="display:flex;align-items:center;gap:12px">
-          <span class="ch-tag c2">ESPLORATIVO</span>
+          <span class="ch-tag c2">VISUAL PLAY</span>
           <span class="ch-arrow" id="arr-c2">+</span>
         </div>
       </div>
       <div class="concept-body" id="body-c2">
         <div class="cb-inner">
           <div>
-            <div class="cb-claim">
+            <div class="cb-claim" style="margin-top:48px">
               <div class="cb-claim-label">Il gioco tipografico</div>
-              <div class="claim-main" style="font-size:clamp(28px,3.5vw,48px)">
-                <span style="color:rgba(248,244,239,.3);text-decoration:line-through">Dis</span><em style="color:var(--gold)">agio</em><br>
-                <span style="color:rgba(248,244,239,.3);font-size:.6em">→</span>
+              <div class="claim-main" style="font-size:clamp(28px,3.5vw,50px);line-height:1.1">
+                <span style="color:rgba(255,255,255,.25);text-decoration:line-through">Dis</span><em style="color:var(--gold)">agio</em><br>
+                <span style="font-size:.55em;color:rgba(255,255,255,.2);font-family:var(--f-mono)">diventa →</span>
                 <span style="color:var(--gold)"> Viaggio Extra</span>
               </div>
-              <div class="multisoggetto" style="margin-top:20px">
+              <div class="cb-sec-title" style="margin-top:28px">Come si declina</div>
+              <div class="multisoggetto" style="margin-top:12px">
                 <div class="ms-item" style="border-left-color:var(--gold)">
-                  <span style="color:rgba(248,244,239,.35);text-decoration:line-through">Dis-agio</span>
-                  <span style="color:var(--gold)">→ Viaggio Extra</span>
+                  <span style="color:rgba(255,255,255,.3);text-decoration:line-through">Dis-agio</span>
+                  <span style="color:var(--gold);margin-left:8px">→ Viaggio <strong>Extra</strong></span>
                 </div>
                 <div class="ms-item" style="border-left-color:var(--gold)">
-                  <span style="color:rgba(248,244,239,.35);text-decoration:line-through">Avver-sità</span>
-                  <span style="color:var(--gold)">→ Opportunità Extra</span>
+                  <span style="color:rgba(255,255,255,.3);text-decoration:line-through">Avver-sità</span>
+                  <span style="color:var(--gold);margin-left:8px">→ Opportunità <strong>Extra</strong></span>
                 </div>
                 <div class="ms-item" style="border-left-color:var(--gold)">
-                  <span style="color:rgba(248,244,239,.35);text-decoration:line-through">Soc-corso</span>
-                  <span style="color:var(--gold)">→ Rimborso Extra</span>
+                  <span style="color:rgba(255,255,255,.3);text-decoration:line-through">Soc-corso</span>
+                  <span style="color:var(--gold);margin-left:8px">→ Rimborso <strong>Extra</strong></span>
                 </div>
-              </div>
-            </div>
-
-            <div class="cb-section" style="margin-top:24px">
-              <div class="cb-sec-title">Analisi del concept</div>
-              <p class="cb-text">Il gioco tipografico è <strong>originale e visivamente interessante</strong>, ma richiede che il passeggero stressato si fermi a decodificare un messaggio in due passaggi cognitivi. Non lo farà. La comunicazione in Fase 2 deve essere fulminea: questo concept funziona meglio in un contesto dove l'utente ha attenzione disponibile — quindi digitale, non fisico.</p>
-            </div>
-
-            <div class="cb-section" style="margin-top:24px">
-              <div class="cb-sec-title">Forza / Debolezza</div>
-              <div class="pill-row">
-                <span class="pill ok">Originalità visiva</span>
-                <span class="pill ok">Funziona bene nel digitale</span>
-                <span class="pill ko">Troppi step cognitivi per fisica</span>
-                <span class="pill ko">Biglietto finto non convince</span>
-                <span class="pill neutral">Riorientare verso social</span>
               </div>
             </div>
           </div>
-
           <div>
             <div class="meccanica-box c2" style="margin-top:48px">
-              <div class="mb-label">Meccanica fisica — valutazione</div>
-              <p class="mb-text" style="margin-bottom:16px"><strong style="color:rgba(248,244,239,.4)">✗ Macchine distributrici con bottone</strong> — Il "finto biglietto" non convince un passeggero diffidente. Rischia di confermare i pregiudizi sul servizio ("è una truffa"). Il concetto di premere un bottone è interessante ma la mechanic non chiude.</p>
-              <p class="mb-text" style="color:var(--gold)"><strong>→ Riorientare:</strong> Il gioco tipografico Disagio/Extra funziona come creative per campagne social ads e OOH classico, non come attivazione aeroportuale fisica interattiva.</p>
+              <div class="mb-label">La meccanica fisica</div>
+              <p class="mb-text" style="margin-bottom:20px">
+                <strong>Macchine distributrici nell'area d'attesa.</strong> Tre macchine, tre disservizi: ritardo, cancellazione, smarrimento bagagli. Sopra ognuna, un bottone enorme: <em>"Premi QUI in caso di ritardo aereo."</em> Dal meccanismo escono dei finti biglietti brandizzati che raccontano il servizio in modo leggero e sorprendente.
+              </p>
+              <p class="mb-text">
+                Il gioco sta nella trasformazione visiva: la parola negativa si <strong>cancella a metà</strong> e diventa qualcosa di buono. L'utente legge "Dis..." e poi "...agio" sparisce, rimane "Extra". Funziona come una micro-storia che si risolve in due secondi.
+              </p>
             </div>
-
-            <div class="cb-section" style="margin-top:24px">
-              <div class="cb-sec-title">Score di efficacia prevista</div>
-              <div class="score-row"><span class="score-name">Riconoscibilità claim</span><div class="score-track"><div class="score-fill" style="background:var(--gold)" data-pct="72"></div></div><span class="score-val">72</span></div>
-              <div class="score-row"><span class="score-name">Emozione corretta</span><div class="score-track"><div class="score-fill" style="background:var(--gold)" data-pct="65"></div></div><span class="score-val">65</span></div>
-              <div class="score-row"><span class="score-name">Attivazione Fase 2</span><div class="score-track"><div class="score-fill" style="background:var(--gold)" data-pct="55"></div></div><span class="score-val">55</span></div>
-              <div class="score-row"><span class="score-name">Potenziale digitale</span><div class="score-track"><div class="score-fill" style="background:var(--gold)" data-pct="88"></div></div><span class="score-val">88</span></div>
-            </div>
-
             <div class="lofi-box" style="margin-top:24px">
-              <div class="lofi-header"><div class="lofi-dot"></div><span class="lofi-label">Layer digitale — dove funziona davvero</span></div>
-              <p class="lofi-text">Il gioco tipografico Disagio→Extra è <strong>perfetto per Reels e TikTok ads</strong>: il testo che si trasforma è un formato nativo dei social. Testo bianco che cambia in testo dorato, con il suono di una notifica. Costo produzione: una mattina di Francesca al computer.</p>
-              <p class="lofi-text" style="margin-top:10px">Usarlo come layer digitale della campagna fisica, non come main concept aeroportuale.</p>
+              <div class="lofi-header"><div class="lofi-dot"></div><span class="lofi-label">Layer digitale lo-fi</span></div>
+              <p class="lofi-text"><strong>Formato Reel nativo:</strong> il gioco tipografico Disagio→Extra è costruito per diventare un video. Testo che si trasforma con effetto sound-on. <strong style="color:var(--lime)">Perfetto come ads su Meta e TikTok</strong> per chi ha cercato voli nelle ultime 48 ore.</p>
+              <p class="lofi-text" style="margin-top:10px"><strong>Video macchina:</strong> qualcuno filma la reazione della prima persona che preme il bottone. La sorpresa è il contenuto.</p>
             </div>
           </div>
         </div>
@@ -711,101 +766,167 @@ body::before{
     </div>
 
     <!-- CONCEPT 3A -->
-    <div class="concept-block" id="cb3" data-section="3">
+    <div class="concept-block" id="cb3">
       <div class="concept-header" onclick="toggleConcept('c3')">
         <span class="ch-num">03</span>
         <div>
           <div class="ch-title">Senza Muovere un Dito — La Galleria</div>
+          <div style="font-size:12px;color:var(--white30);margin-top:4px;font-family:var(--f-mono)">L'area d'attesa diventa una galleria di rivincite</div>
         </div>
         <div style="display:flex;align-items:center;gap:12px">
-          <span class="ch-tag c3">MECCANICA VINCENTE</span>
+          <span class="ch-tag c3">PROVA SOCIALE</span>
           <span class="ch-arrow" id="arr-c3">+</span>
         </div>
       </div>
       <div class="concept-body" id="body-c3">
         <div class="cb-inner">
           <div>
-            <div class="cb-claim">
-              <div class="cb-claim-label">Il concetto: prova sociale immediata</div>
-              <div class="claim-main" style="color:var(--lime);font-size:clamp(28px,3.5vw,48px)">
-                "Le sedie raccontano<br><em>le storie."</em>
+            <div class="cb-claim" style="margin-top:48px">
+              <div class="cb-claim-label">Il concept</div>
+              <div class="claim-main" style="color:var(--lime);font-size:clamp(26px,3vw,42px)">
+                "Senza muovere<br><em>un dito."</em>
               </div>
-              <div class="multisoggetto" style="margin-top:20px">
-                <div class="ms-item" style="border-left-color:var(--lime)">
-                  <div>
-                    <strong style="color:var(--lime)">Anna</strong>
-                    <span style="color:var(--white60)"> · 5h di ritardo e non sentirle · </span>
-                    <strong style="color:var(--white)">€400 recuperati</strong>
-                  </div>
+              <div class="cb-sec-title" style="margin-top:28px">Le storie sulle sedie</div>
+              <div class="multisoggetto" style="margin-top:12px">
+                <div class="ms-item" style="border-left-color:var(--lime);flex-direction:column;align-items:flex-start;gap:4px">
+                  <strong style="color:var(--lime)">Anna</strong>
+                  <span>5h di ritardo e non sentirle.</span>
+                  <span style="font-family:var(--f-mono);font-size:10px;color:rgba(255,255,255,.4)">Con RimborsoalVolo ottieni fino a €600 · senza muovere un dito</span>
                 </div>
-                <div class="ms-item" style="border-left-color:var(--lime)">
-                  <div>
-                    <strong style="color:var(--lime)">Paolo</strong>
-                    <span style="color:var(--white60)"> · Valigie smarrite, che torneranno con qualcos'altro · </span>
-                    <strong style="color:var(--white)">€300 recuperati</strong>
-                  </div>
+                <div class="ms-item" style="border-left-color:var(--lime);flex-direction:column;align-items:flex-start;gap:4px">
+                  <strong style="color:var(--lime)">Paolo</strong>
+                  <span>Valigie smarrite, che torneranno insieme a qualcosa in più.</span>
+                  <span style="font-family:var(--f-mono);font-size:10px;color:rgba(255,255,255,.4)">Con RimborsoalVolo ottieni fino a €600 · senza muovere un dito</span>
                 </div>
-                <div class="ms-item" style="border-left-color:var(--lime)">
-                  <div>
-                    <strong style="color:var(--lime)">Massimo</strong>
-                    <span style="color:var(--white60)"> · Volo slittato? Che grande occasione · </span>
-                    <strong style="color:var(--white)">€600 recuperati</strong>
-                  </div>
+                <div class="ms-item" style="border-left-color:var(--lime);flex-direction:column;align-items:flex-start;gap:4px">
+                  <strong style="color:var(--lime)">Massimo</strong>
+                  <span>Volo slittato? Che grande occasione.</span>
+                  <span style="font-family:var(--f-mono);font-size:10px;color:rgba(255,255,255,.4)">Con RimborsoalVolo ottieni fino a €600 · senza muovere un dito</span>
                 </div>
-              </div>
-            </div>
-
-            <div class="cb-section" style="margin-top:24px">
-              <div class="cb-sec-title">Perché la meccanica funziona</div>
-              <p class="cb-text">Il passeggero in Fase 2 è seduto nell'area di attesa. Legge tutto quello che lo circonda. La sedia accanto a lui è Anna. La sedia davanti è Paolo. <strong>La prova sociale è immediata, fisica, impossibile da ignorare.</strong> Non devi convincere: mostri che altri ce l'hanno fatta. È il trigger di conversione più potente per un servizio diffidente.</p>
-            </div>
-
-            <div class="cb-section" style="margin-top:24px">
-              <div class="cb-sec-title">Forza / Debolezza</div>
-              <div class="pill-row">
-                <span class="pill ok">Meccanica fisica eccellente</span>
-                <span class="pill ok">Prova sociale immediata</span>
-                <span class="pill ok">Nessun permesso speciale</span>
-                <span class="pill ok">Costo produzione bassissimo</span>
-                <span class="pill ko">Claim "senza muovere un dito" troppo generico</span>
-                <span class="pill neutral">Risolvibile con Concept 1</span>
               </div>
             </div>
           </div>
-
           <div>
             <div class="meccanica-box c3" style="margin-top:48px">
-              <div class="mb-label">Meccanica fisica — la più forte di tutte e tre</div>
-              <p class="mb-text" style="margin-bottom:16px"><strong>Adesivi sul poggiaschiena di ogni sedia</strong>: foto stock di persona sorridente + nome + dato del disservizio + importo recuperato. L'area d'attesa diventa una galleria di storie di rivincita. Produzione: stampa adesivi. Permesso: non necessario (spazio commerciale concessionale). Timeline: <strong>2 settimane</strong>.</p>
-              <p class="mb-text" style="color:var(--lime)"><strong>Il punto chiave:</strong> il passeggero che aspetta il volo cancellato si guarda intorno ed è circondato da persone che hanno già vinto contro la compagnia aerea. La narrativa fa tutto il lavoro.</p>
+              <div class="mb-label">La meccanica fisica</div>
+              <p class="mb-text" style="margin-bottom:20px">
+                <strong>Le sedie dell'area d'attesa diventano personaggi.</strong> Ogni sedia ha un adesivo sul poggiaschiena: una foto stock di persona sorridente, un nome, la storia del disservizio, l'importo recuperato. Il passeggero in attesa si guarda intorno ed è circondato da Anna, Paolo, Massimo — persone che ce l'hanno fatta.
+              </p>
+              <p class="mb-text">
+                L'area d'attesa si trasforma in una <strong>galleria di rivincite</strong>. Non è pubblicità. È prova sociale immediata, fisica, impossibile da ignorare. Chi aspetta il volo in ritardo capisce in silenzio che quella sedia è la sua risposta.
+              </p>
             </div>
-
-            <div class="cb-section" style="margin-top:24px">
-              <div class="cb-sec-title">Score di efficacia prevista</div>
-              <div class="score-row"><span class="score-name">Prova sociale</span><div class="score-track"><div class="score-fill" style="background:var(--lime)" data-pct="98"></div></div><span class="score-val">98</span></div>
-              <div class="score-row"><span class="score-name">Costo-efficacia</span><div class="score-track"><div class="score-fill" style="background:var(--lime)" data-pct="96"></div></div><span class="score-val">96</span></div>
-              <div class="score-row"><span class="score-name">Attivazione Fase 2</span><div class="score-track"><div class="score-fill" style="background:var(--lime)" data-pct="92"></div></div><span class="score-val">92</span></div>
-              <div class="score-row"><span class="score-name">Forza claim</span><div class="score-track"><div class="score-fill" style="background:var(--lime)" data-pct="62"></div></div><span class="score-val">62</span></div>
-            </div>
-
             <div class="lofi-box" style="margin-top:24px">
-              <div class="lofi-header"><div class="lofi-dot"></div><span class="lofi-label">Layer digitale — il più potente</span></div>
-              <p class="lofi-text">Video mosso da smartphone: un passeggero "trova" le sedie, si siede accanto ad Anna, legge ad alta voce la storia, poi dice <em>"aspetta ma posso farlo anche io?"</em>. Nessun logo. Nessun attore. Un passeggero vero, o qualcuno che sembra tale. <strong>Questo è il video che viene salvato e condiviso.</strong></p>
-              <p class="lofi-text" style="margin-top:10px">Aggiunge il dubbio CeraVe-style: è vero o è una campagna? Quel dubbio è il motore della viralità.</p>
+              <div class="lofi-header"><div class="lofi-dot"></div><span class="lofi-label">Layer digitale lo-fi</span></div>
+              <p class="lofi-text"><strong>Il video più potente:</strong> qualcuno riprende con il telefono, si siede accanto ad Anna, legge ad alta voce la storia e dice <em>"aspetta ma posso farlo anche io adesso?"</em>. <strong style="color:var(--lime)">Nessun attore. Zero post-produzione.</strong> Il dubbio "è vero o è una campagna?" è il motore della viralità.</p>
             </div>
           </div>
         </div>
       </div>
     </div>
+
   </div>
+</section>
+
+
+<!-- ══ BENCHMARK REFERENCES ═══════════════════════════════════ -->
+<section style="background:#050505;padding:80px 0;border-top:1px solid rgba(255,255,255,.06)" id="benchmarks">
+  <div class="wrap">
+    <div class="sh" id="shBench">
+      <div class="sh-eye">Campagne che ci ispirano</div>
+      <h2 class="sh-h2" style="color:#fff">Non sono nel nostro settore.<br><em>Ma parlano la stessa lingua.</em></h2>
+      <p class="sh-note">Il pattern è sempre lo stesso: momento esatto del disagio + elemento inaspettato = viralità zero-budget. Guarda da dove veniamo prima di vedere dove andiamo.</p>
+    </div>
+
+    <div class="bench-grid">
+
+      <div class="bench-card" id="bc1" onclick="window.open('https://www.youtube.com/watch?v=zIEIvi2MuEk','_blank')">
+        <div class="bc-thumb" style="background:linear-gradient(135deg,#1a1a2e 0%,#c0392b 100%)">
+          <div class="bc-play">▶</div>
+          <div class="bc-year">2013</div>
+          <div style="font-size:36px;margin-bottom:8px">🎁</div>
+          <div class="bc-brand">WestJet Airlines</div>
+          <div class="bc-campaign">Christmas Miracle</div>
+        </div>
+        <div class="bc-info">
+          <div class="bc-tag">AEROPORTO · RIBALTAMENTO</div>
+          <p class="bc-desc">Babbo Natale virtuale al check-in chiede ai passeggeri cosa vogliono. All'atterraggio i bagagli sono i regali. Costo basso. Trenta milioni di view in quattro giorni. <strong style="color:#fff">Il benchmark che rende tutto possibile.</strong></p>
+          <div class="bc-cta">▶ Guarda il video →</div>
+        </div>
+      </div>
+
+      <div class="bench-card" id="bc2" onclick="window.open('https://www.marketingdive.com/news/burger-king-drives-app-downloads-with-traffic-jam-whopper-deliveries/554507/','_blank')">
+        <div class="bc-thumb" style="background:linear-gradient(135deg,#1a0800 0%,#e67e22 100%)">
+          <div class="bc-play">▶</div>
+          <div class="bc-year">2019</div>
+          <div style="font-size:36px;margin-bottom:8px">🚗</div>
+          <div class="bc-brand">Burger King</div>
+          <div class="bc-campaign">Traffic Jam Whopper</div>
+        </div>
+        <div class="bc-info">
+          <div class="bc-tag">INGORGO · GPS REAL-TIME · CANNES GP</div>
+          <p class="bc-desc">Messico, 2019. L'autostrada è bloccata da ore. BK attiva la consegna tramite app direttamente in coda. GPS in tempo reale, notifica push nel momento esatto dello stress. <strong style="color:#fff">Il disagio del cliente diventa il trigger per la soluzione del brand.</strong></p>
+          <div class="bc-cta">📰 Leggi il case study →</div>
+        </div>
+      </div>
+
+      <div class="bench-card" id="bc3" onclick="window.open('https://www.youtube.com/results?search_query=CeraVe+Michael+Cera+Super+Bowl+2024','_blank')">
+        <div class="bc-thumb" style="background:linear-gradient(135deg,#0a0a1a 0%,#2980b9 100%)">
+          <div class="bc-play">▶</div>
+          <div class="bc-year">2024</div>
+          <div style="font-size:36px;margin-bottom:8px">📱</div>
+          <div class="bc-brand">CeraVe</div>
+          <div class="bc-campaign">Michael Cera — UGC Guerrilla</div>
+        </div>
+        <div class="bc-info">
+          <div class="bc-tag">LO-FI · DUBBIO REALE O FINTO? · VIRALE</div>
+          <p class="bc-desc">Prima del Super Bowl, video girati "da passanti" mostrano l'attore Michael Cera in farmacia ad autografare prodotti CeraVe. Riprese mosse, qualità da smartphone. Il dubbio — campagna o gossip vero? — è il motore della viralità. <strong style="color:#fff">Esattamente quello che vogliamo fare.</strong></p>
+          <div class="bc-cta">🔍 Cerca su YouTube →</div>
+        </div>
+      </div>
+
+      <div class="bench-card" id="bc4" onclick="window.open('https://www.instagram.com/ryanair/','_blank')">
+        <div class="bc-thumb" style="background:linear-gradient(135deg,#0a0a0a 0%,#073b8c 100%)">
+          <div class="bc-play" style="font-size:20px">@</div>
+          <div class="bc-year">ongoing</div>
+          <div style="font-size:36px;margin-bottom:8px">✈️</div>
+          <div class="bc-brand">Ryanair</div>
+          <div class="bc-campaign">Social brand reply</div>
+        </div>
+        <div class="bc-info">
+          <div class="bc-tag">TONO SFACCIATO · RISPOSTA IN-THREAD</div>
+          <p class="bc-desc">Il brand risponde alle lamentele dei clienti sui social con ironia, velocità e nessuna paura. Filtro "occhi e bocca" sulla carlinga, audio di tendenza entro ore dall'uscita. <strong style="color:#fff">Non sembra uscito dall'ufficio marketing perché tecnicamente non lo sembra.</strong></p>
+          <div class="bc-cta">Instagram di Ryanair →</div>
+        </div>
+      </div>
+
+      <div class="bench-card" id="bc5" onclick="window.open('https://www.youtube.com/results?search_query=North+Face+helicopter+Ingrid+delivery+campaign','_blank')">
+        <div class="bc-thumb" style="background:linear-gradient(135deg,#0a1a0a 0%,#27ae60 100%)">
+          <div class="bc-play">▶</div>
+          <div class="bc-year">recente</div>
+          <div style="font-size:36px;margin-bottom:8px">🚁</div>
+          <div class="bc-brand">The North Face</div>
+          <div class="bc-campaign">Consegna in elicottero</div>
+        </div>
+        <div class="bc-info">
+          <div class="bc-tag">RISPOSTA VIRALE · UGC TRIGGER</div>
+          <p class="bc-desc">Una creator si lamenta in un video che la sua giacca non è impermeabile. Il brand risponde girando un video dove prende una giacca nuova, sale su un elicottero e gliela consegna in montagna. <strong style="color:#fff">Il twist inaspettato come risposta pubblica. Diventa più virale della lamentela originale.</strong></p>
+          <div class="bc-cta">🔍 Cerca su YouTube →</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 </section>
 
 <!-- ══ SYNTHESIS ═════════════════════════════════════════════════ -->
 <section class="synthesis-section" id="s4">
   <div class="syn-bg"></div>
   <div class="wrap" style="position:relative;z-index:2">
-    <div class="syn-eyebrow">La raccomandazione — Ribrain</div>
-    <h2 class="syn-title">La fusione<br><em>vincente.</em></h2>
+    <div class="syn-eyebrow">La direzione raccomandata</div>
+    <h2 class="syn-title" style="color:#fff">La fusione<br><em>vincente.</em></h2>
 
     <div class="syn-grid">
       <div class="syn-card" id="sc1">
@@ -844,6 +965,61 @@ body::before{
       </div>
     </div>
   </div>
+
+    
+    <!-- ══ CEO VISUAL SUMMARY ════════════════════════════════ -->
+    <div class="ceo-summary" id="ceoSummary">
+      <div class="cs-eyebrow">Come funziona — in un colpo d'occhio</div>
+      <div class="cs-title">La meccanica.<br><em>Passo per passo.</em></div>
+
+      <div class="cs-flow">
+        <div class="csf-step" id="css1">
+          <div class="csf-icon">✈️</div>
+          <div class="csf-num">01</div>
+          <div class="csf-label">Il trigger</div>
+          <div class="csf-text">Il passeggero atterra. Volo in ritardo di <strong>3+ ore</strong>. È Fase 2: arrabbiato, ha tempo morto, telefono in mano. Il prospect più caldo del mondo.</div>
+        </div>
+        <div class="csf-arrow">→</div>
+        <div class="csf-step" id="css2">
+          <div class="csf-icon">🪑</div>
+          <div class="csf-num">02</div>
+          <div class="csf-label">Le sedie parlano</div>
+          <div class="csf-text">Nell'area arrivi, ogni sedia è una storia reale. <strong>Anna. Paolo. Massimo.</strong> Persone che hanno già vinto contro la compagnia. La prova sociale è fisica, impossibile da ignorare.</div>
+        </div>
+        <div class="csf-arrow">→</div>
+        <div class="csf-step" id="css3">
+          <div class="csf-icon">🎫</div>
+          <div class="csf-num">03</div>
+          <div class="csf-label">Il nastro lo conferma</div>
+          <div class="csf-text">Sul nastro bagagli trova lo sticker: <strong>"Fagliela pagare."</strong> Il messaggio lo raggiunge due volte nello stesso percorso. Il claim rimane in testa.</div>
+        </div>
+        <div class="csf-arrow">→</div>
+        <div class="csf-step" id="css4">
+          <div class="csf-icon">📱</div>
+          <div class="csf-num">04</div>
+          <div class="csf-label">Apre la pratica</div>
+          <div class="csf-text">Scansiona il QR. <strong>Due minuti.</strong> RimborsoalVolo fa tutto il resto. Il passeggero non muove un altro dito — esattamente come promette il claim.</div>
+        </div>
+        <div class="csf-arrow">→</div>
+        <div class="csf-step" id="css5">
+          <div class="csf-icon">🎬</div>
+          <div class="csf-num">05</div>
+          <div class="csf-label">Il video lo-fi</div>
+          <div class="csf-text">Qualcuno filma l'installazione con il telefono. <strong>Mosso. Autentico. Gratuito.</strong> Va su TikTok e Reels come scoperta casuale. Il dubbio — è vero o è una campagna? — è il motore.</div>
+        </div>
+        <div class="csf-arrow">→</div>
+        <div class="csf-step" id="css6">
+          <div class="csf-icon">📈</div>
+          <div class="csf-num">06</div>
+          <div class="csf-label">Le ricerche salgono</div>
+          <div class="csf-text">Chi ha visto il video cerca "rimborso volo ritardo" su Google. <strong>Il KPI si muove.</strong> L'offline pianta il seme, il search lo raccoglie.</div>
+        </div>
+      </div>
+
+    </div>
+    <!-- ════════════════════════════════════════════════════════ -->
+═══════════ -->
+
 </section>
 
 <!-- ══ LO-FI STRATEGY ════════════════════════════════════════════ -->
@@ -852,7 +1028,7 @@ body::before{
     <div class="lofi-title-wrap" id="lofiTitle">
       <div class="sh-eye">Layer digitale — integrato in tutti i concept</div>
       <h2 class="sh-h2" style="color:var(--white)">Lo-fi Marketing.<br><em>Zero budget, massima viralità.</em></h2>
-      <p class="sh-note">La strategia che trasforma le installazioni fisiche in contenuto organico. Quattro mosse da attivare in sequenza.</p>
+      <p class="sh-note">Questo layer digitale si applica a tutti e tre i concept. Ogni meccanica fisica ha il suo video lo-fi corrispondente. Le quattro mosse sono sequenziali — e la prima si attiva il giorno dell'installazione.</p>
     </div>
 
     <div class="lofi-cards">
@@ -877,7 +1053,7 @@ body::before{
         <p class="lfc-text">Il gioco tipografico del Concept 2 diventa un Reel nativo: testo che si trasforma, con suono di notifica. <strong>Perfetto per ads su Meta e TikTok</strong> con targeting su chi ha cercato voli nelle ultime 48h. Produzione: mezza giornata.</p>
         <div class="lfc-ref">Benchmark: Duolingo Duo mascot</div>
       </div>
-      <div class="lofi-card" id="lfc4" style="border-top-color:rgba(248,244,239,.2)">
+      <div class="lofi-card" id="lfc4" style="border-top-color:rgba(255,255,255,.2)">
         <div class="lfc-icon">🔥</div>
         <div class="lfc-num" style="color:var(--white60)">04</div>
         <div class="lfc-title">Il twist inaspettato</div>
@@ -930,11 +1106,10 @@ body::before{
 <section class="final-cta">
   <div class="fct-bg"></div>
   <div class="fct-inner" id="fctInner">
-    <div class="fct-label">Ribrain Studio · RimborsoalVolo · Aprile 2026</div>
+    <div class="fct-label">Campagna Brand Awareness · RimborsoalVolo · Aprile 2026</div>
     <h2 class="fct-title">Pronti a<br><em>fargliela pagare?</em></h2>
     <div class="fct-btns">
       <a href="m0.html" class="fct-btn-main">← Torna al cruscotto strategico</a>
-      <a href="brief-rimborsoalovolo-v2.docx" class="fct-btn-sec">📄 Scarica brief v2</a>
     </div>
   </div>
 </section>
