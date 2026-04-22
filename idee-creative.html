@@ -536,12 +536,10 @@ body::before{
 /* ── SYN WHY ─────────────────────────────────────────── */
 .syn-why{margin-bottom:80px;opacity:0}
 .syn-why-grid{display:grid;grid-template-columns:1fr 48px 1fr 48px 1fr;gap:0;margin:40px 0;align-items:start}
-.swc{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);padding:32px 28px;transition:background .3s}
-.swc:hover{background:rgba(255,255,255,.04)}
-.swc-head{display:flex;align-items:baseline;gap:14px;margin-bottom:20px;border-bottom:1px solid rgba(255,255,255,.07);padding-bottom:16px}
-.swc-num{font-family:var(--f-disp);font-size:32px;font-weight:300;color:rgba(255,255,255,.9);line-height:1;letter-spacing:-.02em}
-.swc-name{font-family:var(--f-disp);font-size:20px;font-weight:300;color:#fff;line-height:1.15;letter-spacing:-.01em}
-.swc-name em{font-style:italic;font-weight:400;color:#fff}
+.swc{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);padding:28px 24px}
+.swc-head{display:flex;align-items:baseline;gap:8px;margin-bottom:16px;border-bottom:1px solid rgba(255,255,255,.07);padding-bottom:12px}
+.swc-num{font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;flex-shrink:0}
+.swc-name{font-size:14px;font-weight:600;color:#fff}
 .swc-pro{font-size:12px;color:rgba(255,255,255,.65);line-height:1.65;margin-bottom:10px;padding:10px 12px;background:rgba(255,255,255,.03);border-left:2px solid rgba(255,255,255,.2)}
 .swc-con{font-size:11px;color:rgba(255,255,255,.3);line-height:1.6;padding:8px 12px;font-style:italic;background:rgba(0,0,0,.2)}
 .swc-plus{display:flex;align-items:center;justify-content:center;font-size:28px;color:rgba(255,255,255,.15);font-weight:300;padding-top:40px}
@@ -622,7 +620,67 @@ body::before{
 }
 .asset-pill:hover{background:rgba(70,255,221,.06);color:rgba(255,255,255,.8);border-color:rgba(70,255,221,.2)}
 
-
+/* ── VISUAL MECCANICA ───────────────────────────────── */
+.mech-visual{
+  background:rgba(0,0,0,.35);
+  border:1px solid rgba(255,255,255,.07);
+  padding:32px;margin-top:24px;
+  opacity:0;
+}
+.mv-eye{font-family:var(--f-mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--lime);margin-bottom:28px}
+.mv-diagram{
+  display:grid;
+  grid-template-columns:160px 28px 200px 28px 140px 28px 220px 28px 140px;
+  align-items:start;gap:0;
+  overflow-x:auto;padding-bottom:8px;
+  scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.1) transparent;
+  min-width:0;
+}
+.mvd-col{min-width:0;width:100%}
+.mvd-label-col{font-family:var(--f-mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:12px;text-align:center}
+.mvd-trigger{
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  background:rgba(247,97,67,.1);border:1px solid rgba(247,97,67,.3);
+  padding:24px 16px;text-align:center;margin-top:24px;
+}
+.mvt-icon{font-size:28px}
+.mvt-label{font-size:13px;font-weight:600;color:#fff;line-height:1.3}
+.mvt-sub{font-family:var(--f-mono);font-size:9px;color:rgba(255,255,255,.35);letter-spacing:.08em}
+.mvd-arrow{
+  flex-shrink:0;color:rgba(255,255,255,.2);
+  font-size:22px;padding:0 4px;
+  align-self:center;margin-top:24px;
+}
+.mvd-arrow-main{color:var(--coral);opacity:.6}
+.mvd-stack{display:flex;flex-direction:column;gap:0}
+.mvd-block{
+  display:flex;align-items:flex-start;gap:8px;
+  border-left:2px solid;padding:10px 12px;
+  background:rgba(255,255,255,.04);
+}
+.mvdb-ico{font-size:18px;flex-shrink:0;margin-top:2px}
+.mvdb-txt{font-size:10px;color:rgba(255,255,255,.7);line-height:1.45}
+.mvdb-txt strong{color:#fff;display:block;margin-bottom:2px}
+.mvd-connector{text-align:center;color:rgba(255,255,255,.2);font-size:14px;padding:4px 0;background:rgba(255,255,255,.02)}
+.mvd-action{
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  background:rgba(70,255,221,.08);border:1px solid rgba(70,255,221,.2);
+  padding:24px 16px;text-align:center;margin-top:24px;
+}
+.mva-icon{font-size:28px}
+.mva-label{font-size:13px;font-weight:600;color:var(--lime)}
+.mva-sub{font-family:var(--f-mono);font-size:9px;color:rgba(255,255,255,.35)}
+.mvd-result{
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  background:rgba(70,255,221,.1);border:1px solid rgba(70,255,221,.35);
+  padding:20px 14px;text-align:center;margin-top:24px;
+}
+.mvr-icon{font-size:28px}
+.mvr-label{font-size:13px;font-weight:600;color:#fff;line-height:1.3}
+.mvr-kpi{font-family:var(--f-mono);font-size:9px;color:var(--lime);letter-spacing:.12em;text-transform:uppercase;border:1px solid rgba(70,255,221,.4);padding:2px 8px;margin-top:4px}
+.mv-note{font-size:12px;color:rgba(255,255,255,.4);line-height:1.7;margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,.07)}
+.mv-note strong{color:rgba(255,255,255,.7)}
+@media(max-width:960px){.mv-diagram{grid-template-columns:1fr !important;gap:4px}.mvd-arrow{display:none}.mvd-col{width:100%}}
 
 
 /* ── BENCH GRID VIDEO ───────────────────────────────── */
@@ -690,13 +748,6 @@ body::before{
   opacity:1 !important;
   transform:none !important;
 }
-
-
-/* ── YT IFRAME WRAP ─────────────────────────────────── */
-.yt-iframe-wrap{position:relative;width:100%;background:#000;overflow:hidden}
-.yt-iframe-wrap[data-aspect="16/9"]{aspect-ratio:16/9}
-.yt-iframe-wrap[data-aspect="9/16"]{aspect-ratio:9/16;max-height:600px;margin:0 auto}
-.yt-iframe-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
 
 </style>
 </head>
@@ -1015,9 +1066,10 @@ body::before{
           <div class="bc-tag">AEROPORTO · RIBALTAMENTO EMOTIVO · IL BENCHMARK ASSOLUTO</div>
         </div>
         <div class="bc-video-wrap">
-          <div class="yt-iframe-wrap" data-aspect="16/9">
-            <iframe src="https://www.youtube.com/embed/zIEIvi2MuEk?si=vjjt_rua57i8VYUu" title="Video benchmark" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-          </div>
+          <div class="yt-player" data-vid="zIEIvi2MuEk" onclick="loadYT(this)" title="WestJet Christmas Miracle 2013">
+          <img src="https://img.youtube.com/vi/zIEIvi2MuEk/maxresdefault.jpg" alt="WestJet Christmas Miracle 2013" loading="lazy">
+          <div class="yt-play-btn"><svg viewBox="0 0 68 48"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#f00"/><path d="M45 24L27 14v20" fill="#fff"/></svg></div>
+        </div>
         </div>
         <div class="bc-why">
           <strong>Perché ci riguarda:</strong> Babbo Natale chiede ai passeggeri cosa vogliono al check-in. All'atterraggio i bagagli sono regali. Stesso spazio fisico aeroportuale. Stesso ribaltamento emotivo. Stessa logica: il momento del disagio diventa il momento della sorpresa.
@@ -1033,9 +1085,10 @@ body::before{
           <div class="bc-tag">LO-FI UGC · DUBBIO REALE O FINTO? · VIRALE ZERO BUDGET</div>
         </div>
         <div class="bc-video-wrap">
-          <div class="yt-iframe-wrap" data-aspect="9/16">
-            <iframe src="https://www.youtube.com/embed/GT9MKK0h0nE" title="Video benchmark" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-          </div>
+          <div class="yt-player" data-vid="eVrUDqYfRUM" onclick="loadYT(this)" title="CeraVe Michael Cera long form">
+          <img src="https://img.youtube.com/vi/eVrUDqYfRUM/maxresdefault.jpg" alt="CeraVe Michael Cera long form" loading="lazy">
+          <div class="yt-play-btn"><svg viewBox="0 0 68 48"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#f00"/><path d="M45 24L27 14v20" fill="#fff"/></svg></div>
+        </div>
         </div>
         <div class="bc-why">
           <strong>Perché ci riguarda:</strong> Video girati "da passanti" mostrano Michael Cera in farmacia ad autografare prodotti. Riprese mosse, qualità da smartphone. Il dubbio — campagna o gossip vero? — è il motore della viralità. <em>Esattamente il meccanismo del nostro video lo-fi.</em>
@@ -1051,9 +1104,10 @@ body::before{
           <div class="bc-tag">MOMENTO ESATTO DEL DISAGIO · GPS REAL-TIME · TRIGGER COMPORTAMENTALE</div>
         </div>
         <div class="bc-video-wrap">
-          <div class="yt-iframe-wrap" data-aspect="16/9">
-            <iframe src="https://www.youtube.com/embed/5jqXgWHvrPA?si=Ds8_8JHlVtrXbCaw" title="Video benchmark" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-          </div>
+          <div class="yt-player" data-vid="5jqXgWHvrPA" onclick="loadYT(this)" title="BK Traffic Jam Whopper">
+          <img src="https://img.youtube.com/vi/5jqXgWHvrPA/maxresdefault.jpg" alt="BK Traffic Jam Whopper" loading="lazy">
+          <div class="yt-play-btn"><svg viewBox="0 0 68 48"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#f00"/><path d="M45 24L27 14v20" fill="#fff"/></svg></div>
+        </div>
         </div>
         <div class="bc-why">
           <strong>Perché ci riguarda:</strong> L'autostrada è bloccata. BK consegna direttamente in coda via app. Il disagio del cliente diventa il trigger per la soluzione del brand. +44x download app in un giorno. La logica è identica: intercettare nel momento esatto del problema, non prima, non dopo.
@@ -1069,8 +1123,9 @@ body::before{
           <div class="bc-tag">UGC TRIGGER · BRAND REPLY · 11M VIEWS</div>
         </div>
         <div class="bc-video-wrap">
-          <div class="yt-iframe-wrap" data-aspect="16/9">
-            <iframe src="https://www.youtube.com/embed/ihmvnkL9Bcw?si=UipP3WiN-Huxhdgy" title="Video benchmark" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          <div class="yt-player" data-vid="ihmvnkL9Bcw" onclick="loadYT(this)" title="North Face Helicopter Jacket Delivery">
+            <img src="https://img.youtube.com/vi/ihmvnkL9Bcw/maxresdefault.jpg" alt="North Face Helicopter Jacket Delivery" loading="lazy">
+            <div class="yt-play-btn"><svg viewBox="0 0 68 48"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#f00"/><path d="M45 24L27 14v20" fill="#fff"/></svg></div>
           </div>
         </div>
         <div class="bc-why">
@@ -1095,7 +1150,7 @@ body::before{
       <div class="syn-why-grid">
         <div class="swc">
           <div class="swc-head">
-            <span class="swc-num">01</span><span class="swc-name">Fagliela <em>Pagare</em></span>
+            <span class="swc-num" style="color:var(--coral)">01 —</span><span class="swc-name">Fagliela Pagare</span>
           </div>
           <div class="swc-pro">✓ Claim potente. Emozione esatta. Nessun competitor lo usa.</div>
           <div class="swc-con">Ma senza prova sociale, rimane un'affermazione. Perché dovrei crederci?</div>
@@ -1103,7 +1158,7 @@ body::before{
         <div class="swc-plus">+</div>
         <div class="swc">
           <div class="swc-head">
-            <span class="swc-num">02</span><span class="swc-name">Il Tuo <em>Extra</em></span>
+            <span class="swc-num" style="color:var(--gold)">02 —</span><span class="swc-name">Il Tuo Extra</span>
           </div>
           <div class="swc-pro">✓ Gioco visivo originale. Perfetto per il formato digitale.</div>
           <div class="swc-con">Troppo cerebrale per l'aeroporto. Funziona come layer adv, non come attivazione fisica.</div>
@@ -1111,7 +1166,7 @@ body::before{
         <div class="swc-plus">+</div>
         <div class="swc">
           <div class="swc-head">
-            <span class="swc-num">03</span><span class="swc-name">Senza <em>muovere un dito</em></span>
+            <span class="swc-num" style="color:var(--lime)">03 —</span><span class="swc-name">Senza muovere un dito</span>
           </div>
           <div class="swc-pro">✓ Meccanica fisica eccellente. Prova sociale immediata. Basso costo.</div>
           <div class="swc-con">Il claim è generico. "Senza muovere un dito" lo dicono tutti.</div>
@@ -1123,6 +1178,93 @@ body::before{
         <div class="sr-title">Claim forte<em> + </em>prova fisica<em> + </em>amplificazione digitale.</div>
         <div class="sr-sub">Le sedie non dicono "senza muovere un dito". Dicono <strong>"Fagliela pagare — Anna l'ha fatto. Ha preso €400."</strong> Il claim incontra la prova. La prova incontra il video. Il video incontra la ricerca su Google.</div>
       </div>
+
+    <!-- ══ VISUAL MECCANICA CAMPAGNA ══════════════════════════ -->
+    <div class="mech-visual" id="mechVisual">
+      <div class="mv-eye">La meccanica — schema visivo</div>
+
+      <div class="mv-diagram">
+        <!-- Colonna sinistra: trigger -->
+        <div class="mvd-col">
+          <div class="mvd-trigger">
+            <div class="mvt-icon">✈️</div>
+            <div class="mvt-label">Passeggero<br>in arrivo</div>
+            <div class="mvt-sub">Ritardo 3h+ · Fase 2</div>
+          </div>
+        </div>
+
+        <div class="mvd-arrow mvd-arrow-main">→</div>
+
+        <!-- Colonna centro: touchpoint fisici -->
+        <div class="mvd-col">
+          <div class="mvd-label-col">Touchpoint fisici</div>
+          <div class="mvd-stack">
+            <div class="mvd-block" style="border-color:var(--coral)">
+              <span class="mvdb-ico">🎫</span>
+              <span class="mvdb-txt"><strong>Nastro bagagli</strong><br>"Fagliela pagare."</span>
+            </div>
+            <div class="mvd-connector">↓</div>
+            <div class="mvd-block" style="border-color:var(--lime)">
+              <span class="mvdb-ico">🪑</span>
+              <span class="mvdb-txt"><strong>Sedie — storie reali</strong><br>Anna · Paolo · Massimo</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mvd-arrow">→</div>
+
+        <!-- Colonna azione -->
+        <div class="mvd-col">
+          <div class="mvd-label-col">Azione</div>
+          <div class="mvd-action">
+            <div class="mva-icon">📱</div>
+            <div class="mva-label">Apre la pratica</div>
+            <div class="mva-sub">QR code · 2 minuti</div>
+          </div>
+        </div>
+
+        <div class="mvd-arrow">→</div>
+
+        <!-- Colonna digital layer -->
+        <div class="mvd-col">
+          <div class="mvd-label-col">Layer digitale</div>
+          <div class="mvd-stack">
+            <div class="mvd-block" style="border-color:#006BFF">
+              <span class="mvdb-ico">🎬</span>
+              <span class="mvdb-txt"><strong>Video lo-fi</strong><br>UGC · TikTok · Reels</span>
+            </div>
+            <div class="mvd-connector">+</div>
+            <div class="mvd-block" style="border-color:var(--gold)">
+              <span class="mvdb-ico">📲</span>
+              <span class="mvdb-txt"><strong>Social ADV</strong><br>Disagio→Extra · Meta/TikTok</span>
+            </div>
+            <div class="mvd-connector">+</div>
+            <div class="mvd-block" style="border-color:rgba(255,255,255,.2)">
+              <span class="mvdb-ico">💬</span>
+              <span class="mvdb-txt"><strong>Brand reply</strong><br>Always-on · AI + supervisione</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mvd-arrow">→</div>
+
+        <!-- Colonna risultato -->
+        <div class="mvd-col">
+          <div class="mvd-result">
+            <div class="mvr-icon">📈</div>
+            <div class="mvr-label">Ricerche<br>in aumento</div>
+            <div class="mvr-kpi">KPI</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mv-note">
+        Il sistema funziona a cascata: <strong>l'installazione fisica crea il momento</strong> → il video lo-fi lo amplifica → l'ADV targetizza chi ha già avuto il disservizio → il brand reply intercetta le lamentele organiche → le ricerche Google salgono.
+      </div>
+    </div>
+
+
+    </div>
 
     <!-- ══ LAYER BUILDER INTERATTIVO ══ -->
     <div class="layer-section" id="layerSection">
@@ -1702,6 +1844,15 @@ setTimeout(function(){
     if(parseFloat(getComputedStyle(el).opacity)<0.5){el.style.opacity='1';el.style.transform='none';}
   });
 },3500);
+
+
+
+  gsap.fromTo('#mechVisual',{opacity:0,y:20},{opacity:1,y:0,duration:.8,ease:'power3.out',
+    scrollTrigger:{trigger:'#mechVisual',start:'top 80%',once:true}});
+  setTimeout(function(){
+    var el=document.getElementById('mechVisual');
+    if(el&&parseFloat(getComputedStyle(el).opacity)<0.5){el.style.opacity='1';el.style.transform='none';}
+  },3000);
 
 
 // ── YouTube click-to-load ──────────────────────────────────────
